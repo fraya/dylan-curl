@@ -1,0 +1,18 @@
+{
+    "dependencies": [
+	"strings@1.1.0",
+        "command-line-parser@3.2.2"
+    ],
+    "dev-dependencies": [
+	"sphinx-extensions@0.2.0",
+	"testworks@3.0"
+    ],
+    "description": "Curl library wrapper",
+    "name": "curl",
+    "version": "0.1.0",
+    "url": "https://github.com/fraya/dylan-curl",
+    "keywords": [ "curl", "web", "ftp" ],
+    "contact": "",
+    "license": "",
+    "license-url": ""
+}
