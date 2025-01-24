@@ -6,15 +6,15 @@ Install curl library
 
 Install the Gnu TLS variant
 
-.. example-code::
+.. code-block:: console
+   :caption: Debian/Ubuntu
 
-   .. code-block:: Debian/Ubuntu
+   sudo apt install libcurl4-gnutls-dev
 
-      sudo apt install libcurl4-gnutls-dev
+.. code-block:: console
+   :caption: Opensuse Tumbleweed
 
-   .. code-block:: Opensuse Tumbleweed
-
-      sudo zypper in libcurl-devel
+   sudo zypper in libcurl-devel
 
 Configure your Opendylan project
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^

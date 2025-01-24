@@ -26,8 +26,7 @@ release = '0.0.1'
 
 extensions = [
     'dylan.domain',
-    'sphinx_copybutton',
-    'sphinxcontrib.examplecode'
+    'sphinx_copybutton'
 ]
 
 templates_path = ['_templates']
