@@ -3,7 +3,7 @@ Module: dylan-user
 define module curl-easy
 
   // Curl error codes
-  
+
   export
     $curle-ok,
     $curle-unsupported-protocol,
@@ -109,7 +109,7 @@ define module curl-easy
     $curle-ech-required;
 
   // Constants for `curl-global-init`
-  
+
   export
     $curl-global-ssl,
     $curl-global-win32,
@@ -119,7 +119,7 @@ define module curl-easy
     $curl-global-ack-eintr;
 
   // Proxy error codes
-  
+
   create
     $curlpx-ok,
     $curlpx-bad-address-type,
@@ -180,7 +180,7 @@ define module curl-easy
     $curlinfo-ssl-data-out;
 
   // Type of authentication methods
-  
+
   create
     $curlauth-none,
     $curlauth-basic,
@@ -205,7 +205,7 @@ define module curl-easy
     $curlpause-send-cont,
     $curlpause-all,
     $curlpause-cont;
-  
+
   create
     $curlsslbackend-none,
     $curlsslbackend-openssl,
@@ -242,7 +242,7 @@ define module curl-easy
     curl-tlssessioninfo-internals-setter;
 
   // Curl header
-  
+
   create
     <curl-header>,
     <curl-header*>,
@@ -260,7 +260,7 @@ define module curl-easy
     curl-header-anchor-setter;
 
   // Curl slist
-  
+
   create
     <curl-slist>,
     <curl-slist*>,
@@ -276,9 +276,9 @@ define module curl-easy
     curl-certinfo-num-of-certs,
     curl-certinfo-certinfo-setter,
     curl-certinfo-certinfo;
-  
+
   // Curl options
-  
+
   create
     <curl-easy-option>,
     <curl-easy-option*>,
@@ -290,7 +290,7 @@ define module curl-easy
     curl-easy-option-type-setter,
     curl-easy-option-flags,
     curl-easy-option-flags-setter;
-  
+
   create
     <curl-error>,
     curl-error-code,
@@ -298,7 +298,7 @@ define module curl-easy
     <curl-init-error>,
     <curl-option-error>,
     <curl-perform-error>;
-  
+
   create
     <curl>,
     <curl-easy>;
@@ -326,7 +326,7 @@ define module curl-easy
     curl-version;
 
   // callbacks
-  
+
   create
     *curl-header-callback*,
     *curl-write-callback*,
@@ -338,12 +338,12 @@ define module curl-easy
     $curl-progress-callback;
 
   // Curl options
-  
+
   create
     <curlopt-stringpoint>,
     <curlopt-slistpoint>,
     <curlopt-cbpoint>;
-  
+
   create
     curl-writedata-setter,
     curl-url-setter,
@@ -652,7 +652,7 @@ define module curl-easy
     curl-tcp-keepcnt-setter;
 
   // curl-easy-getinfo*
-  
+
   create
     curl-effective-url,
     curl-response-code,

@@ -13,7 +13,7 @@ define function dump-debug-callback
           format-out("\n%s\n%s", message, data)
         end method;
   select (type)
-    $curlinfo-text 
+    $curlinfo-text
       => dump("<= Recv data", data);
     $curlinfo-header-in
       => dump("=> Send data", data);
@@ -28,7 +28,7 @@ define function dump-debug-callback
     $curlinfo-ssl-data-out
       => dump("=> Send SSL data", data);
     otherwise
-      => format-out("Invalid curl info type: %d", type);    
+      => format-out("Invalid curl info type: %d", type);
   end select;
   0
 end function;

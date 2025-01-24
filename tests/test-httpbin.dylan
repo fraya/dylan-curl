@@ -47,7 +47,7 @@ end test;
 
 define test test-auth-bearer (tags: #("io", "httpbin"))
   let headers = null-pointer(<curlopt-slistpoint>);
-  block ()    
+  block ()
     curl-global-init($curl-global-default);
     let curl = make(<curl-easy>);
     curl.curl-url := httpbin("/bearer");

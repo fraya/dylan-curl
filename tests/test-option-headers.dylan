@@ -9,7 +9,7 @@ define test test-option-headers (tags: #("io", "httpbin"))
   block ()
     let curl = make(<curl-easy>);
     curl.curl-url := httpbin("/headers");
-    
+
     headers := curl-slist-append(headers, "X-Custom-Header: Chucho");
     headers := curl-slist-append(headers, "Another-Header: Good");
     curl.curl-httpheader := headers;

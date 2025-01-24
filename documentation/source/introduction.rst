@@ -35,16 +35,16 @@ In libcurl, you create a handle using `curl_easy_init
 wrapper, you create an object of the :class:`<curl-easy>` class.
 
 .. code-block:: c
-   :caption: C example	  
+   :caption: C example
 
    CURL *curl = curl_easy_init();
    if (curl) {
      ...
      curl_easy_cleanup(curl);
    }
-	   
+
 .. code-block:: dylan
-   :caption: Opendylan example	   
+   :caption: Opendylan example
 
    let curl = make(<curl-easy>);
 
@@ -64,12 +64,12 @@ parameter, a :class:`<curl-option-error>` exception is raised.
 
 .. code-block:: c
    :caption: Example showing the error checking, usually hidden in examples.	 
-	   
+
    CURLCODE code = curl_easy_setopt(curl, CURLOPT_URL, "https://example.com");
    if (code != CURLE_OK) {
       fprintf(stderr,
               "Error setting option: %s\n",
-	      curl_easy_strerror(res));
+              curl_easy_strerror(res));
       return 1;
    }
 
@@ -85,7 +85,7 @@ handled either immediately at the point of the operation or deferred
 to another method for centralized error handling.
 
 .. code-block:: dylan
-   :caption: In Opendylan errors can be captured in a block somewhere.	   
+   :caption: In Opendylan errors can be captured in a block somewhere.
 
    let curl = make(<curl-easy>);
    curl.curl-url := "https://example.com";
@@ -139,8 +139,8 @@ passing a constant for the type of information. In the Open Dylan
 wrapper, you access the information directly using property syntax.
 
 .. code-block:: c
-   :caption: C example getting the total time of previous transfer		
-		
+   :caption: C example getting the total time of previous transfer
+
    double total_time;
    CURLCODE res;
 
@@ -153,14 +153,14 @@ wrapper, you access the information directly using property syntax.
      } else {
        fprintf(stderr, "curl_easy_getinfo() failed: %s\n",
                        curl_easy_strerror(res));
-     }		      
+     }
    } else {
      fprintf(stderr, "curl_easy_perform() failed: %s\n",
              curl_easy_strerror(res));
    }
    /* always cleanup */
    curl_easy_cleanup(curl);
-   
+
 .. code-block:: dylan
    :caption: Dylan Example
 
@@ -175,4 +175,4 @@ wrapper, you access the information directly using property syntax.
    exception (err :: <curl-perform-error>)
       format-err("curl easy perform failed: %s\n",
                  err.curl-error-message)
-   end block;		 
+   end block;

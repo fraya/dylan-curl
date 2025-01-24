@@ -7,7 +7,7 @@ define library curl-easy-test-suite
   use strings;
   use system;
   use testworks;
-  
+
   use dylan-curl,
     import: { curl-easy };
 end library;

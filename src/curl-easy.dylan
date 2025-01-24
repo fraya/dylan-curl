@@ -678,8 +678,8 @@ end c-callable-wrapper;
 //
 // `curl-easy-setopt` shim functions.
 //
-// A "shim" function is created for each `$curl-setopt-xxx` constant to 
-// streamline the process of working with the variadic function 
+// A "shim" function is created for each `$curl-setopt-xxx` constant to
+// streamline the process of working with the variadic function
 // `curl_easy_getinfo`.
 //
 //////////////////////////////////////////////////////////////////////////////
@@ -810,9 +810,9 @@ define constant $curlopttype-values        = $curlopttype-long;
 
 define macro curlopt-definer
   { define curlopt ?type:name ?id:name = ?number:expression }
-    => { define constant "$curlopt-" ## ?id 
+    => { define constant "$curlopt-" ## ?id
            = "$curlopttype-" ## ?type + ?number;
-    
+
          define method "curl-" ## ?id ## "-setter"
              (option :: "<curlopt-" ## ?type ## ">", curl :: <curl-easy>)
 	  => (option :: "<curlopt-" ## ?type ## ">")
@@ -1169,13 +1169,13 @@ define constant <curlinfo-off-t>  = <curl-off-t>;
 //
 // `curl-easy-getinfo` shim functions.
 //
-// A "shim" function is created for each `$curlinfo-xxx` constant to 
-// streamline the process of working with the variadic function 
+// A "shim" function is created for each `$curlinfo-xxx` constant to
+// streamline the process of working with the variadic function
 // `curl_easy_getinfo`.
 //
 //////////////////////////////////////////////////////////////////////////////
 
-define C-function curl-easy-getinfo-string 
+define C-function curl-easy-getinfo-string
   input  parameter handle    :: <curl-easy-handle>;
   input  parameter option    :: <c-int>;
   output parameter curl-code :: <c-int*>;
@@ -1183,7 +1183,7 @@ define C-function curl-easy-getinfo-string
   c-name: "curl_easy_getinfo_string";
 end C-function;
 
-define C-function curl-easy-getinfo-long 
+define C-function curl-easy-getinfo-long
   input  parameter handle    :: <curl-easy-handle>;
   input  parameter option    :: <c-int>;
   output parameter curl-code :: <c-int*>;
@@ -1191,7 +1191,7 @@ define C-function curl-easy-getinfo-long
   c-name: "curl_easy_getinfo_long";
 end C-function;
 
-define C-function curl-easy-getinfo-double 
+define C-function curl-easy-getinfo-double
   input  parameter handle    :: <curl-easy-handle>;
   input  parameter option    :: <c-int>;
   output parameter curl-code :: <c-int*>;
@@ -1199,7 +1199,7 @@ define C-function curl-easy-getinfo-double
   c-name: "curl_easy_getinfo_double";
 end C-function;
 
-define C-function curl-easy-getinfo-off-t 
+define C-function curl-easy-getinfo-off-t
   input  parameter handle    :: <curl-easy-handle>;
   input  parameter option    :: <c-int>;
   output parameter curl-code :: <c-int*>;
@@ -1207,7 +1207,7 @@ define C-function curl-easy-getinfo-off-t
   c-name: "curl_easy_getinfo_off_t";
 end C-function;
 
-define C-function curl-easy-getinfo-slist 
+define C-function curl-easy-getinfo-slist
   input  parameter handle    :: <curl-easy-handle>;
   input  parameter option    :: <c-int>;
   output parameter curl-code :: <c-int*>;
@@ -1272,18 +1272,18 @@ ignore($curlinfo-typemask);
 // 1. Defines a constant for each identifier by adding the base index 
 //    to the identifier's numeric value.
 // 2. Creates a function to retrieve information about the identifier.
-//    This function calls the corresponding shim function and checks 
+//    This function calls the corresponding shim function and checks
 //    the status code to handle errors appropriately.
 //
 //////////////////////////////////////////////////////////////////////////////
 
 define macro curlinfo-definer
   { define curlinfo ?type:name ?id:name = ?number:expression }
-    => { define constant "$curlinfo-" ## ?id 
+    => { define constant "$curlinfo-" ## ?id
            = "$curlinfo-" ## ?type + ?number;
 
          define method "curl-" ## ?id
-              (curl :: <curl-easy>) 
+              (curl :: <curl-easy>)
 	  => (result :: "<curlinfo-" ## ?type ## ">")
 	     let handle = curl.curl-handle;
 	     let (result, code)

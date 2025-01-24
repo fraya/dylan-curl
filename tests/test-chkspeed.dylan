@@ -31,10 +31,10 @@ define test test-chkspeed (tags: #("io", "slow"))
     with-open-file (stream = filename, direction: #"output", if-exists: #"replace")
       dynamic-bind(*curl-write-callback* = handle-download)
         dynamic-bind(*curl-progress-callback* = progress-callback)
- 	  register-c-dylan-object(stream);
- 	  curl.curl-writedata := export-c-dylan-object(stream);
- 	  curl-easy-perform(curl);
- 	  unregister-c-dylan-object(stream);
+          register-c-dylan-object(stream);
+          curl.curl-writedata := export-c-dylan-object(stream);
+          curl-easy-perform(curl);
+          unregister-c-dylan-object(stream);
         end dynamic-bind;
       end dynamic-bind;
     end with-open-file;

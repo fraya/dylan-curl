@@ -25,7 +25,9 @@ release = '0.0.1'
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#general-configuration
 
 extensions = [
-  'dylan.domain'
+    'dylan.domain',
+    'sphinx_copybutton',
+    'sphinxcontrib.examplecode'
 ]
 
 templates_path = ['_templates']

@@ -3,7 +3,7 @@ Curl global
 
 ..
    .. current-library:: curl
-   .. current-module:: easy-curl		     
+   .. current-module:: easy-curl
 
 Global setup
 ------------
@@ -27,12 +27,12 @@ Functions
 - :func:`curl-global-cleanup`
 
 .. function:: curl-global-init
-	      
+
    :signature:
 
       curl-global-init *flags* => *code*
 
-   :description:      
+   :description:
 
    See `curl_global_init <https://curl.se/libcurl/c/curl_global_init.html>`_
 
@@ -41,7 +41,5 @@ Functions
    :signature:
 
       curl-global-cleanup => ()
-   
+
    See `curl_global_cleanup <https://curl.se/libcurl/c/curl_global_cleanup.html>`_
-
-
