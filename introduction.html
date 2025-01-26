@@ -266,7 +266,7 @@
 <h1>Introduction<a class="headerlink" href="#introduction" title="Link to this heading">¶</a></h1>
 <p><code class="docutils literal notranslate"><span class="pre">dylan-curl</span></code> is a wrapper around the popular libcurl library,
 providing a way to interact with network resources from within Open
-Dylan programs. This wrapper try to simplify the complexities of
+Dylan programs. This wrapper tries to simplify the complexities of
 libcurl, offering a Dylan-friendly API while maintaining the core
 capabilities of the underlying C library.</p>
 <p><strong>Key Features</strong></p>
@@ -281,8 +281,8 @@ handling into Dylan’s exception mechanism for cleaner and more
 reliable error management.</p>
 </dd>
 </dl>
-<section id="howto-convert-a-libcurl-program">
-<h2>Howto convert a libcurl program<a class="headerlink" href="#howto-convert-a-libcurl-program" title="Link to this heading">¶</a></h2>
+<section id="how-to-convert-a-libcurl-program">
+<h2>How to convert a libcurl program<a class="headerlink" href="#how-to-convert-a-libcurl-program" title="Link to this heading">¶</a></h2>
 <p>When converting a libcurl-based C program to the Open Dylan wrapper, a
 few conventions streamline the process. Below are the main conventions
 and their corresponding Open Dylan equivalents.</p>
@@ -290,8 +290,8 @@ and their corresponding Open Dylan equivalents.</p>
 <h3>Creating a CURL Handle<a class="headerlink" href="#creating-a-curl-handle" title="Link to this heading">¶</a></h3>
 <p>In libcurl, you create a handle using <a class="reference external" href="https://curl.se/libcurl/c/curl_easy_init.html">curl_easy_init</a>. In the Open Dylan
 wrapper, you create an object of the <code class="xref py py-class docutils literal notranslate"><span class="pre">&lt;curl-easy&gt;</span></code> class.</p>
-<div class="literal-block-wrapper docutils container" id="id3">
-<div class="code-block-caption"><span class="caption-text">C example</span><a class="headerlink" href="#id3" title="Link to this code">¶</a></div>
+<div class="literal-block-wrapper docutils container" id="id7">
+<div class="code-block-caption"><span class="caption-text">C example</span><a class="headerlink" href="#id7" title="Link to this code">¶</a></div>
 <div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="n">CURL</span><span class="w"> </span><span class="o">*</span><span class="n">curl</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">curl_easy_init</span><span class="p">();</span>
 <span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">curl</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
 <span class="w">  </span><span class="p">...</span>
@@ -300,8 +300,8 @@ wrapper, you create an object of the <code class="xref py py-class docutils lite
 </pre></div>
 </div>
 </div>
-<div class="literal-block-wrapper docutils container" id="id4">
-<div class="code-block-caption"><span class="caption-text">Opendylan example</span><a class="headerlink" href="#id4" title="Link to this code">¶</a></div>
+<div class="literal-block-wrapper docutils container" id="id8">
+<div class="code-block-caption"><span class="caption-text">Dylan example</span><a class="headerlink" href="#id8" title="Link to this code">¶</a></div>
 <div class="highlight-dylan notranslate"><div class="highlight"><pre><span></span><span class="k">let</span><span class="w"> </span><span class="n">curl</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">make</span><span class="p">(</span><span class="nc">&lt;curl-easy&gt;</span><span class="p">);</span>
 </pre></div>
 </div>
@@ -315,10 +315,10 @@ fails, a <code class="xref py py-class docutils literal notranslate"><span class
 <p>In libcurl, parameters are configured using <a class="reference external" href="https://curl.se/libcurl/c/curl_easy_setopt.html">curl_easy_setopt</a>, where a constant
 representing the option name is paired with its value. In the Open
 Dylan wrapper, options are set directly using property syntax, such as
-<cite>curl.curl-option-name := value</cite>. If an error occurs while setting a
+<a href="#id1"><span class="problematic" id="id2">``</span></a>curl.curl-option-name := value`. If an error occurs while setting a
 parameter, a <code class="xref py py-class docutils literal notranslate"><span class="pre">&lt;curl-option-error&gt;</span></code> exception is raised.</p>
-<div class="literal-block-wrapper docutils container" id="id5">
-<div class="code-block-caption"><span class="caption-text">Example showing the error checking, usually hidden in examples.</span><a class="headerlink" href="#id5" title="Link to this code">¶</a></div>
+<div class="literal-block-wrapper docutils container" id="id9">
+<div class="code-block-caption"><span class="caption-text">Example showing the error checking, usually hidden in examples.</span><a class="headerlink" href="#id9" title="Link to this code">¶</a></div>
 <div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="n">CURLCODE</span><span class="w"> </span><span class="n">code</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">curl_easy_setopt</span><span class="p">(</span><span class="n">curl</span><span class="p">,</span><span class="w"> </span><span class="n">CURLOPT_URL</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;https://example.com&quot;</span><span class="p">);</span>
 <span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">code</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="n">CURLE_OK</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
 <span class="w">   </span><span class="n">fprintf</span><span class="p">(</span><span class="n">stderr</span><span class="p">,</span>
@@ -330,7 +330,7 @@ parameter, a <code class="xref py py-class docutils literal notranslate"><span c
 </div>
 </div>
 <p>In libcurl, each parameter should be validated after calling the
-<cite>curl_easy_setopt</cite> function, although this step is often omitted in
+<code class="docutils literal notranslate"><span class="pre">curl_easy_setopt</span></code> function, although this step is often omitted in
 examples for simplicity. The libcurl documentation cautions: <em>“A
 real-world application will, of course, properly check every return
 value and exit correctly at the first serious error.”</em></p>
@@ -338,8 +338,8 @@ value and exit correctly at the first serious error.”</em></p>
 checked. If an error occurs, an exception is raised, allowing it to be
 handled either immediately at the point of the operation or deferred
 to another method for centralized error handling.</p>
-<div class="literal-block-wrapper docutils container" id="id6">
-<div class="code-block-caption"><span class="caption-text">In Opendylan errors can be captured in a block somewhere.</span><a class="headerlink" href="#id6" title="Link to this code">¶</a></div>
+<div class="literal-block-wrapper docutils container" id="id10">
+<div class="code-block-caption"><span class="caption-text">In Dylan errors can be captured in a block somewhere.</span><a class="headerlink" href="#id10" title="Link to this code">¶</a></div>
 <div class="highlight-dylan notranslate"><div class="highlight"><pre><span></span><span class="k">let</span><span class="w"> </span><span class="n">curl</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">make</span><span class="p">(</span><span class="nc">&lt;curl-easy&gt;</span><span class="p">);</span>
 <span class="n">curl</span><span class="p">.</span><span class="n">curl-url</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="s">&quot;https://example.com&quot;</span><span class="p">;</span>
 
@@ -359,8 +359,8 @@ to another method for centralized error handling.</p>
 <h3>Performing the Request<a class="headerlink" href="#performing-the-request" title="Link to this heading">¶</a></h3>
 <p>In libcurl, the request is executed using <cite>curl_easy_perform</cite>. The
 Open Dylan equivalent is the method <code class="xref py py-meth docutils literal notranslate"><span class="pre">curl-easy-perform()</span></code>.</p>
-<div class="literal-block-wrapper docutils container" id="id7">
-<div class="code-block-caption"><span class="caption-text">C Example</span><a class="headerlink" href="#id7" title="Link to this code">¶</a></div>
+<div class="literal-block-wrapper docutils container" id="id11">
+<div class="code-block-caption"><span class="caption-text">C Example</span><a class="headerlink" href="#id11" title="Link to this code">¶</a></div>
 <div class="highlight-C notranslate"><div class="highlight"><pre><span></span><span class="n">CURLcode</span><span class="w"> </span><span class="n">res</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">curl_easy_perform</span><span class="p">(</span><span class="n">curl</span><span class="p">);</span>
 
 <span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">res</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="n">CURLE_OK</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
@@ -371,14 +371,10 @@ Open Dylan equivalent is the method <code class="xref py py-meth docutils litera
 </pre></div>
 </div>
 </div>
-<p>In Opendylan <a href="#id1"><span class="problematic" id="id2">:function:`curl-perform`</span></a> raises a
+<p>In Opendylan <a href="#id3"><span class="problematic" id="id4">:function:`curl-perform`</span></a> raises a
 <code class="xref py py-class docutils literal notranslate"><span class="pre">&lt;curl-perform-error&gt;</span></code>.</p>
-<div class="highlight-dylan notranslate"><div class="highlight"><pre><span></span><span class="n">curl-easy-perform</span><span class="p">(</span><span class="n">curl</span><span class="p">);</span>
-
-<span class="p">...</span>
-
-<span class="nb">block</span><span class="w"> </span><span class="p">()</span>
-<span class="w">  </span><span class="p">...</span>
+<div class="highlight-dylan notranslate"><div class="highlight"><pre><span></span><span class="nb">block</span><span class="w"> </span><span class="p">()</span>
+<span class="w">  </span><span class="n">curl-easy-perform</span><span class="p">(</span><span class="n">curl</span><span class="p">);</span>
 <span class="nb">exception</span><span class="w"> </span><span class="p">(</span><span class="n">err</span><span class="w"> </span><span class="p">::</span><span class="w"> </span><span class="nc">&lt;curl-perform-error&gt;</span><span class="p">)</span>
 <span class="w">   </span><span class="p">...</span><span class="w"> </span><span class="n">show</span><span class="w"> </span><span class="nb">error</span><span class="w"> </span><span class="n">or</span><span class="w"> </span><span class="n">retry?</span>
 <span class="k">end</span><span class="w"> </span><span class="nb">block</span><span class="p">;</span>
@@ -387,11 +383,11 @@ Open Dylan equivalent is the method <code class="xref py py-meth docutils litera
 </section>
 <section id="retrieving-information">
 <h3>Retrieving Information<a class="headerlink" href="#retrieving-information" title="Link to this heading">¶</a></h3>
-<p>In libcurl, retrieving information is done with <cite>curl_easy_getinfo</cite>,
+<p>In libcurl, retrieving information is done with <a href="#id5"><span class="problematic" id="id6">``</span></a>curl_easy_getinfo`,
 passing a constant for the type of information. In the Open Dylan
 wrapper, you access the information directly using property syntax.</p>
-<div class="literal-block-wrapper docutils container" id="id8">
-<div class="code-block-caption"><span class="caption-text">C example getting the total time of previous transfer</span><a class="headerlink" href="#id8" title="Link to this code">¶</a></div>
+<div class="literal-block-wrapper docutils container" id="id12">
+<div class="code-block-caption"><span class="caption-text">C example getting the total time of previous transfer</span><a class="headerlink" href="#id12" title="Link to this code">¶</a></div>
 <div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="kt">double</span><span class="w"> </span><span class="n">total_time</span><span class="p">;</span>
 <span class="n">CURLCODE</span><span class="w"> </span><span class="n">res</span><span class="p">;</span>
 
@@ -414,8 +410,8 @@ wrapper, you access the information directly using property syntax.</p>
 </pre></div>
 </div>
 </div>
-<div class="literal-block-wrapper docutils container" id="id9">
-<div class="code-block-caption"><span class="caption-text">Dylan Example</span><a class="headerlink" href="#id9" title="Link to this code">¶</a></div>
+<div class="literal-block-wrapper docutils container" id="id13">
+<div class="code-block-caption"><span class="caption-text">Dylan Example</span><a class="headerlink" href="#id13" title="Link to this code">¶</a></div>
 <div class="highlight-dylan notranslate"><div class="highlight"><pre><span></span><span class="nb">block</span><span class="w"> </span><span class="p">()</span>
 <span class="w">   </span><span class="k">let</span><span class="w"> </span><span class="n">curl</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">make</span><span class="p">(</span><span class="nc">&lt;curl-easy&gt;</span><span class="p">);</span>
 <span class="w">   </span><span class="n">curl</span><span class="p">.</span><span class="n">curl-url</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="s">&quot;https://example.com/&quot;</span><span class="p">;</span>
@@ -491,7 +487,7 @@ wrapper, you access the information directly using property syntax.</p>
           <div class="toc-tree">
             <ul>
 <li><a class="reference internal" href="#">Introduction</a><ul>
-<li><a class="reference internal" href="#howto-convert-a-libcurl-program">Howto convert a libcurl program</a><ul>
+<li><a class="reference internal" href="#how-to-convert-a-libcurl-program">How to convert a libcurl program</a><ul>
 <li><a class="reference internal" href="#creating-a-curl-handle">Creating a CURL Handle</a></li>
 <li><a class="reference internal" href="#setting-parameters">Setting Parameters</a></li>
 <li><a class="reference internal" href="#performing-the-request">Performing the Request</a></li>
