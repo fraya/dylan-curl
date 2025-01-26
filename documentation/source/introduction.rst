@@ -3,7 +3,7 @@ Introduction
 
 ``dylan-curl`` is a wrapper around the popular libcurl library,
 providing a way to interact with network resources from within Open
-Dylan programs. This wrapper try to simplify the complexities of
+Dylan programs. This wrapper tries to simplify the complexities of
 libcurl, offering a Dylan-friendly API while maintaining the core
 capabilities of the underlying C library.
 
@@ -20,8 +20,8 @@ Dylan Integration:
   handling into Dylan's exception mechanism for cleaner and more
   reliable error management.
 
-Howto convert a libcurl program
--------------------------------
+How to convert a libcurl program
+--------------------------------
 
 When converting a libcurl-based C program to the Open Dylan wrapper, a
 few conventions streamline the process. Below are the main conventions
@@ -44,7 +44,7 @@ wrapper, you create an object of the :class:`<curl-easy>` class.
    }
 
 .. code-block:: dylan
-   :caption: Opendylan example
+   :caption: Dylan example
 
    let curl = make(<curl-easy>);
 
@@ -59,7 +59,7 @@ In libcurl, parameters are configured using `curl_easy_setopt
 <https://curl.se/libcurl/c/curl_easy_setopt.html>`_, where a constant
 representing the option name is paired with its value. In the Open
 Dylan wrapper, options are set directly using property syntax, such as
-`curl.curl-option-name := value`. If an error occurs while setting a
+``curl.curl-option-name := value`. If an error occurs while setting a
 parameter, a :class:`<curl-option-error>` exception is raised.
 
 .. code-block:: c
@@ -74,7 +74,7 @@ parameter, a :class:`<curl-option-error>` exception is raised.
    }
 
 In libcurl, each parameter should be validated after calling the
-`curl_easy_setopt` function, although this step is often omitted in
+``curl_easy_setopt`` function, although this step is often omitted in
 examples for simplicity. The libcurl documentation cautions: *"A
 real-world application will, of course, properly check every return
 value and exit correctly at the first serious error."*
@@ -85,7 +85,7 @@ handled either immediately at the point of the operation or deferred
 to another method for centralized error handling.
 
 .. code-block:: dylan
-   :caption: In Opendylan errors can be captured in a block somewhere.
+   :caption: In Dylan errors can be captured in a block somewhere.
 
    let curl = make(<curl-easy>);
    curl.curl-url := "https://example.com";
@@ -120,21 +120,19 @@ In Opendylan :function:`curl-perform` raises a
 :class:`<curl-perform-error>`.
 
 .. code-block:: dylan
-
-   curl-easy-perform(curl);
-
-   ...
+   :caption: Dylan example
 
    block ()
-     ...
+     curl-easy-perform(curl);
+     format-out("Request completed successfully.\n")
    exception (err :: <curl-perform-error>)
-      ... show error or retry?
+      format-err("Curl failed: %s\n", curl.curl-error-message)
    end block;
 
 Retrieving Information
 ^^^^^^^^^^^^^^^^^^^^^^
 
-In libcurl, retrieving information is done with `curl_easy_getinfo`,
+In libcurl, retrieving information is done with ``curl_easy_getinfo`,
 passing a constant for the type of information. In the Open Dylan
 wrapper, you access the information directly using property syntax.
 

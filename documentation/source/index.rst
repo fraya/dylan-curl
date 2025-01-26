@@ -1,7 +1,7 @@
 Dylan-curl
 ==========
 
-Curl library wrapper for the Opendylan language.
+Curl library wrapper for the Dylan language.
 
 .. toctree::
    :maxdepth: 2
