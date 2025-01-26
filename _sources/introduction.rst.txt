@@ -120,11 +120,13 @@ In Opendylan :function:`curl-perform` raises a
 :class:`<curl-perform-error>`.
 
 .. code-block:: dylan
+   :caption: Dylan example
 
    block ()
      curl-easy-perform(curl);
+     format-out("Request completed successfully.\n")
    exception (err :: <curl-perform-error>)
-      ... show error or retry?
+      format-err("Curl failed: %s\n", curl.curl-error-message)
    end block;
 
 Retrieving Information
