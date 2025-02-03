@@ -511,6 +511,19 @@ define C-function curl-version
   c-name: "curl_version";
 end C-function;
 
+define macro with-curl-easy
+  { with-curl-easy (?curl:name) ?body:body end }
+    => { let ?curl = #f;
+         block ()
+	   ?curl := make(<curl-easy>);
+	   ?body
+	 cleanup
+	   if (?curl)
+	     c-curl-easy-cleanup(?curl.curl-handle)
+	   end;
+         end block }
+end macro;
+
 ///////////////////////////////////////////////////////////////////////////////
 //
 // Curl errors as exceptions
@@ -538,7 +551,7 @@ define class <curl-info-error> (<curl-error>) end;
 
 ///////////////////////////////////////////////////////////////////////////////
 //
-// Curl easy and methods/functions
+// Curlerrors as exceptions
 //
 ///////////////////////////////////////////////////////////////////////////////
 
@@ -551,18 +564,11 @@ end;
 
 define method initialize
     (curl :: <curl-easy>, #key)
-  // drain-finalization-queue(); ???
   next-method();
   if (null-pointer?(curl.curl-handle))
     signal(make(<curl-init-error>))
   end;
-  finalize-when-unreachable(curl);
 end method;
-
-define method finalize
-    (curl :: <curl-easy>) => ()
-  c-curl-easy-cleanup(curl.curl-handle)
-end;
 
 define function curl-easy-dup
     (curl :: <curl-easy>) => (dup :: <curl-easy>)

@@ -46,9 +46,11 @@ wrapper, you create an object of the :class:`<curl-easy>` class.
 .. code-block:: dylan
    :caption: Dylan example
 
-   let curl = make(<curl-easy>);
+   with-curl-easy (curl)
+     ...
+   end;
 
-The :class:`<curl-easy>` object handles both initialization and
+The macro :macro:`with-curl-easy` handles both initialization and
 automatic cleanup when it is no longer accessible. If initialization
 fails, a :class:`<curl-init-error>` exception is raised.
 
@@ -59,7 +61,7 @@ In libcurl, parameters are configured using `curl_easy_setopt
 <https://curl.se/libcurl/c/curl_easy_setopt.html>`_, where a constant
 representing the option name is paired with its value. In the Open
 Dylan wrapper, options are set directly using property syntax, such as
-``curl.curl-option-name := value`. If an error occurs while setting a
+``curl.curl-option-name := value``. If an error occurs while setting a
 parameter, a :class:`<curl-option-error>` exception is raised.
 
 .. code-block:: c
@@ -87,8 +89,9 @@ to another method for centralized error handling.
 .. code-block:: dylan
    :caption: In Dylan errors can be captured in a block somewhere.
 
-   let curl = make(<curl-easy>);
-   curl.curl-url := "https://example.com";
+   with-curl-easy (curl)
+     curl.curl-url := "https://example.com";
+   end;
 
    ...
 
@@ -132,7 +135,7 @@ In Opendylan :function:`curl-perform` raises a
 Retrieving Information
 ^^^^^^^^^^^^^^^^^^^^^^
 
-In libcurl, retrieving information is done with ``curl_easy_getinfo`,
+In libcurl, retrieving information is done with ``curl_easy_getinfo``,
 passing a constant for the type of information. In the Open Dylan
 wrapper, you access the information directly using property syntax.
 
@@ -163,10 +166,11 @@ wrapper, you access the information directly using property syntax.
    :caption: Dylan Example
 
    block ()
-      let curl = make(<curl-easy>);
-      curl.curl-url := "https://example.com/";
-      curl-easy-perform(curl);
-      format-out("Time: %d", curl.total-time);
+      with-curl-easy (curl)
+        curl.curl-url := "https://example.com/";
+        curl-easy-perform(curl);
+        format-out("Time: %d", curl.total-time)
+      end
    exception (err :: <curl-info-error>)
       format-err("curl easy getinfo failed: %s\n",
                  err.curl-error-message)
