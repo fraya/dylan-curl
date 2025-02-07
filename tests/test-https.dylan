@@ -7,13 +7,14 @@ Reference:  https://curl.se/libcurl/c/https.html
 define test test-https (tags: #("io", "slow"))
   block ()
     curl-global-init($curl-global-default);
-    let curl = make(<curl-easy>);
-    curl.curl-url := "https://example.org";
-    curl.curl-ssl-verifypeer := 1;
-    curl.curl-ssl-verifyhost := 1;
-    curl.curl-ca-cache-timeout := 604800;
-    curl-easy-perform(curl);
-    assert-true(#t);
+    with-curl-easy (curl)
+      curl.curl-url := "https://example.org";
+      curl.curl-ssl-verifypeer := 1;
+      curl.curl-ssl-verifyhost := 1;
+      curl.curl-ca-cache-timeout := 604800;
+      curl-easy-perform(curl);
+      assert-true(#t);
+    end with-curl-easy;
   cleanup
     curl-global-cleanup();
   exception (err :: <curl-error>)

@@ -301,7 +301,8 @@ define module curl-easy
 
   create
     <curl>,
-    <curl-easy>;
+    <curl-easy>,
+    with-curl-easy;
 
   create
     c-curl-easy-header,
@@ -729,6 +730,5 @@ define module curl-easy-impl
   use curl-easy;
 
   use common-dylan;
-  use finalization;
   use c-ffi;
 end module;
