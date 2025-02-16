@@ -1,6 +1,6 @@
 Dylan-curl
 ==========
-
+		     
 Curl library wrapper for the Dylan language.
 
 .. toctree::
@@ -9,8 +9,7 @@ Curl library wrapper for the Dylan language.
 
    installation
    introduction
-   curl_global
-   curl_options
+   reference
 
 Indices and tables
 ==================
