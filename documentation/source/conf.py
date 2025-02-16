@@ -29,6 +29,9 @@ extensions = [
     'sphinx_copybutton'
 ]
 
+# Necessary to make things like '.. current-module:: foo' work.
+primary_domain = 'dylan'
+
 templates_path = ['_templates']
 exclude_patterns = []
 
