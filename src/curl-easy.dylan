@@ -491,6 +491,19 @@ define C-function curl-global-cleanup
   c-name: "curl_global_cleanup";
 end C-function;
 
+define macro with-curl-global
+  { with-curl-global (?flags:expression) ?body:body end }
+    => { let status = curl-global-init(?flags);
+         if (status ~= $curle-ok)
+           signal(make(<curl-init-error>))
+         end;
+         block ()
+           ?body
+         cleanup
+           curl-global-cleanup()
+         end block }
+end macro;
+
 define C-function curl-slist-append
   // https://curl.se/libcurl/c/curl_slist_append.html
   input parameter slist  :: <curl-slist*>;
@@ -519,7 +532,7 @@ define macro with-curl-easy
 	   ?body
 	 cleanup
 	   if (?curl)
-	     c-curl-easy-cleanup(?curl.curl-handle)
+	     curl-easy-cleanup(?curl)
 	   end;
          end block }
 end macro;
@@ -569,6 +582,11 @@ define method initialize
     signal(make(<curl-init-error>))
   end;
 end method;
+
+define function curl-easy-cleanup
+    (curl :: <curl-easy>) => ) 
+  c-curl-easy-cleanup(curl.curl-handle)
+end;
 
 define function curl-easy-dup
     (curl :: <curl-easy>) => (dup :: <curl-easy>)

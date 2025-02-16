@@ -34,18 +34,18 @@ define function dump-debug-callback
 end function;
 
 define test test-debug-callback (tags: #("io"))
-  curl-global-init($curl-global-default);
   block ()
-    let curl = make(<curl-easy>);
-    dynamic-bind (*curl-debug-callback* = dump-debug-callback)
-      curl.curl-url := "https://example.com/";
-      curl.curl-verbose := 1;  // verbose to use debug-callback
-      curl.curl-debugfunction := $curl-debug-callback;
-      curl-easy-perform(curl);
-    end dynamic-bind;
-    assert-true(#t);
-  cleanup
-    curl-global-cleanup();
+    with-curl-global ($curl-global-default)
+      with-curl-easy (curl)
+        dynamic-bind (*curl-debug-callback* = dump-debug-callback)
+	  curl.curl-url := "https://example.com/";
+          curl.curl-verbose := 1;  // verbose to use debug-callback
+          curl.curl-debugfunction := $curl-debug-callback;
+          curl-easy-perform(curl);
+        end dynamic-bind;
+        assert-true(#t);
+      end with-curl-easy;
+    end with-curl-global;
   exception (curl-error :: <curl-error>)
     format-err("Curl error: %s", as(<string>, curl-error))
   end block;

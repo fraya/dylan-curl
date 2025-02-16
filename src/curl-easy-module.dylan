@@ -302,7 +302,8 @@ define module curl-easy
   create
     <curl>,
     <curl-easy>,
-    with-curl-easy;
+    with-curl-easy,
+    with-curl-global;
 
   create
     c-curl-easy-header,
@@ -313,6 +314,7 @@ define module curl-easy
     c-curl-easy-upkeep,
     curl-global-init,
     curl-global-cleanup,
+    curl-easy-cleanup,
     curl-easy-dup,
     curl-easy-escape,
     curl-easy-option-by-id,
