@@ -26,4 +26,6 @@ define module curl-easy-test-suite
   use testworks;
 
   use curl-easy;
+
+  export curl-easy-test-suite;
 end module;

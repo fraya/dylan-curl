@@ -11,6 +11,10 @@ define function httpbin
   let port = environment-variable("HTTPBIN_PORT") | $httpbin_port;
   concatenate("http://", site, ":", port, path);
 end;
-	
+
+define suite curl-easy-test-suite ()
+  suite suite-httpbin;
+end suite;
+
 // Use `_build/bin/easy-curl-test-suite --help` to see options.
 run-test-application()
