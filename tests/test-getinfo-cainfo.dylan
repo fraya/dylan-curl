@@ -2,18 +2,17 @@ Module:    curl-easy-test-suite
 Author:    Fernando Raya
 Copyright: Copyright (C) 2025, Dylan Hackers. All rights reserved.
 
-define test test-getinfo-cainfo ()
-  curl-global-init($curl-global-default);
+define test test-getinfo-cainfo () 
   block ()
-    with-curl-easy (curl)
-      curl.curl-cainfo := "/etc/ssl/certs/SecureTrust_CA.pem";
-      let cainfo = curl.curl-cainfo;
-      format-out("default ca info path: '%s'\n", cainfo);
-      assert-true(#t);
-    end;
-  cleanup
-    curl-global-cleanup();
+    with-curl-global ($curl-global-default)
+      with-curl-easy (curl)
+	curl.curl-cainfo := "/etc/ssl/certs/SecureTrust_CA.pem";
+	let cainfo = curl.curl-cainfo;
+	format-out("default ca info path: '%s'\n", cainfo);
+	assert-true(#t);
+      end with-curl-easy;
+    end with-curl-global;
   exception (err :: <curl-error>)
-    format-out("cainfo failed: %s\n", err.curl-error-message)
+      format-out("cainfo failed: %s\n", err.curl-error-message)
   end block;
 end test;

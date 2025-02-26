@@ -106,7 +106,7 @@ Performing the Request
 ^^^^^^^^^^^^^^^^^^^^^^
 
 In libcurl, the request is executed using `curl_easy_perform`. The
-Open Dylan equivalent is the method :meth:`curl-easy-perform`.
+Open Dylan equivalent is the method :func:`curl-easy-perform`.
 
 .. code-block:: C
    :caption: C Example
@@ -119,7 +119,7 @@ Open Dylan equivalent is the method :meth:`curl-easy-perform`.
      printf("Request completed successfully.\n");
    }
 
-In Opendylan :function:`curl-perform` raises a
+In Opendylan :func:`curl-perform` raises a
 :class:`<curl-perform-error>`.
 
 .. code-block:: dylan

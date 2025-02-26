@@ -1,7 +1,153 @@
+*********
+Reference
+*********
+
+.. current-library:: dylan-curl
+.. current-module:: curl-easy
+
+Constants
+=========
+
+Global initialization
+---------------------
+
+.. note::
+
+   See `curl_global_init
+   <https://curl.se/libcurl/c/curl_global_init.html>`_ in libcurl's
+   documentation for a complete description of this flags.
+
+- :const:`$curl-global-ssl`
+- :const:`$curl-global-win32`
+- :const:`$curl-global-all`
+- :const:`$curl-global-nothing`
+- :const:`$curl-global-default`
+- :const:`$curl-global-ack-eintr`
+
+Functions
+=========
+
+Global
+------
+
+.. function:: curl-global-init
+
+   :signature:
+
+      curl-global-init *flags* => *code*
+
+   :description:
+
+   See `curl_global_init <https://curl.se/libcurl/c/curl_global_init.html>`_
+
+.. function:: curl-global-cleanup
+
+   :signature:
+
+      curl-global-cleanup => ()
+
+   See `curl_global_cleanup <https://curl.se/libcurl/c/curl_global_cleanup.html>`_
+
+General
+-------
+
+.. function:: curl-easy-perform
+
+   :signature:
+
+      curl-easy-perform (*curl-handler*) => ()
+
+   :seealso:
+
+     `curl_easy_perform
+     <https://curl.se/libcurl/c/curl_easy_perform.html>`_ in `libcurl
+     <https://curl.se/libcurl/>`_
+
+Macros
+======
+
+.. dylan:macro:: with-curl-easy
+   :statement:
+
+   :macrocall:
+     .. parsed-literal::
+	with-curl-easy (*name*) body end
+
+   :example:
+
+     .. code-block:: dylan
+
+        with-curl-easy (curl)
+          curl.url := "example.com";
+	  curl-easy-perform(curl);
+	end;
+
+   :signals:
+
+      :class:`<curl-init-error>` if the curl handle could not be
+      initialized.
+
+   :discussion:
+
+     This macro is more or less equivalent to:
+
+     .. code-block:: dylan
+
+	let curl = #f;
+        block ()
+	  curl := make(<curl-easy>);
+	  ... body ...
+	cleanup
+	  curl-easy-cleanup(curl)
+	end block;
+
+.. dylan:macro:: with-global-curl
+   :statement:
+
+   This macro simplifies the initialization and cleanup of the
+   `libcurl` library in Open Dylan.  It ensures that `libcurl`'s
+   global variables are initialized before the code is executed and
+   properly cleaned up afterwards.
+
+   :macrocall:
+      .. parsed-literal::
+	 with-global-curl (*flags*) body end
+
+   :param flags:
+
+      A bit pattern that tells libcurl exactly what features to init.
+      In normal operation, you must use :const:`$curl-global-all` or
+      :const:`$curl-global-default` since right now are the same.
+
+   :signals:
+
+      A :class:`<curl-init-error>` if there was an error initializing
+      the library. The rest of functions/methods cannot be used.
+
+   :example:
+
+     .. code-block:: dylan
+
+        with-global-curl ($curl-global-all)
+          with-curl-easy (curl)
+            curl.url := "https://example.com";
+            curl-easy-perform(curl);
+	    // do staff
+          end;
+        end with-global-curl;
+
+   :seealso:
+
+      * `Global preparation <https://curl.se/libcurl/c/libcurl-tutorial.html>`_.
+      * `Global flags <#global-flags>`_
+      * :func:`curl-global-init`
+      * :func:`curl-global-cleanup`
+
 Options
 =======
 
 .. method:: curl-writedata-setter
+   :specializer: <curl-cbpoint>
 
    :signature:
 
@@ -13,9 +159,12 @@ Options
 
    :description:
 
-   See: https://curl.se/libcurl/c/CURLOPT_WRITEDATA.html
+   :seealso:
+
+     https://curl.se/libcurl/c/CURLOPT_WRITEDATA.html
 
 .. method:: curl-url-setter
+   :specializer: <curl-stringpoint>
 
    :signature:
 
@@ -27,9 +176,12 @@ Options
 
    :description:
 
-   See: https://curl.se/libcurl/c/CURLOPT_URL.html
+   :seealso:
+
+     https://curl.se/libcurl/c/CURLOPT_URL.html
 
 .. method:: curl-port-setter
+   :specializer: <curl-long>
 
    :signature:
 
@@ -41,9 +193,12 @@ Options
 
    :description:
 
-   See: https://curl.se/libcurl/c/CURLOPT_PORT.html
+   :seealso:
+
+     https://curl.se/libcurl/c/CURLOPT_PORT.html
 
 .. method:: curl-proxy-setter
+   :specializer: <curl-stringpoint>
 
    :signature:
 
@@ -55,9 +210,12 @@ Options
 
    :description:
 
-   See: https://curl.se/libcurl/c/CURLOPT_PROXY.html
+   :seealso:
+
+     https://curl.se/libcurl/c/CURLOPT_PROXY.html
 
 .. method:: curl-userpwd-setter
+   :specializer: <curl-stringpoint>
 
    :signature:
 
@@ -69,9 +227,12 @@ Options
 
    :description:
 
-   See: https://curl.se/libcurl/c/CURLOPT_USERPWD.html
+   :seealso:
+
+     https://curl.se/libcurl/c/CURLOPT_USERPWD.html
 
 .. method:: curl-proxyuserpwd-setter
+   :specializer: <curl-stringpoint>
 
    :signature:
 
@@ -83,9 +244,12 @@ Options
 
    :description:
 
-   See: https://curl.se/libcurl/c/CURLOPT_PROXYUSERPWD.html
+   :seealso:
+
+     https://curl.se/libcurl/c/CURLOPT_PROXYUSERPWD.html
 
 .. method:: curl-range-setter
+   :specializer: <curl-stringpoint>
 
    :signature:
 
@@ -97,9 +261,12 @@ Options
 
    :description:
 
-   See: https://curl.se/libcurl/c/CURLOPT_RANGE.html
+   :seealso:
+
+     https://curl.se/libcurl/c/CURLOPT_RANGE.html
 
 .. method:: curl-readdata-setter
+   :specializer: <curl-cbpoint>
 
    :signature:
 
@@ -111,9 +278,12 @@ Options
 
    :description:
 
-   See: https://curl.se/libcurl/c/CURLOPT_READDATA.html
+   :seealso:
+
+     https://curl.se/libcurl/c/CURLOPT_READDATA.html
 
 .. method:: curl-errorbuffer-setter
+   :specializer: <curl-objectpoint>
 
    :signature:
 
@@ -125,9 +295,12 @@ Options
 
    :description:
 
-   See: https://curl.se/libcurl/c/CURLOPT_ERRORBUFFER.html
+   :seealso:
+
+     https://curl.se/libcurl/c/CURLOPT_ERRORBUFFER.html
 
 .. method:: curl-writefunction-setter
+   :specializer: <curl-functionpoint>
 
    :signature:
 
@@ -139,9 +312,12 @@ Options
 
    :description:
 
-   See: https://curl.se/libcurl/c/CURLOPT_WRITEFUNCTION.html
+   :seealso:
+
+     https://curl.se/libcurl/c/CURLOPT_WRITEFUNCTION.html
 
 .. method:: curl-readfunction-setter
+   :specializer: <curl-functionpoint>
 
    :signature:
 
@@ -153,9 +329,12 @@ Options
 
    :description:
 
-   See: https://curl.se/libcurl/c/CURLOPT_READFUNCTION.html
+   :seealso:
+
+     https://curl.se/libcurl/c/CURLOPT_READFUNCTION.html
 
 .. method:: curl-timeout-setter
+   :specializer: <curl-long>
 
    :signature:
 
@@ -167,9 +346,12 @@ Options
 
    :description:
 
-   See: https://curl.se/libcurl/c/CURLOPT_TIMEOUT.html
+   :seealso:
+
+     https://curl.se/libcurl/c/CURLOPT_TIMEOUT.html
 
 .. method:: curl-infilesize-setter
+   :specializer: <curl-long>
 
    :signature:
 
@@ -181,9 +363,12 @@ Options
 
    :description:
 
-   See: https://curl.se/libcurl/c/CURLOPT_INFILESIZE.html
+   :seealso:
+
+     https://curl.se/libcurl/c/CURLOPT_INFILESIZE.html
 
 .. method:: curl-postfields-setter
+   :specializer: <curl-stringpoint>
 
    :signature:
 
@@ -195,9 +380,12 @@ Options
 
    :description:
 
-   See: https://curl.se/libcurl/c/CURLOPT_POSTFIELDS.html
+   :seealso:
+
+     https://curl.se/libcurl/c/CURLOPT_POSTFIELDS.html
 
 .. method:: curl-referer-setter
+   :specializer: <curl-stringpoint>
 
    :signature:
 
@@ -209,9 +397,12 @@ Options
 
    :description:
 
-   See: https://curl.se/libcurl/c/CURLOPT_REFERER.html
+   :seealso:
+
+     https://curl.se/libcurl/c/CURLOPT_REFERER.html
 
 .. method:: curl-ftpport-setter
+   :specializer: <curl-stringpoint>
 
    :signature:
 
@@ -223,9 +414,12 @@ Options
 
    :description:
 
-   See: https://curl.se/libcurl/c/CURLOPT_FTPPORT.html
+   :seealso:
+
+     https://curl.se/libcurl/c/CURLOPT_FTPPORT.html
 
 .. method:: curl-useragent-setter
+   :specializer: <curl-stringpoint>
 
    :signature:
 
@@ -237,9 +431,12 @@ Options
 
    :description:
 
-   See: https://curl.se/libcurl/c/CURLOPT_USERAGENT.html
+   :seealso:
+
+     https://curl.se/libcurl/c/CURLOPT_USERAGENT.html
 
 .. method:: curl-low-speed-limit-setter
+   :specializer: <curl-long>
 
    :signature:
 
@@ -251,9 +448,12 @@ Options
 
    :description:
 
-   See: https://curl.se/libcurl/c/CURLOPT_LOW_SPEED_LIMIT.html
+   :seealso:
+
+     https://curl.se/libcurl/c/CURLOPT_LOW_SPEED_LIMIT.html
 
 .. method:: curl-low-speed-time-setter
+   :specializer: <curl-long>
 
    :signature:
 
@@ -265,9 +465,12 @@ Options
 
    :description:
 
-   See: https://curl.se/libcurl/c/CURLOPT_LOW_SPEED_TIME.html
+   :seealso:
+
+     https://curl.se/libcurl/c/CURLOPT_LOW_SPEED_TIME.html
 
 .. method:: curl-resume-from-setter
+   :specializer: <curl-long>
 
    :signature:
 
@@ -279,9 +482,12 @@ Options
 
    :description:
 
-   See: https://curl.se/libcurl/c/CURLOPT_RESUME_FROM.html
+   :seealso:
+
+     https://curl.se/libcurl/c/CURLOPT_RESUME_FROM.html
 
 .. method:: curl-cookie-setter
+   :specializer: <curl-stringpoint>
 
    :signature:
 
@@ -293,9 +499,12 @@ Options
 
    :description:
 
-   See: https://curl.se/libcurl/c/CURLOPT_COOKIE.html
+   :seealso:
+
+     https://curl.se/libcurl/c/CURLOPT_COOKIE.html
 
 .. method:: curl-httpheader-setter
+   :specializer: <curl-slistpoint>
 
    :signature:
 
@@ -307,9 +516,12 @@ Options
 
    :description:
 
-   See: https://curl.se/libcurl/c/CURLOPT_HTTPHEADER.html
+   :seealso:
+
+     https://curl.se/libcurl/c/CURLOPT_HTTPHEADER.html
 
 .. method:: curl-httppost-setter
+   :specializer: <curl-objectpoint>
 
    :signature:
 
@@ -321,9 +533,12 @@ Options
 
    :description:
 
-   See: https://curl.se/libcurl/c/CURLOPT_HTTPPOST.html
+   :seealso:
+
+     https://curl.se/libcurl/c/CURLOPT_HTTPPOST.html
 
 .. method:: curl-sslcert-setter
+   :specializer: <curl-stringpoint>
 
    :signature:
 
@@ -335,9 +550,12 @@ Options
 
    :description:
 
-   See: https://curl.se/libcurl/c/CURLOPT_SSLCERT.html
+   :seealso:
+
+     https://curl.se/libcurl/c/CURLOPT_SSLCERT.html
 
 .. method:: curl-keypasswd-setter
+   :specializer: <curl-stringpoint>
 
    :signature:
 
@@ -349,9 +567,12 @@ Options
 
    :description:
 
-   See: https://curl.se/libcurl/c/CURLOPT_KEYPASSWD.html
+   :seealso:
+
+     https://curl.se/libcurl/c/CURLOPT_KEYPASSWD.html
 
 .. method:: curl-crlf-setter
+   :specializer: <curl-long>
 
    :signature:
 
@@ -363,9 +584,12 @@ Options
 
    :description:
 
-   See: https://curl.se/libcurl/c/CURLOPT_CRLF.html
+   :seealso:
+
+     https://curl.se/libcurl/c/CURLOPT_CRLF.html
 
 .. method:: curl-quote-setter
+   :specializer: <curl-slistpoint>
 
    :signature:
 
@@ -377,9 +601,12 @@ Options
 
    :description:
 
-   See: https://curl.se/libcurl/c/CURLOPT_QUOTE.html
+   :seealso:
+
+     https://curl.se/libcurl/c/CURLOPT_QUOTE.html
 
 .. method:: curl-headerdata-setter
+   :specializer: <curl-cbpoint>
 
    :signature:
 
@@ -391,9 +618,12 @@ Options
 
    :description:
 
-   See: https://curl.se/libcurl/c/CURLOPT_HEADERDATA.html
+   :seealso:
+
+     https://curl.se/libcurl/c/CURLOPT_HEADERDATA.html
 
 .. method:: curl-cookiefile-setter
+   :specializer: <curl-stringpoint>
 
    :signature:
 
@@ -405,9 +635,12 @@ Options
 
    :description:
 
-   See: https://curl.se/libcurl/c/CURLOPT_COOKIEFILE.html
+   :seealso:
+
+     https://curl.se/libcurl/c/CURLOPT_COOKIEFILE.html
 
 .. method:: curl-sslversion-setter
+   :specializer: <curl-values>
 
    :signature:
 
@@ -419,9 +652,12 @@ Options
 
    :description:
 
-   See: https://curl.se/libcurl/c/CURLOPT_SSLVERSION.html
+   :seealso:
+
+     https://curl.se/libcurl/c/CURLOPT_SSLVERSION.html
 
 .. method:: curl-timecondition-setter
+   :specializer: <curl-values>
 
    :signature:
 
@@ -433,9 +669,12 @@ Options
 
    :description:
 
-   See: https://curl.se/libcurl/c/CURLOPT_TIMECONDITION.html
+   :seealso:
+
+     https://curl.se/libcurl/c/CURLOPT_TIMECONDITION.html
 
 .. method:: curl-timevalue-setter
+   :specializer: <curl-long>
 
    :signature:
 
@@ -447,9 +686,12 @@ Options
 
    :description:
 
-   See: https://curl.se/libcurl/c/CURLOPT_TIMEVALUE.html
+   :seealso:
+
+     https://curl.se/libcurl/c/CURLOPT_TIMEVALUE.html
 
 .. method:: curl-customrequest-setter
+   :specializer: <curl-stringpoint>
 
    :signature:
 
@@ -461,9 +703,12 @@ Options
 
    :description:
 
-   See: https://curl.se/libcurl/c/CURLOPT_CUSTOMREQUEST.html
+   :seealso:
+
+     https://curl.se/libcurl/c/CURLOPT_CUSTOMREQUEST.html
 
 .. method:: curl-stderr-setter
+   :specializer: <curl-objectpoint>
 
    :signature:
 
@@ -475,9 +720,12 @@ Options
 
    :description:
 
-   See: https://curl.se/libcurl/c/CURLOPT_STDERR.html
+   :seealso:
+
+     https://curl.se/libcurl/c/CURLOPT_STDERR.html
 
 .. method:: curl-postquote-setter
+   :specializer: <curl-slistpoint>
 
    :signature:
 
@@ -489,9 +737,12 @@ Options
 
    :description:
 
-   See: https://curl.se/libcurl/c/CURLOPT_POSTQUOTE.html
+   :seealso:
+
+     https://curl.se/libcurl/c/CURLOPT_POSTQUOTE.html
 
 .. method:: curl-verbose-setter
+   :specializer: <curl-long>
 
    :signature:
 
@@ -503,9 +754,12 @@ Options
 
    :description:
 
-   See: https://curl.se/libcurl/c/CURLOPT_VERBOSE.html
+   :seealso:
+
+     https://curl.se/libcurl/c/CURLOPT_VERBOSE.html
 
 .. method:: curl-header-setter
+   :specializer: <curl-long>
 
    :signature:
 
@@ -517,9 +771,12 @@ Options
 
    :description:
 
-   See: https://curl.se/libcurl/c/CURLOPT_HEADER.html
+   :seealso:
+
+     https://curl.se/libcurl/c/CURLOPT_HEADER.html
 
 .. method:: curl-noprogress-setter
+   :specializer: <curl-long>
 
    :signature:
 
@@ -531,9 +788,12 @@ Options
 
    :description:
 
-   See: https://curl.se/libcurl/c/CURLOPT_NOPROGRESS.html
+   :seealso:
+
+     https://curl.se/libcurl/c/CURLOPT_NOPROGRESS.html
 
 .. method:: curl-nobody-setter
+   :specializer: <curl-long>
 
    :signature:
 
@@ -545,9 +805,12 @@ Options
 
    :description:
 
-   See: https://curl.se/libcurl/c/CURLOPT_NOBODY.html
+   :seealso:
+
+     https://curl.se/libcurl/c/CURLOPT_NOBODY.html
 
 .. method:: curl-failonerror-setter
+   :specializer: <curl-long>
 
    :signature:
 
@@ -559,9 +822,12 @@ Options
 
    :description:
 
-   See: https://curl.se/libcurl/c/CURLOPT_FAILONERROR.html
+   :seealso:
+
+     https://curl.se/libcurl/c/CURLOPT_FAILONERROR.html
 
 .. method:: curl-upload-setter
+   :specializer: <curl-long>
 
    :signature:
 
@@ -573,9 +839,12 @@ Options
 
    :description:
 
-   See: https://curl.se/libcurl/c/CURLOPT_UPLOAD.html
+   :seealso:
+
+     https://curl.se/libcurl/c/CURLOPT_UPLOAD.html
 
 .. method:: curl-post-setter
+   :specializer: <curl-long>
 
    :signature:
 
@@ -587,9 +856,12 @@ Options
 
    :description:
 
-   See: https://curl.se/libcurl/c/CURLOPT_POST.html
+   :seealso:
+
+     https://curl.se/libcurl/c/CURLOPT_POST.html
 
 .. method:: curl-dirlistonly-setter
+   :specializer: <curl-long>
 
    :signature:
 
@@ -601,9 +873,12 @@ Options
 
    :description:
 
-   See: https://curl.se/libcurl/c/CURLOPT_DIRLISTONLY.html
+   :seealso:
+
+     https://curl.se/libcurl/c/CURLOPT_DIRLISTONLY.html
 
 .. method:: curl-append-setter
+   :specializer: <curl-long>
 
    :signature:
 
@@ -615,9 +890,12 @@ Options
 
    :description:
 
-   See: https://curl.se/libcurl/c/CURLOPT_APPEND.html
+   :seealso:
+
+     https://curl.se/libcurl/c/CURLOPT_APPEND.html
 
 .. method:: curl-netrc-setter
+   :specializer: <curl-values>
 
    :signature:
 
@@ -629,9 +907,12 @@ Options
 
    :description:
 
-   See: https://curl.se/libcurl/c/CURLOPT_NETRC.html
+   :seealso:
+
+     https://curl.se/libcurl/c/CURLOPT_NETRC.html
 
 .. method:: curl-followlocation-setter
+   :specializer: <curl-long>
 
    :signature:
 
@@ -643,9 +924,12 @@ Options
 
    :description:
 
-   See: https://curl.se/libcurl/c/CURLOPT_FOLLOWLOCATION.html
+   :seealso:
+
+     https://curl.se/libcurl/c/CURLOPT_FOLLOWLOCATION.html
 
 .. method:: curl-transfertext-setter
+   :specializer: <curl-long>
 
    :signature:
 
@@ -657,9 +941,12 @@ Options
 
    :description:
 
-   See: https://curl.se/libcurl/c/CURLOPT_TRANSFERTEXT.html
+   :seealso:
+
+     https://curl.se/libcurl/c/CURLOPT_TRANSFERTEXT.html
 
 .. method:: curl-put-setter
+   :specializer: <curl-long>
 
    :signature:
 
@@ -671,9 +958,12 @@ Options
 
    :description:
 
-   See: https://curl.se/libcurl/c/CURLOPT_PUT.html
+   :seealso:
+
+     https://curl.se/libcurl/c/CURLOPT_PUT.html
 
 .. method:: curl-progressfunction-setter
+   :specializer: <curl-functionpoint>
 
    :signature:
 
@@ -685,9 +975,12 @@ Options
 
    :description:
 
-   See: https://curl.se/libcurl/c/CURLOPT_PROGRESSFUNCTION.html
+   :seealso:
+
+     https://curl.se/libcurl/c/CURLOPT_PROGRESSFUNCTION.html
 
 .. method:: curl-xferinfodata-setter
+   :specializer: <curl-cbpoint>
 
    :signature:
 
@@ -699,9 +992,12 @@ Options
 
    :description:
 
-   See: https://curl.se/libcurl/c/CURLOPT_XFERINFODATA.html
+   :seealso:
+
+     https://curl.se/libcurl/c/CURLOPT_XFERINFODATA.html
 
 .. method:: curl-autoreferer-setter
+   :specializer: <curl-long>
 
    :signature:
 
@@ -713,9 +1009,12 @@ Options
 
    :description:
 
-   See: https://curl.se/libcurl/c/CURLOPT_AUTOREFERER.html
+   :seealso:
+
+     https://curl.se/libcurl/c/CURLOPT_AUTOREFERER.html
 
 .. method:: curl-proxyport-setter
+   :specializer: <curl-long>
 
    :signature:
 
@@ -727,9 +1026,12 @@ Options
 
    :description:
 
-   See: https://curl.se/libcurl/c/CURLOPT_PROXYPORT.html
+   :seealso:
+
+     https://curl.se/libcurl/c/CURLOPT_PROXYPORT.html
 
 .. method:: curl-postfieldsize-setter
+   :specializer: <curl-long>
 
    :signature:
 
@@ -741,9 +1043,12 @@ Options
 
    :description:
 
-   See: https://curl.se/libcurl/c/CURLOPT_POSTFIELDSIZE.html
+   :seealso:
+
+     https://curl.se/libcurl/c/CURLOPT_POSTFIELDSIZE.html
 
 .. method:: curl-httpproxytunnel-setter
+   :specializer: <curl-long>
 
    :signature:
 
@@ -755,9 +1060,12 @@ Options
 
    :description:
 
-   See: https://curl.se/libcurl/c/CURLOPT_HTTPPROXYTUNNEL.html
+   :seealso:
+
+     https://curl.se/libcurl/c/CURLOPT_HTTPPROXYTUNNEL.html
 
 .. method:: curl-interface-setter
+   :specializer: <curl-stringpoint>
 
    :signature:
 
@@ -769,9 +1077,12 @@ Options
 
    :description:
 
-   See: https://curl.se/libcurl/c/CURLOPT_INTERFACE.html
+   :seealso:
+
+     https://curl.se/libcurl/c/CURLOPT_INTERFACE.html
 
 .. method:: curl-krblevel-setter
+   :specializer: <curl-stringpoint>
 
    :signature:
 
@@ -783,9 +1094,12 @@ Options
 
    :description:
 
-   See: https://curl.se/libcurl/c/CURLOPT_KRBLEVEL.html
+   :seealso:
+
+     https://curl.se/libcurl/c/CURLOPT_KRBLEVEL.html
 
 .. method:: curl-ssl-verifypeer-setter
+   :specializer: <curl-long>
 
    :signature:
 
@@ -797,9 +1111,12 @@ Options
 
    :description:
 
-   See: https://curl.se/libcurl/c/CURLOPT_SSL_VERIFYPEER.html
+   :seealso:
+
+     https://curl.se/libcurl/c/CURLOPT_SSL_VERIFYPEER.html
 
 .. method:: curl-cainfo-setter
+   :specializer: <curl-stringpoint>
 
    :signature:
 
@@ -811,9 +1128,12 @@ Options
 
    :description:
 
-   See: https://curl.se/libcurl/c/CURLOPT_CAINFO.html
+   :seealso:
+
+     https://curl.se/libcurl/c/CURLOPT_CAINFO.html
 
 .. method:: curl-maxredirs-setter
+   :specializer: <curl-long>
 
    :signature:
 
@@ -825,9 +1145,12 @@ Options
 
    :description:
 
-   See: https://curl.se/libcurl/c/CURLOPT_MAXREDIRS.html
+   :seealso:
+
+     https://curl.se/libcurl/c/CURLOPT_MAXREDIRS.html
 
 .. method:: curl-filetime-setter
+   :specializer: <curl-long>
 
    :signature:
 
@@ -839,9 +1162,12 @@ Options
 
    :description:
 
-   See: https://curl.se/libcurl/c/CURLOPT_FILETIME.html
+   :seealso:
+
+     https://curl.se/libcurl/c/CURLOPT_FILETIME.html
 
 .. method:: curl-telnetoptions-setter
+   :specializer: <curl-slistpoint>
 
    :signature:
 
@@ -853,9 +1179,12 @@ Options
 
    :description:
 
-   See: https://curl.se/libcurl/c/CURLOPT_TELNETOPTIONS.html
+   :seealso:
+
+     https://curl.se/libcurl/c/CURLOPT_TELNETOPTIONS.html
 
 .. method:: curl-maxconnects-setter
+   :specializer: <curl-long>
 
    :signature:
 
@@ -867,9 +1196,12 @@ Options
 
    :description:
 
-   See: https://curl.se/libcurl/c/CURLOPT_MAXCONNECTS.html
+   :seealso:
+
+     https://curl.se/libcurl/c/CURLOPT_MAXCONNECTS.html
 
 .. method:: curl-fresh-connect-setter
+   :specializer: <curl-long>
 
    :signature:
 
@@ -881,9 +1213,12 @@ Options
 
    :description:
 
-   See: https://curl.se/libcurl/c/CURLOPT_FRESH_CONNECT.html
+   :seealso:
+
+     https://curl.se/libcurl/c/CURLOPT_FRESH_CONNECT.html
 
 .. method:: curl-forbid-reuse-setter
+   :specializer: <curl-long>
 
    :signature:
 
@@ -895,9 +1230,12 @@ Options
 
    :description:
 
-   See: https://curl.se/libcurl/c/CURLOPT_FORBID_REUSE.html
+   :seealso:
+
+     https://curl.se/libcurl/c/CURLOPT_FORBID_REUSE.html
 
 .. method:: curl-random-file-setter
+   :specializer: <curl-stringpoint>
 
    :signature:
 
@@ -909,9 +1247,12 @@ Options
 
    :description:
 
-   See: https://curl.se/libcurl/c/CURLOPT_RANDOM_FILE.html
+   :seealso:
+
+     https://curl.se/libcurl/c/CURLOPT_RANDOM_FILE.html
 
 .. method:: curl-egdsocket-setter
+   :specializer: <curl-stringpoint>
 
    :signature:
 
@@ -923,9 +1264,12 @@ Options
 
    :description:
 
-   See: https://curl.se/libcurl/c/CURLOPT_EGDSOCKET.html
+   :seealso:
+
+     https://curl.se/libcurl/c/CURLOPT_EGDSOCKET.html
 
 .. method:: curl-connecttimeout-setter
+   :specializer: <curl-long>
 
    :signature:
 
@@ -937,9 +1281,12 @@ Options
 
    :description:
 
-   See: https://curl.se/libcurl/c/CURLOPT_CONNECTTIMEOUT.html
+   :seealso:
+
+     https://curl.se/libcurl/c/CURLOPT_CONNECTTIMEOUT.html
 
 .. method:: curl-headerfunction-setter
+   :specializer: <curl-functionpoint>
 
    :signature:
 
@@ -951,9 +1298,12 @@ Options
 
    :description:
 
-   See: https://curl.se/libcurl/c/CURLOPT_HEADERFUNCTION.html
+   :seealso:
+
+     https://curl.se/libcurl/c/CURLOPT_HEADERFUNCTION.html
 
 .. method:: curl-httpget-setter
+   :specializer: <curl-long>
 
    :signature:
 
@@ -965,9 +1315,12 @@ Options
 
    :description:
 
-   See: https://curl.se/libcurl/c/CURLOPT_HTTPGET.html
+   :seealso:
+
+     https://curl.se/libcurl/c/CURLOPT_HTTPGET.html
 
 .. method:: curl-ssl-verifyhost-setter
+   :specializer: <curl-long>
 
    :signature:
 
@@ -979,9 +1332,12 @@ Options
 
    :description:
 
-   See: https://curl.se/libcurl/c/CURLOPT_SSL_VERIFYHOST.html
+   :seealso:
+
+     https://curl.se/libcurl/c/CURLOPT_SSL_VERIFYHOST.html
 
 .. method:: curl-cookiejar-setter
+   :specializer: <curl-stringpoint>
 
    :signature:
 
@@ -993,9 +1349,12 @@ Options
 
    :description:
 
-   See: https://curl.se/libcurl/c/CURLOPT_COOKIEJAR.html
+   :seealso:
+
+     https://curl.se/libcurl/c/CURLOPT_COOKIEJAR.html
 
 .. method:: curl-ssl-cipher-list-setter
+   :specializer: <curl-stringpoint>
 
    :signature:
 
@@ -1007,9 +1366,12 @@ Options
 
    :description:
 
-   See: https://curl.se/libcurl/c/CURLOPT_SSL_CIPHER_LIST.html
+   :seealso:
+
+     https://curl.se/libcurl/c/CURLOPT_SSL_CIPHER_LIST.html
 
 .. method:: curl-http-version-setter
+   :specializer: <curl-values>
 
    :signature:
 
@@ -1021,9 +1383,12 @@ Options
 
    :description:
 
-   See: https://curl.se/libcurl/c/CURLOPT_HTTP_VERSION.html
+   :seealso:
+
+     https://curl.se/libcurl/c/CURLOPT_HTTP_VERSION.html
 
 .. method:: curl-ftp-use-epsv-setter
+   :specializer: <curl-long>
 
    :signature:
 
@@ -1035,9 +1400,12 @@ Options
 
    :description:
 
-   See: https://curl.se/libcurl/c/CURLOPT_FTP_USE_EPSV.html
+   :seealso:
+
+     https://curl.se/libcurl/c/CURLOPT_FTP_USE_EPSV.html
 
 .. method:: curl-sslcerttype-setter
+   :specializer: <curl-stringpoint>
 
    :signature:
 
@@ -1049,9 +1417,12 @@ Options
 
    :description:
 
-   See: https://curl.se/libcurl/c/CURLOPT_SSLCERTTYPE.html
+   :seealso:
+
+     https://curl.se/libcurl/c/CURLOPT_SSLCERTTYPE.html
 
 .. method:: curl-sslkeytype-setter
+   :specializer: <curl-stringpoint>
 
    :signature:
 
@@ -1063,9 +1434,12 @@ Options
 
    :description:
 
-   See: https://curl.se/libcurl/c/CURLOPT_SSLKEYTYPE.html
+   :seealso:
+
+     https://curl.se/libcurl/c/CURLOPT_SSLKEYTYPE.html
 
 .. method:: curl-sslengine-setter
+   :specializer: <curl-stringpoint>
 
    :signature:
 
@@ -1077,9 +1451,12 @@ Options
 
    :description:
 
-   See: https://curl.se/libcurl/c/CURLOPT_SSLENGINE.html
+   :seealso:
+
+     https://curl.se/libcurl/c/CURLOPT_SSLENGINE.html
 
 .. method:: curl-sslengine-default-setter
+   :specializer: <curl-long>
 
    :signature:
 
@@ -1091,9 +1468,12 @@ Options
 
    :description:
 
-   See: https://curl.se/libcurl/c/CURLOPT_SSLENGINE_DEFAULT.html
+   :seealso:
+
+     https://curl.se/libcurl/c/CURLOPT_SSLENGINE_DEFAULT.html
 
 .. method:: curl-dns-use-global-cache-setter
+   :specializer: <curl-long>
 
    :signature:
 
@@ -1105,9 +1485,12 @@ Options
 
    :description:
 
-   See: https://curl.se/libcurl/c/CURLOPT_DNS_USE_GLOBAL_CACHE.html
+   :seealso:
+
+     https://curl.se/libcurl/c/CURLOPT_DNS_USE_GLOBAL_CACHE.html
 
 .. method:: curl-dns-cache-timeout-setter
+   :specializer: <curl-long>
 
    :signature:
 
@@ -1119,9 +1502,12 @@ Options
 
    :description:
 
-   See: https://curl.se/libcurl/c/CURLOPT_DNS_CACHE_TIMEOUT.html
+   :seealso:
+
+     https://curl.se/libcurl/c/CURLOPT_DNS_CACHE_TIMEOUT.html
 
 .. method:: curl-prequote-setter
+   :specializer: <curl-slistpoint>
 
    :signature:
 
@@ -1133,9 +1519,12 @@ Options
 
    :description:
 
-   See: https://curl.se/libcurl/c/CURLOPT_PREQUOTE.html
+   :seealso:
+
+     https://curl.se/libcurl/c/CURLOPT_PREQUOTE.html
 
 .. method:: curl-debugfunction-setter
+   :specializer: <curl-functionpoint>
 
    :signature:
 
@@ -1147,9 +1536,12 @@ Options
 
    :description:
 
-   See: https://curl.se/libcurl/c/CURLOPT_DEBUGFUNCTION.html
+   :seealso:
+
+     https://curl.se/libcurl/c/CURLOPT_DEBUGFUNCTION.html
 
 .. method:: curl-debugdata-setter
+   :specializer: <curl-cbpoint>
 
    :signature:
 
@@ -1161,9 +1553,12 @@ Options
 
    :description:
 
-   See: https://curl.se/libcurl/c/CURLOPT_DEBUGDATA.html
+   :seealso:
+
+     https://curl.se/libcurl/c/CURLOPT_DEBUGDATA.html
 
 .. method:: curl-cookiesession-setter
+   :specializer: <curl-long>
 
    :signature:
 
@@ -1175,9 +1570,12 @@ Options
 
    :description:
 
-   See: https://curl.se/libcurl/c/CURLOPT_COOKIESESSION.html
+   :seealso:
+
+     https://curl.se/libcurl/c/CURLOPT_COOKIESESSION.html
 
 .. method:: curl-capath-setter
+   :specializer: <curl-stringpoint>
 
    :signature:
 
@@ -1189,9 +1587,12 @@ Options
 
    :description:
 
-   See: https://curl.se/libcurl/c/CURLOPT_CAPATH.html
+   :seealso:
+
+     https://curl.se/libcurl/c/CURLOPT_CAPATH.html
 
 .. method:: curl-buffersize-setter
+   :specializer: <curl-long>
 
    :signature:
 
@@ -1203,9 +1604,12 @@ Options
 
    :description:
 
-   See: https://curl.se/libcurl/c/CURLOPT_BUFFERSIZE.html
+   :seealso:
+
+     https://curl.se/libcurl/c/CURLOPT_BUFFERSIZE.html
 
 .. method:: curl-nosignal-setter
+   :specializer: <curl-long>
 
    :signature:
 
@@ -1217,9 +1621,12 @@ Options
 
    :description:
 
-   See: https://curl.se/libcurl/c/CURLOPT_NOSIGNAL.html
+   :seealso:
+
+     https://curl.se/libcurl/c/CURLOPT_NOSIGNAL.html
 
 .. method:: curl-share-setter
+   :specializer: <curl-objectpoint>
 
    :signature:
 
@@ -1231,9 +1638,12 @@ Options
 
    :description:
 
-   See: https://curl.se/libcurl/c/CURLOPT_SHARE.html
+   :seealso:
+
+     https://curl.se/libcurl/c/CURLOPT_SHARE.html
 
 .. method:: curl-proxytype-setter
+   :specializer: <curl-values>
 
    :signature:
 
@@ -1245,9 +1655,12 @@ Options
 
    :description:
 
-   See: https://curl.se/libcurl/c/CURLOPT_PROXYTYPE.html
+   :seealso:
+
+     https://curl.se/libcurl/c/CURLOPT_PROXYTYPE.html
 
 .. method:: curl-accept-encoding-setter
+   :specializer: <curl-stringpoint>
 
    :signature:
 
@@ -1259,9 +1672,12 @@ Options
 
    :description:
 
-   See: https://curl.se/libcurl/c/CURLOPT_ACCEPT_ENCODING.html
+   :seealso:
+
+     https://curl.se/libcurl/c/CURLOPT_ACCEPT_ENCODING.html
 
 .. method:: curl-private-setter
+   :specializer: <curl-objectpoint>
 
    :signature:
 
@@ -1273,9 +1689,12 @@ Options
 
    :description:
 
-   See: https://curl.se/libcurl/c/CURLOPT_PRIVATE.html
+   :seealso:
+
+     https://curl.se/libcurl/c/CURLOPT_PRIVATE.html
 
 .. method:: curl-http200aliases-setter
+   :specializer: <curl-slistpoint>
 
    :signature:
 
@@ -1287,9 +1706,12 @@ Options
 
    :description:
 
-   See: https://curl.se/libcurl/c/CURLOPT_HTTP200ALIASES.html
+   :seealso:
+
+     https://curl.se/libcurl/c/CURLOPT_HTTP200ALIASES.html
 
 .. method:: curl-unrestricted-auth-setter
+   :specializer: <curl-long>
 
    :signature:
 
@@ -1301,9 +1723,12 @@ Options
 
    :description:
 
-   See: https://curl.se/libcurl/c/CURLOPT_UNRESTRICTED_AUTH.html
+   :seealso:
+
+     https://curl.se/libcurl/c/CURLOPT_UNRESTRICTED_AUTH.html
 
 .. method:: curl-ftp-use-eprt-setter
+   :specializer: <curl-long>
 
    :signature:
 
@@ -1315,9 +1740,12 @@ Options
 
    :description:
 
-   See: https://curl.se/libcurl/c/CURLOPT_FTP_USE_EPRT.html
+   :seealso:
+
+     https://curl.se/libcurl/c/CURLOPT_FTP_USE_EPRT.html
 
 .. method:: curl-httpauth-setter
+   :specializer: <curl-values>
 
    :signature:
 
@@ -1329,9 +1757,12 @@ Options
 
    :description:
 
-   See: https://curl.se/libcurl/c/CURLOPT_HTTPAUTH.html
+   :seealso:
+
+     https://curl.se/libcurl/c/CURLOPT_HTTPAUTH.html
 
 .. method:: curl-ssl-ctx-function-setter
+   :specializer: <curl-functionpoint>
 
    :signature:
 
@@ -1343,9 +1774,12 @@ Options
 
    :description:
 
-   See: https://curl.se/libcurl/c/CURLOPT_SSL_CTX_FUNCTION.html
+   :seealso:
+
+     https://curl.se/libcurl/c/CURLOPT_SSL_CTX_FUNCTION.html
 
 .. method:: curl-ssl-ctx-data-setter
+   :specializer: <curl-cbpoint>
 
    :signature:
 
@@ -1357,9 +1791,12 @@ Options
 
    :description:
 
-   See: https://curl.se/libcurl/c/CURLOPT_SSL_CTX_DATA.html
+   :seealso:
+
+     https://curl.se/libcurl/c/CURLOPT_SSL_CTX_DATA.html
 
 .. method:: curl-ftp-create-missing-dirs-setter
+   :specializer: <curl-long>
 
    :signature:
 
@@ -1371,9 +1808,12 @@ Options
 
    :description:
 
-   See: https://curl.se/libcurl/c/CURLOPT_FTP_CREATE_MISSING_DIRS.html
+   :seealso:
+
+     https://curl.se/libcurl/c/CURLOPT_FTP_CREATE_MISSING_DIRS.html
 
 .. method:: curl-proxyauth-setter
+   :specializer: <curl-values>
 
    :signature:
 
@@ -1385,9 +1825,12 @@ Options
 
    :description:
 
-   See: https://curl.se/libcurl/c/CURLOPT_PROXYAUTH.html
+   :seealso:
+
+     https://curl.se/libcurl/c/CURLOPT_PROXYAUTH.html
 
 .. method:: curl-server-response-timeout-setter
+   :specializer: <curl-long>
 
    :signature:
 
@@ -1399,9 +1842,12 @@ Options
 
    :description:
 
-   See: https://curl.se/libcurl/c/CURLOPT_SERVER_RESPONSE_TIMEOUT.html
+   :seealso:
+
+     https://curl.se/libcurl/c/CURLOPT_SERVER_RESPONSE_TIMEOUT.html
 
 .. method:: curl-ipresolve-setter
+   :specializer: <curl-values>
 
    :signature:
 
@@ -1413,9 +1859,12 @@ Options
 
    :description:
 
-   See: https://curl.se/libcurl/c/CURLOPT_IPRESOLVE.html
+   :seealso:
+
+     https://curl.se/libcurl/c/CURLOPT_IPRESOLVE.html
 
 .. method:: curl-maxfilesize-setter
+   :specializer: <curl-long>
 
    :signature:
 
@@ -1427,9 +1876,12 @@ Options
 
    :description:
 
-   See: https://curl.se/libcurl/c/CURLOPT_MAXFILESIZE.html
+   :seealso:
+
+     https://curl.se/libcurl/c/CURLOPT_MAXFILESIZE.html
 
 .. method:: curl-infilesize-large-setter
+   :specializer: <curl-off-t>
 
    :signature:
 
@@ -1441,9 +1893,12 @@ Options
 
    :description:
 
-   See: https://curl.se/libcurl/c/CURLOPT_INFILESIZE_LARGE.html
+   :seealso:
+
+     https://curl.se/libcurl/c/CURLOPT_INFILESIZE_LARGE.html
 
 .. method:: curl-resume-from-large-setter
+   :specializer: <curl-off-t>
 
    :signature:
 
@@ -1455,9 +1910,12 @@ Options
 
    :description:
 
-   See: https://curl.se/libcurl/c/CURLOPT_RESUME_FROM_LARGE.html
+   :seealso:
+
+     https://curl.se/libcurl/c/CURLOPT_RESUME_FROM_LARGE.html
 
 .. method:: curl-maxfilesize-large-setter
+   :specializer: <curl-off-t>
 
    :signature:
 
@@ -1469,9 +1927,12 @@ Options
 
    :description:
 
-   See: https://curl.se/libcurl/c/CURLOPT_MAXFILESIZE_LARGE.html
+   :seealso:
+
+     https://curl.se/libcurl/c/CURLOPT_MAXFILESIZE_LARGE.html
 
 .. method:: curl-netrc-file-setter
+   :specializer: <curl-stringpoint>
 
    :signature:
 
@@ -1483,9 +1944,12 @@ Options
 
    :description:
 
-   See: https://curl.se/libcurl/c/CURLOPT_NETRC_FILE.html
+   :seealso:
+
+     https://curl.se/libcurl/c/CURLOPT_NETRC_FILE.html
 
 .. method:: curl-use-ssl-setter
+   :specializer: <curl-values>
 
    :signature:
 
@@ -1497,9 +1961,12 @@ Options
 
    :description:
 
-   See: https://curl.se/libcurl/c/CURLOPT_USE_SSL.html
+   :seealso:
+
+     https://curl.se/libcurl/c/CURLOPT_USE_SSL.html
 
 .. method:: curl-postfieldsize-large-setter
+   :specializer: <curl-off-t>
 
    :signature:
 
@@ -1511,9 +1978,12 @@ Options
 
    :description:
 
-   See: https://curl.se/libcurl/c/CURLOPT_POSTFIELDSIZE_LARGE.html
+   :seealso:
+
+     https://curl.se/libcurl/c/CURLOPT_POSTFIELDSIZE_LARGE.html
 
 .. method:: curl-tcp-nodelay-setter
+   :specializer: <curl-long>
 
    :signature:
 
@@ -1525,9 +1995,12 @@ Options
 
    :description:
 
-   See: https://curl.se/libcurl/c/CURLOPT_TCP_NODELAY.html
+   :seealso:
+
+     https://curl.se/libcurl/c/CURLOPT_TCP_NODELAY.html
 
 .. method:: curl-ftpsslauth-setter
+   :specializer: <curl-values>
 
    :signature:
 
@@ -1539,9 +2012,12 @@ Options
 
    :description:
 
-   See: https://curl.se/libcurl/c/CURLOPT_FTPSSLAUTH.html
+   :seealso:
+
+     https://curl.se/libcurl/c/CURLOPT_FTPSSLAUTH.html
 
 .. method:: curl-ioctlfunction-setter
+   :specializer: <curl-functionpoint>
 
    :signature:
 
@@ -1553,9 +2029,12 @@ Options
 
    :description:
 
-   See: https://curl.se/libcurl/c/CURLOPT_IOCTLFUNCTION.html
+   :seealso:
+
+     https://curl.se/libcurl/c/CURLOPT_IOCTLFUNCTION.html
 
 .. method:: curl-ioctldata-setter
+   :specializer: <curl-cbpoint>
 
    :signature:
 
@@ -1567,9 +2046,12 @@ Options
 
    :description:
 
-   See: https://curl.se/libcurl/c/CURLOPT_IOCTLDATA.html
+   :seealso:
+
+     https://curl.se/libcurl/c/CURLOPT_IOCTLDATA.html
 
 .. method:: curl-ftp-account-setter
+   :specializer: <curl-stringpoint>
 
    :signature:
 
@@ -1581,9 +2063,12 @@ Options
 
    :description:
 
-   See: https://curl.se/libcurl/c/CURLOPT_FTP_ACCOUNT.html
+   :seealso:
+
+     https://curl.se/libcurl/c/CURLOPT_FTP_ACCOUNT.html
 
 .. method:: curl-cookielist-setter
+   :specializer: <curl-stringpoint>
 
    :signature:
 
@@ -1595,9 +2080,12 @@ Options
 
    :description:
 
-   See: https://curl.se/libcurl/c/CURLOPT_COOKIELIST.html
+   :seealso:
+
+     https://curl.se/libcurl/c/CURLOPT_COOKIELIST.html
 
 .. method:: curl-ignore-content-length-setter
+   :specializer: <curl-long>
 
    :signature:
 
@@ -1609,9 +2097,12 @@ Options
 
    :description:
 
-   See: https://curl.se/libcurl/c/CURLOPT_IGNORE_CONTENT_LENGTH.html
+   :seealso:
+
+     https://curl.se/libcurl/c/CURLOPT_IGNORE_CONTENT_LENGTH.html
 
 .. method:: curl-ftp-skip-pasv-ip-setter
+   :specializer: <curl-long>
 
    :signature:
 
@@ -1623,9 +2114,12 @@ Options
 
    :description:
 
-   See: https://curl.se/libcurl/c/CURLOPT_FTP_SKIP_PASV_IP.html
+   :seealso:
+
+     https://curl.se/libcurl/c/CURLOPT_FTP_SKIP_PASV_IP.html
 
 .. method:: curl-ftp-filemethod-setter
+   :specializer: <curl-values>
 
    :signature:
 
@@ -1637,9 +2131,12 @@ Options
 
    :description:
 
-   See: https://curl.se/libcurl/c/CURLOPT_FTP_FILEMETHOD.html
+   :seealso:
+
+     https://curl.se/libcurl/c/CURLOPT_FTP_FILEMETHOD.html
 
 .. method:: curl-localport-setter
+   :specializer: <curl-long>
 
    :signature:
 
@@ -1651,9 +2148,12 @@ Options
 
    :description:
 
-   See: https://curl.se/libcurl/c/CURLOPT_LOCALPORT.html
+   :seealso:
+
+     https://curl.se/libcurl/c/CURLOPT_LOCALPORT.html
 
 .. method:: curl-localportrange-setter
+   :specializer: <curl-long>
 
    :signature:
 
@@ -1665,9 +2165,12 @@ Options
 
    :description:
 
-   See: https://curl.se/libcurl/c/CURLOPT_LOCALPORTRANGE.html
+   :seealso:
+
+     https://curl.se/libcurl/c/CURLOPT_LOCALPORTRANGE.html
 
 .. method:: curl-connect-only-setter
+   :specializer: <curl-long>
 
    :signature:
 
@@ -1679,9 +2182,12 @@ Options
 
    :description:
 
-   See: https://curl.se/libcurl/c/CURLOPT_CONNECT_ONLY.html
+   :seealso:
+
+     https://curl.se/libcurl/c/CURLOPT_CONNECT_ONLY.html
 
 .. method:: curl-max-send-speed-large-setter
+   :specializer: <curl-off-t>
 
    :signature:
 
@@ -1693,9 +2199,12 @@ Options
 
    :description:
 
-   See: https://curl.se/libcurl/c/CURLOPT_MAX_SEND_SPEED_LARGE.html
+   :seealso:
+
+     https://curl.se/libcurl/c/CURLOPT_MAX_SEND_SPEED_LARGE.html
 
 .. method:: curl-max-recv-speed-large-setter
+   :specializer: <curl-off-t>
 
    :signature:
 
@@ -1707,9 +2216,12 @@ Options
 
    :description:
 
-   See: https://curl.se/libcurl/c/CURLOPT_MAX_RECV_SPEED_LARGE.html
+   :seealso:
+
+     https://curl.se/libcurl/c/CURLOPT_MAX_RECV_SPEED_LARGE.html
 
 .. method:: curl-ftp-alternative-to-user-setter
+   :specializer: <curl-stringpoint>
 
    :signature:
 
@@ -1721,9 +2233,12 @@ Options
 
    :description:
 
-   See: https://curl.se/libcurl/c/CURLOPT_FTP_ALTERNATIVE_TO_USER.html
+   :seealso:
+
+     https://curl.se/libcurl/c/CURLOPT_FTP_ALTERNATIVE_TO_USER.html
 
 .. method:: curl-sockoptfunction-setter
+   :specializer: <curl-functionpoint>
 
    :signature:
 
@@ -1735,9 +2250,12 @@ Options
 
    :description:
 
-   See: https://curl.se/libcurl/c/CURLOPT_SOCKOPTFUNCTION.html
+   :seealso:
+
+     https://curl.se/libcurl/c/CURLOPT_SOCKOPTFUNCTION.html
 
 .. method:: curl-sockoptdata-setter
+   :specializer: <curl-cbpoint>
 
    :signature:
 
@@ -1749,9 +2267,12 @@ Options
 
    :description:
 
-   See: https://curl.se/libcurl/c/CURLOPT_SOCKOPTDATA.html
+   :seealso:
+
+     https://curl.se/libcurl/c/CURLOPT_SOCKOPTDATA.html
 
 .. method:: curl-ssl-sessionid-cache-setter
+   :specializer: <curl-long>
 
    :signature:
 
@@ -1763,9 +2284,12 @@ Options
 
    :description:
 
-   See: https://curl.se/libcurl/c/CURLOPT_SSL_SESSIONID_CACHE.html
+   :seealso:
+
+     https://curl.se/libcurl/c/CURLOPT_SSL_SESSIONID_CACHE.html
 
 .. method:: curl-ssh-auth-types-setter
+   :specializer: <curl-values>
 
    :signature:
 
@@ -1777,9 +2301,12 @@ Options
 
    :description:
 
-   See: https://curl.se/libcurl/c/CURLOPT_SSH_AUTH_TYPES.html
+   :seealso:
+
+     https://curl.se/libcurl/c/CURLOPT_SSH_AUTH_TYPES.html
 
 .. method:: curl-ssh-public-keyfile-setter
+   :specializer: <curl-stringpoint>
 
    :signature:
 
@@ -1791,9 +2318,12 @@ Options
 
    :description:
 
-   See: https://curl.se/libcurl/c/CURLOPT_SSH_PUBLIC_KEYFILE.html
+   :seealso:
+
+     https://curl.se/libcurl/c/CURLOPT_SSH_PUBLIC_KEYFILE.html
 
 .. method:: curl-ssh-private-keyfile-setter
+   :specializer: <curl-stringpoint>
 
    :signature:
 
@@ -1805,9 +2335,12 @@ Options
 
    :description:
 
-   See: https://curl.se/libcurl/c/CURLOPT_SSH_PRIVATE_KEYFILE.html
+   :seealso:
+
+     https://curl.se/libcurl/c/CURLOPT_SSH_PRIVATE_KEYFILE.html
 
 .. method:: curl-ftp-ssl-ccc-setter
+   :specializer: <curl-long>
 
    :signature:
 
@@ -1819,9 +2352,12 @@ Options
 
    :description:
 
-   See: https://curl.se/libcurl/c/CURLOPT_FTP_SSL_CCC.html
+   :seealso:
+
+     https://curl.se/libcurl/c/CURLOPT_FTP_SSL_CCC.html
 
 .. method:: curl-timeout-ms-setter
+   :specializer: <curl-long>
 
    :signature:
 
@@ -1833,9 +2369,12 @@ Options
 
    :description:
 
-   See: https://curl.se/libcurl/c/CURLOPT_TIMEOUT_MS.html
+   :seealso:
+
+     https://curl.se/libcurl/c/CURLOPT_TIMEOUT_MS.html
 
 .. method:: curl-connecttimeout-ms-setter
+   :specializer: <curl-long>
 
    :signature:
 
@@ -1847,9 +2386,12 @@ Options
 
    :description:
 
-   See: https://curl.se/libcurl/c/CURLOPT_CONNECTTIMEOUT_MS.html
+   :seealso:
+
+     https://curl.se/libcurl/c/CURLOPT_CONNECTTIMEOUT_MS.html
 
 .. method:: curl-http-transfer-decoding-setter
+   :specializer: <curl-long>
 
    :signature:
 
@@ -1861,9 +2403,12 @@ Options
 
    :description:
 
-   See: https://curl.se/libcurl/c/CURLOPT_HTTP_TRANSFER_DECODING.html
+   :seealso:
+
+     https://curl.se/libcurl/c/CURLOPT_HTTP_TRANSFER_DECODING.html
 
 .. method:: curl-http-content-decoding-setter
+   :specializer: <curl-long>
 
    :signature:
 
@@ -1875,9 +2420,12 @@ Options
 
    :description:
 
-   See: https://curl.se/libcurl/c/CURLOPT_HTTP_CONTENT_DECODING.html
+   :seealso:
+
+     https://curl.se/libcurl/c/CURLOPT_HTTP_CONTENT_DECODING.html
 
 .. method:: curl-new-file-perms-setter
+   :specializer: <curl-long>
 
    :signature:
 
@@ -1889,9 +2437,12 @@ Options
 
    :description:
 
-   See: https://curl.se/libcurl/c/CURLOPT_NEW_FILE_PERMS.html
+   :seealso:
+
+     https://curl.se/libcurl/c/CURLOPT_NEW_FILE_PERMS.html
 
 .. method:: curl-new-directory-perms-setter
+   :specializer: <curl-long>
 
    :signature:
 
@@ -1903,9 +2454,12 @@ Options
 
    :description:
 
-   See: https://curl.se/libcurl/c/CURLOPT_NEW_DIRECTORY_PERMS.html
+   :seealso:
+
+     https://curl.se/libcurl/c/CURLOPT_NEW_DIRECTORY_PERMS.html
 
 .. method:: curl-postredir-setter
+   :specializer: <curl-values>
 
    :signature:
 
@@ -1917,9 +2471,12 @@ Options
 
    :description:
 
-   See: https://curl.se/libcurl/c/CURLOPT_POSTREDIR.html
+   :seealso:
+
+     https://curl.se/libcurl/c/CURLOPT_POSTREDIR.html
 
 .. method:: curl-ssh-host-public-key-md5-setter
+   :specializer: <curl-stringpoint>
 
    :signature:
 
@@ -1931,9 +2488,12 @@ Options
 
    :description:
 
-   See: https://curl.se/libcurl/c/CURLOPT_SSH_HOST_PUBLIC_KEY_MD5.html
+   :seealso:
+
+     https://curl.se/libcurl/c/CURLOPT_SSH_HOST_PUBLIC_KEY_MD5.html
 
 .. method:: curl-opensocketfunction-setter
+   :specializer: <curl-functionpoint>
 
    :signature:
 
@@ -1945,9 +2505,12 @@ Options
 
    :description:
 
-   See: https://curl.se/libcurl/c/CURLOPT_OPENSOCKETFUNCTION.html
+   :seealso:
+
+     https://curl.se/libcurl/c/CURLOPT_OPENSOCKETFUNCTION.html
 
 .. method:: curl-opensocketdata-setter
+   :specializer: <curl-cbpoint>
 
    :signature:
 
@@ -1959,9 +2522,12 @@ Options
 
    :description:
 
-   See: https://curl.se/libcurl/c/CURLOPT_OPENSOCKETDATA.html
+   :seealso:
+
+     https://curl.se/libcurl/c/CURLOPT_OPENSOCKETDATA.html
 
 .. method:: curl-copypostfields-setter
+   :specializer: <curl-objectpoint>
 
    :signature:
 
@@ -1973,9 +2539,12 @@ Options
 
    :description:
 
-   See: https://curl.se/libcurl/c/CURLOPT_COPYPOSTFIELDS.html
+   :seealso:
+
+     https://curl.se/libcurl/c/CURLOPT_COPYPOSTFIELDS.html
 
 .. method:: curl-proxy-transfer-mode-setter
+   :specializer: <curl-long>
 
    :signature:
 
@@ -1987,9 +2556,12 @@ Options
 
    :description:
 
-   See: https://curl.se/libcurl/c/CURLOPT_PROXY_TRANSFER_MODE.html
+   :seealso:
+
+     https://curl.se/libcurl/c/CURLOPT_PROXY_TRANSFER_MODE.html
 
 .. method:: curl-seekfunction-setter
+   :specializer: <curl-functionpoint>
 
    :signature:
 
@@ -2001,9 +2573,12 @@ Options
 
    :description:
 
-   See: https://curl.se/libcurl/c/CURLOPT_SEEKFUNCTION.html
+   :seealso:
+
+     https://curl.se/libcurl/c/CURLOPT_SEEKFUNCTION.html
 
 .. method:: curl-seekdata-setter
+   :specializer: <curl-cbpoint>
 
    :signature:
 
@@ -2015,9 +2590,12 @@ Options
 
    :description:
 
-   See: https://curl.se/libcurl/c/CURLOPT_SEEKDATA.html
+   :seealso:
+
+     https://curl.se/libcurl/c/CURLOPT_SEEKDATA.html
 
 .. method:: curl-crlfile-setter
+   :specializer: <curl-stringpoint>
 
    :signature:
 
@@ -2029,9 +2607,12 @@ Options
 
    :description:
 
-   See: https://curl.se/libcurl/c/CURLOPT_CRLFILE.html
+   :seealso:
+
+     https://curl.se/libcurl/c/CURLOPT_CRLFILE.html
 
 .. method:: curl-issuercert-setter
+   :specializer: <curl-stringpoint>
 
    :signature:
 
@@ -2043,9 +2624,12 @@ Options
 
    :description:
 
-   See: https://curl.se/libcurl/c/CURLOPT_ISSUERCERT.html
+   :seealso:
+
+     https://curl.se/libcurl/c/CURLOPT_ISSUERCERT.html
 
 .. method:: curl-address-scope-setter
+   :specializer: <curl-long>
 
    :signature:
 
@@ -2057,9 +2641,12 @@ Options
 
    :description:
 
-   See: https://curl.se/libcurl/c/CURLOPT_ADDRESS_SCOPE.html
+   :seealso:
+
+     https://curl.se/libcurl/c/CURLOPT_ADDRESS_SCOPE.html
 
 .. method:: curl-certinfo-setter
+   :specializer: <curl-long>
 
    :signature:
 
@@ -2071,9 +2658,12 @@ Options
 
    :description:
 
-   See: https://curl.se/libcurl/c/CURLOPT_CERTINFO.html
+   :seealso:
+
+     https://curl.se/libcurl/c/CURLOPT_CERTINFO.html
 
 .. method:: curl-username-setter
+   :specializer: <curl-stringpoint>
 
    :signature:
 
@@ -2085,9 +2675,12 @@ Options
 
    :description:
 
-   See: https://curl.se/libcurl/c/CURLOPT_USERNAME.html
+   :seealso:
+
+     https://curl.se/libcurl/c/CURLOPT_USERNAME.html
 
 .. method:: curl-password-setter
+   :specializer: <curl-stringpoint>
 
    :signature:
 
@@ -2099,9 +2692,12 @@ Options
 
    :description:
 
-   See: https://curl.se/libcurl/c/CURLOPT_PASSWORD.html
+   :seealso:
+
+     https://curl.se/libcurl/c/CURLOPT_PASSWORD.html
 
 .. method:: curl-proxyusername-setter
+   :specializer: <curl-stringpoint>
 
    :signature:
 
@@ -2113,9 +2709,12 @@ Options
 
    :description:
 
-   See: https://curl.se/libcurl/c/CURLOPT_PROXYUSERNAME.html
+   :seealso:
+
+     https://curl.se/libcurl/c/CURLOPT_PROXYUSERNAME.html
 
 .. method:: curl-proxypassword-setter
+   :specializer: <curl-stringpoint>
 
    :signature:
 
@@ -2127,9 +2726,12 @@ Options
 
    :description:
 
-   See: https://curl.se/libcurl/c/CURLOPT_PROXYPASSWORD.html
+   :seealso:
+
+     https://curl.se/libcurl/c/CURLOPT_PROXYPASSWORD.html
 
 .. method:: curl-noproxy-setter
+   :specializer: <curl-stringpoint>
 
    :signature:
 
@@ -2141,9 +2743,12 @@ Options
 
    :description:
 
-   See: https://curl.se/libcurl/c/CURLOPT_NOPROXY.html
+   :seealso:
+
+     https://curl.se/libcurl/c/CURLOPT_NOPROXY.html
 
 .. method:: curl-tftp-blksize-setter
+   :specializer: <curl-long>
 
    :signature:
 
@@ -2155,9 +2760,12 @@ Options
 
    :description:
 
-   See: https://curl.se/libcurl/c/CURLOPT_TFTP_BLKSIZE.html
+   :seealso:
+
+     https://curl.se/libcurl/c/CURLOPT_TFTP_BLKSIZE.html
 
 .. method:: curl-socks5-gssapi-service-setter
+   :specializer: <curl-stringpoint>
 
    :signature:
 
@@ -2169,9 +2777,12 @@ Options
 
    :description:
 
-   See: https://curl.se/libcurl/c/CURLOPT_SOCKS5_GSSAPI_SERVICE.html
+   :seealso:
+
+     https://curl.se/libcurl/c/CURLOPT_SOCKS5_GSSAPI_SERVICE.html
 
 .. method:: curl-socks5-gssapi-nec-setter
+   :specializer: <curl-long>
 
    :signature:
 
@@ -2183,9 +2794,12 @@ Options
 
    :description:
 
-   See: https://curl.se/libcurl/c/CURLOPT_SOCKS5_GSSAPI_NEC.html
+   :seealso:
+
+     https://curl.se/libcurl/c/CURLOPT_SOCKS5_GSSAPI_NEC.html
 
 .. method:: curl-protocols-setter
+   :specializer: <curl-long>
 
    :signature:
 
@@ -2197,9 +2811,12 @@ Options
 
    :description:
 
-   See: https://curl.se/libcurl/c/CURLOPT_PROTOCOLS.html
+   :seealso:
+
+     https://curl.se/libcurl/c/CURLOPT_PROTOCOLS.html
 
 .. method:: curl-redir-protocols-setter
+   :specializer: <curl-long>
 
    :signature:
 
@@ -2211,9 +2828,12 @@ Options
 
    :description:
 
-   See: https://curl.se/libcurl/c/CURLOPT_REDIR_PROTOCOLS.html
+   :seealso:
+
+     https://curl.se/libcurl/c/CURLOPT_REDIR_PROTOCOLS.html
 
 .. method:: curl-ssh-knownhosts-setter
+   :specializer: <curl-stringpoint>
 
    :signature:
 
@@ -2225,9 +2845,12 @@ Options
 
    :description:
 
-   See: https://curl.se/libcurl/c/CURLOPT_SSH_KNOWNHOSTS.html
+   :seealso:
+
+     https://curl.se/libcurl/c/CURLOPT_SSH_KNOWNHOSTS.html
 
 .. method:: curl-ssh-keyfunction-setter
+   :specializer: <curl-functionpoint>
 
    :signature:
 
@@ -2239,9 +2862,12 @@ Options
 
    :description:
 
-   See: https://curl.se/libcurl/c/CURLOPT_SSH_KEYFUNCTION.html
+   :seealso:
+
+     https://curl.se/libcurl/c/CURLOPT_SSH_KEYFUNCTION.html
 
 .. method:: curl-ssh-keydata-setter
+   :specializer: <curl-cbpoint>
 
    :signature:
 
@@ -2253,9 +2879,12 @@ Options
 
    :description:
 
-   See: https://curl.se/libcurl/c/CURLOPT_SSH_KEYDATA.html
+   :seealso:
+
+     https://curl.se/libcurl/c/CURLOPT_SSH_KEYDATA.html
 
 .. method:: curl-mail-from-setter
+   :specializer: <curl-stringpoint>
 
    :signature:
 
@@ -2267,9 +2896,12 @@ Options
 
    :description:
 
-   See: https://curl.se/libcurl/c/CURLOPT_MAIL_FROM.html
+   :seealso:
+
+     https://curl.se/libcurl/c/CURLOPT_MAIL_FROM.html
 
 .. method:: curl-mail-rcpt-setter
+   :specializer: <curl-slistpoint>
 
    :signature:
 
@@ -2281,9 +2913,12 @@ Options
 
    :description:
 
-   See: https://curl.se/libcurl/c/CURLOPT_MAIL_RCPT.html
+   :seealso:
+
+     https://curl.se/libcurl/c/CURLOPT_MAIL_RCPT.html
 
 .. method:: curl-ftp-use-pret-setter
+   :specializer: <curl-long>
 
    :signature:
 
@@ -2295,9 +2930,12 @@ Options
 
    :description:
 
-   See: https://curl.se/libcurl/c/CURLOPT_FTP_USE_PRET.html
+   :seealso:
+
+     https://curl.se/libcurl/c/CURLOPT_FTP_USE_PRET.html
 
 .. method:: curl-rtsp-request-setter
+   :specializer: <curl-values>
 
    :signature:
 
@@ -2309,9 +2947,12 @@ Options
 
    :description:
 
-   See: https://curl.se/libcurl/c/CURLOPT_RTSP_REQUEST.html
+   :seealso:
+
+     https://curl.se/libcurl/c/CURLOPT_RTSP_REQUEST.html
 
 .. method:: curl-rtsp-session-id-setter
+   :specializer: <curl-stringpoint>
 
    :signature:
 
@@ -2323,9 +2964,12 @@ Options
 
    :description:
 
-   See: https://curl.se/libcurl/c/CURLOPT_RTSP_SESSION_ID.html
+   :seealso:
+
+     https://curl.se/libcurl/c/CURLOPT_RTSP_SESSION_ID.html
 
 .. method:: curl-chunk-data-setter
+   :specializer: <curl-cbpoint>
 
    :signature:
 
@@ -2337,9 +2981,12 @@ Options
 
    :description:
 
-   See: https://curl.se/libcurl/c/CURLOPT_CHUNK_DATA.html
+   :seealso:
+
+     https://curl.se/libcurl/c/CURLOPT_CHUNK_DATA.html
 
 .. method:: curl-fnmatch-data-setter
+   :specializer: <curl-cbpoint>
 
    :signature:
 
@@ -2351,9 +2998,12 @@ Options
 
    :description:
 
-   See: https://curl.se/libcurl/c/CURLOPT_FNMATCH_DATA.html
+   :seealso:
+
+     https://curl.se/libcurl/c/CURLOPT_FNMATCH_DATA.html
 
 .. method:: curl-resolve-setter
+   :specializer: <curl-slistpoint>
 
    :signature:
 
@@ -2365,9 +3015,12 @@ Options
 
    :description:
 
-   See: https://curl.se/libcurl/c/CURLOPT_RESOLVE.html
+   :seealso:
+
+     https://curl.se/libcurl/c/CURLOPT_RESOLVE.html
 
 .. method:: curl-tlsauth-username-setter
+   :specializer: <curl-stringpoint>
 
    :signature:
 
@@ -2379,9 +3032,12 @@ Options
 
    :description:
 
-   See: https://curl.se/libcurl/c/CURLOPT_TLSAUTH_USERNAME.html
+   :seealso:
+
+     https://curl.se/libcurl/c/CURLOPT_TLSAUTH_USERNAME.html
 
 .. method:: curl-tlsauth-password-setter
+   :specializer: <curl-stringpoint>
 
    :signature:
 
@@ -2393,9 +3049,12 @@ Options
 
    :description:
 
-   See: https://curl.se/libcurl/c/CURLOPT_TLSAUTH_PASSWORD.html
+   :seealso:
+
+     https://curl.se/libcurl/c/CURLOPT_TLSAUTH_PASSWORD.html
 
 .. method:: curl-tlsauth-type-setter
+   :specializer: <curl-stringpoint>
 
    :signature:
 
@@ -2407,9 +3066,12 @@ Options
 
    :description:
 
-   See: https://curl.se/libcurl/c/CURLOPT_TLSAUTH_TYPE.html
+   :seealso:
+
+     https://curl.se/libcurl/c/CURLOPT_TLSAUTH_TYPE.html
 
 .. method:: curl-transfer-encoding-setter
+   :specializer: <curl-long>
 
    :signature:
 
@@ -2421,9 +3083,12 @@ Options
 
    :description:
 
-   See: https://curl.se/libcurl/c/CURLOPT_TRANSFER_ENCODING.html
+   :seealso:
+
+     https://curl.se/libcurl/c/CURLOPT_TRANSFER_ENCODING.html
 
 .. method:: curl-closesocketfunction-setter
+   :specializer: <curl-functionpoint>
 
    :signature:
 
@@ -2435,9 +3100,12 @@ Options
 
    :description:
 
-   See: https://curl.se/libcurl/c/CURLOPT_CLOSESOCKETFUNCTION.html
+   :seealso:
+
+     https://curl.se/libcurl/c/CURLOPT_CLOSESOCKETFUNCTION.html
 
 .. method:: curl-closesocketdata-setter
+   :specializer: <curl-cbpoint>
 
    :signature:
 
@@ -2449,9 +3117,12 @@ Options
 
    :description:
 
-   See: https://curl.se/libcurl/c/CURLOPT_CLOSESOCKETDATA.html
+   :seealso:
+
+     https://curl.se/libcurl/c/CURLOPT_CLOSESOCKETDATA.html
 
 .. method:: curl-gssapi-delegation-setter
+   :specializer: <curl-values>
 
    :signature:
 
@@ -2463,9 +3134,12 @@ Options
 
    :description:
 
-   See: https://curl.se/libcurl/c/CURLOPT_GSSAPI_DELEGATION.html
+   :seealso:
+
+     https://curl.se/libcurl/c/CURLOPT_GSSAPI_DELEGATION.html
 
 .. method:: curl-dns-servers-setter
+   :specializer: <curl-stringpoint>
 
    :signature:
 
@@ -2477,9 +3151,12 @@ Options
 
    :description:
 
-   See: https://curl.se/libcurl/c/CURLOPT_DNS_SERVERS.html
+   :seealso:
+
+     https://curl.se/libcurl/c/CURLOPT_DNS_SERVERS.html
 
 .. method:: curl-accepttimeout-ms-setter
+   :specializer: <curl-long>
 
    :signature:
 
@@ -2491,9 +3168,12 @@ Options
 
    :description:
 
-   See: https://curl.se/libcurl/c/CURLOPT_ACCEPTTIMEOUT_MS.html
+   :seealso:
+
+     https://curl.se/libcurl/c/CURLOPT_ACCEPTTIMEOUT_MS.html
 
 .. method:: curl-tcp-keepalive-setter
+   :specializer: <curl-long>
 
    :signature:
 
@@ -2505,9 +3185,12 @@ Options
 
    :description:
 
-   See: https://curl.se/libcurl/c/CURLOPT_TCP_KEEPALIVE.html
+   :seealso:
+
+     https://curl.se/libcurl/c/CURLOPT_TCP_KEEPALIVE.html
 
 .. method:: curl-tcp-keepidle-setter
+   :specializer: <curl-long>
 
    :signature:
 
@@ -2519,9 +3202,12 @@ Options
 
    :description:
 
-   See: https://curl.se/libcurl/c/CURLOPT_TCP_KEEPIDLE.html
+   :seealso:
+
+     https://curl.se/libcurl/c/CURLOPT_TCP_KEEPIDLE.html
 
 .. method:: curl-tcp-keepintvl-setter
+   :specializer: <curl-long>
 
    :signature:
 
@@ -2533,9 +3219,12 @@ Options
 
    :description:
 
-   See: https://curl.se/libcurl/c/CURLOPT_TCP_KEEPINTVL.html
+   :seealso:
+
+     https://curl.se/libcurl/c/CURLOPT_TCP_KEEPINTVL.html
 
 .. method:: curl-ssl-options-setter
+   :specializer: <curl-values>
 
    :signature:
 
@@ -2547,9 +3236,12 @@ Options
 
    :description:
 
-   See: https://curl.se/libcurl/c/CURLOPT_SSL_OPTIONS.html
+   :seealso:
+
+     https://curl.se/libcurl/c/CURLOPT_SSL_OPTIONS.html
 
 .. method:: curl-mail-auth-setter
+   :specializer: <curl-stringpoint>
 
    :signature:
 
@@ -2561,9 +3253,12 @@ Options
 
    :description:
 
-   See: https://curl.se/libcurl/c/CURLOPT_MAIL_AUTH.html
+   :seealso:
+
+     https://curl.se/libcurl/c/CURLOPT_MAIL_AUTH.html
 
 .. method:: curl-sasl-ir-setter
+   :specializer: <curl-long>
 
    :signature:
 
@@ -2575,9 +3270,12 @@ Options
 
    :description:
 
-   See: https://curl.se/libcurl/c/CURLOPT_SASL_IR.html
+   :seealso:
+
+     https://curl.se/libcurl/c/CURLOPT_SASL_IR.html
 
 .. method:: curl-xferinfofunction-setter
+   :specializer: <curl-functionpoint>
 
    :signature:
 
@@ -2589,9 +3287,12 @@ Options
 
    :description:
 
-   See: https://curl.se/libcurl/c/CURLOPT_XFERINFOFUNCTION.html
+   :seealso:
+
+     https://curl.se/libcurl/c/CURLOPT_XFERINFOFUNCTION.html
 
 .. method:: curl-xoauth2-bearer-setter
+   :specializer: <curl-stringpoint>
 
    :signature:
 
@@ -2603,9 +3304,12 @@ Options
 
    :description:
 
-   See: https://curl.se/libcurl/c/CURLOPT_XOAUTH2_BEARER.html
+   :seealso:
+
+     https://curl.se/libcurl/c/CURLOPT_XOAUTH2_BEARER.html
 
 .. method:: curl-dns-interface-setter
+   :specializer: <curl-stringpoint>
 
    :signature:
 
@@ -2617,9 +3321,12 @@ Options
 
    :description:
 
-   See: https://curl.se/libcurl/c/CURLOPT_DNS_INTERFACE.html
+   :seealso:
+
+     https://curl.se/libcurl/c/CURLOPT_DNS_INTERFACE.html
 
 .. method:: curl-dns-local-ip4-setter
+   :specializer: <curl-stringpoint>
 
    :signature:
 
@@ -2631,9 +3338,12 @@ Options
 
    :description:
 
-   See: https://curl.se/libcurl/c/CURLOPT_DNS_LOCAL_IP4.html
+   :seealso:
+
+     https://curl.se/libcurl/c/CURLOPT_DNS_LOCAL_IP4.html
 
 .. method:: curl-dns-local-ip6-setter
+   :specializer: <curl-stringpoint>
 
    :signature:
 
@@ -2645,9 +3355,12 @@ Options
 
    :description:
 
-   See: https://curl.se/libcurl/c/CURLOPT_DNS_LOCAL_IP6.html
+   :seealso:
+
+     https://curl.se/libcurl/c/CURLOPT_DNS_LOCAL_IP6.html
 
 .. method:: curl-login-options-setter
+   :specializer: <curl-stringpoint>
 
    :signature:
 
@@ -2659,9 +3372,12 @@ Options
 
    :description:
 
-   See: https://curl.se/libcurl/c/CURLOPT_LOGIN_OPTIONS.html
+   :seealso:
+
+     https://curl.se/libcurl/c/CURLOPT_LOGIN_OPTIONS.html
 
 .. method:: curl-ssl-enable-alpn-setter
+   :specializer: <curl-long>
 
    :signature:
 
@@ -2673,9 +3389,12 @@ Options
 
    :description:
 
-   See: https://curl.se/libcurl/c/CURLOPT_SSL_ENABLE_ALPN.html
+   :seealso:
+
+     https://curl.se/libcurl/c/CURLOPT_SSL_ENABLE_ALPN.html
 
 .. method:: curl-expect-100-timeout-ms-setter
+   :specializer: <curl-long>
 
    :signature:
 
@@ -2687,9 +3406,12 @@ Options
 
    :description:
 
-   See: https://curl.se/libcurl/c/CURLOPT_EXPECT_100_TIMEOUT_MS.html
+   :seealso:
+
+     https://curl.se/libcurl/c/CURLOPT_EXPECT_100_TIMEOUT_MS.html
 
 .. method:: curl-proxyheader-setter
+   :specializer: <curl-slistpoint>
 
    :signature:
 
@@ -2701,9 +3423,12 @@ Options
 
    :description:
 
-   See: https://curl.se/libcurl/c/CURLOPT_PROXYHEADER.html
+   :seealso:
+
+     https://curl.se/libcurl/c/CURLOPT_PROXYHEADER.html
 
 .. method:: curl-headeropt-setter
+   :specializer: <curl-values>
 
    :signature:
 
@@ -2715,9 +3440,12 @@ Options
 
    :description:
 
-   See: https://curl.se/libcurl/c/CURLOPT_HEADEROPT.html
+   :seealso:
+
+     https://curl.se/libcurl/c/CURLOPT_HEADEROPT.html
 
 .. method:: curl-pinnedpublickey-setter
+   :specializer: <curl-stringpoint>
 
    :signature:
 
@@ -2729,9 +3457,12 @@ Options
 
    :description:
 
-   See: https://curl.se/libcurl/c/CURLOPT_PINNEDPUBLICKEY.html
+   :seealso:
+
+     https://curl.se/libcurl/c/CURLOPT_PINNEDPUBLICKEY.html
 
 .. method:: curl-unix-socket-path-setter
+   :specializer: <curl-stringpoint>
 
    :signature:
 
@@ -2743,9 +3474,12 @@ Options
 
    :description:
 
-   See: https://curl.se/libcurl/c/CURLOPT_UNIX_SOCKET_PATH.html
+   :seealso:
+
+     https://curl.se/libcurl/c/CURLOPT_UNIX_SOCKET_PATH.html
 
 .. method:: curl-ssl-verifystatus-setter
+   :specializer: <curl-long>
 
    :signature:
 
@@ -2757,9 +3491,12 @@ Options
 
    :description:
 
-   See: https://curl.se/libcurl/c/CURLOPT_SSL_VERIFYSTATUS.html
+   :seealso:
+
+     https://curl.se/libcurl/c/CURLOPT_SSL_VERIFYSTATUS.html
 
 .. method:: curl-ssl-falsestart-setter
+   :specializer: <curl-long>
 
    :signature:
 
@@ -2771,9 +3508,12 @@ Options
 
    :description:
 
-   See: https://curl.se/libcurl/c/CURLOPT_SSL_FALSESTART.html
+   :seealso:
+
+     https://curl.se/libcurl/c/CURLOPT_SSL_FALSESTART.html
 
 .. method:: curl-path-as-is-setter
+   :specializer: <curl-long>
 
    :signature:
 
@@ -2785,9 +3525,12 @@ Options
 
    :description:
 
-   See: https://curl.se/libcurl/c/CURLOPT_PATH_AS_IS.html
+   :seealso:
+
+     https://curl.se/libcurl/c/CURLOPT_PATH_AS_IS.html
 
 .. method:: curl-proxy-service-name-setter
+   :specializer: <curl-stringpoint>
 
    :signature:
 
@@ -2799,9 +3542,12 @@ Options
 
    :description:
 
-   See: https://curl.se/libcurl/c/CURLOPT_PROXY_SERVICE_NAME.html
+   :seealso:
+
+     https://curl.se/libcurl/c/CURLOPT_PROXY_SERVICE_NAME.html
 
 .. method:: curl-service-name-setter
+   :specializer: <curl-stringpoint>
 
    :signature:
 
@@ -2813,9 +3559,12 @@ Options
 
    :description:
 
-   See: https://curl.se/libcurl/c/CURLOPT_SERVICE_NAME.html
+   :seealso:
+
+     https://curl.se/libcurl/c/CURLOPT_SERVICE_NAME.html
 
 .. method:: curl-pipewait-setter
+   :specializer: <curl-long>
 
    :signature:
 
@@ -2827,9 +3576,12 @@ Options
 
    :description:
 
-   See: https://curl.se/libcurl/c/CURLOPT_PIPEWAIT.html
+   :seealso:
+
+     https://curl.se/libcurl/c/CURLOPT_PIPEWAIT.html
 
 .. method:: curl-default-protocol-setter
+   :specializer: <curl-stringpoint>
 
    :signature:
 
@@ -2841,9 +3593,12 @@ Options
 
    :description:
 
-   See: https://curl.se/libcurl/c/CURLOPT_DEFAULT_PROTOCOL.html
+   :seealso:
+
+     https://curl.se/libcurl/c/CURLOPT_DEFAULT_PROTOCOL.html
 
 .. method:: curl-stream-weight-setter
+   :specializer: <curl-long>
 
    :signature:
 
@@ -2855,9 +3610,12 @@ Options
 
    :description:
 
-   See: https://curl.se/libcurl/c/CURLOPT_STREAM_WEIGHT.html
+   :seealso:
+
+     https://curl.se/libcurl/c/CURLOPT_STREAM_WEIGHT.html
 
 .. method:: curl-stream-depends-setter
+   :specializer: <curl-objectpoint>
 
    :signature:
 
@@ -2869,9 +3627,12 @@ Options
 
    :description:
 
-   See: https://curl.se/libcurl/c/CURLOPT_STREAM_DEPENDS.html
+   :seealso:
+
+     https://curl.se/libcurl/c/CURLOPT_STREAM_DEPENDS.html
 
 .. method:: curl-stream-depends-e-setter
+   :specializer: <curl-objectpoint>
 
    :signature:
 
@@ -2883,9 +3644,12 @@ Options
 
    :description:
 
-   See: https://curl.se/libcurl/c/CURLOPT_STREAM_DEPENDS_E.html
+   :seealso:
+
+     https://curl.se/libcurl/c/CURLOPT_STREAM_DEPENDS_E.html
 
 .. method:: curl-tftp-no-options-setter
+   :specializer: <curl-long>
 
    :signature:
 
@@ -2897,9 +3661,12 @@ Options
 
    :description:
 
-   See: https://curl.se/libcurl/c/CURLOPT_TFTP_NO_OPTIONS.html
+   :seealso:
+
+     https://curl.se/libcurl/c/CURLOPT_TFTP_NO_OPTIONS.html
 
 .. method:: curl-connect-to-setter
+   :specializer: <curl-slistpoint>
 
    :signature:
 
@@ -2911,9 +3678,12 @@ Options
 
    :description:
 
-   See: https://curl.se/libcurl/c/CURLOPT_CONNECT_TO.html
+   :seealso:
+
+     https://curl.se/libcurl/c/CURLOPT_CONNECT_TO.html
 
 .. method:: curl-tcp-fastopen-setter
+   :specializer: <curl-long>
 
    :signature:
 
@@ -2925,9 +3695,12 @@ Options
 
    :description:
 
-   See: https://curl.se/libcurl/c/CURLOPT_TCP_FASTOPEN.html
+   :seealso:
+
+     https://curl.se/libcurl/c/CURLOPT_TCP_FASTOPEN.html
 
 .. method:: curl-keep-sending-on-error-setter
+   :specializer: <curl-long>
 
    :signature:
 
@@ -2939,9 +3712,12 @@ Options
 
    :description:
 
-   See: https://curl.se/libcurl/c/CURLOPT_KEEP_SENDING_ON_ERROR.html
+   :seealso:
+
+     https://curl.se/libcurl/c/CURLOPT_KEEP_SENDING_ON_ERROR.html
 
 .. method:: curl-proxy-cainfo-setter
+   :specializer: <curl-stringpoint>
 
    :signature:
 
@@ -2953,9 +3729,12 @@ Options
 
    :description:
 
-   See: https://curl.se/libcurl/c/CURLOPT_PROXY_CAINFO.html
+   :seealso:
+
+     https://curl.se/libcurl/c/CURLOPT_PROXY_CAINFO.html
 
 .. method:: curl-proxy-capath-setter
+   :specializer: <curl-stringpoint>
 
    :signature:
 
@@ -2967,9 +3746,12 @@ Options
 
    :description:
 
-   See: https://curl.se/libcurl/c/CURLOPT_PROXY_CAPATH.html
+   :seealso:
+
+     https://curl.se/libcurl/c/CURLOPT_PROXY_CAPATH.html
 
 .. method:: curl-proxy-ssl-verifypeer-setter
+   :specializer: <curl-long>
 
    :signature:
 
@@ -2981,9 +3763,12 @@ Options
 
    :description:
 
-   See: https://curl.se/libcurl/c/CURLOPT_PROXY_SSL_VERIFYPEER.html
+   :seealso:
+
+     https://curl.se/libcurl/c/CURLOPT_PROXY_SSL_VERIFYPEER.html
 
 .. method:: curl-proxy-ssl-verifyhost-setter
+   :specializer: <curl-long>
 
    :signature:
 
@@ -2995,9 +3780,12 @@ Options
 
    :description:
 
-   See: https://curl.se/libcurl/c/CURLOPT_PROXY_SSL_VERIFYHOST.html
+   :seealso:
+
+     https://curl.se/libcurl/c/CURLOPT_PROXY_SSL_VERIFYHOST.html
 
 .. method:: curl-proxy-sslversion-setter
+   :specializer: <curl-values>
 
    :signature:
 
@@ -3009,9 +3797,12 @@ Options
 
    :description:
 
-   See: https://curl.se/libcurl/c/CURLOPT_PROXY_SSLVERSION.html
+   :seealso:
+
+     https://curl.se/libcurl/c/CURLOPT_PROXY_SSLVERSION.html
 
 .. method:: curl-proxy-tlsauth-username-setter
+   :specializer: <curl-stringpoint>
 
    :signature:
 
@@ -3023,9 +3814,12 @@ Options
 
    :description:
 
-   See: https://curl.se/libcurl/c/CURLOPT_PROXY_TLSAUTH_USERNAME.html
+   :seealso:
+
+     https://curl.se/libcurl/c/CURLOPT_PROXY_TLSAUTH_USERNAME.html
 
 .. method:: curl-proxy-tlsauth-password-setter
+   :specializer: <curl-stringpoint>
 
    :signature:
 
@@ -3037,9 +3831,12 @@ Options
 
    :description:
 
-   See: https://curl.se/libcurl/c/CURLOPT_PROXY_TLSAUTH_PASSWORD.html
+   :seealso:
+
+     https://curl.se/libcurl/c/CURLOPT_PROXY_TLSAUTH_PASSWORD.html
 
 .. method:: curl-proxy-tlsauth-type-setter
+   :specializer: <curl-stringpoint>
 
    :signature:
 
@@ -3051,9 +3848,12 @@ Options
 
    :description:
 
-   See: https://curl.se/libcurl/c/CURLOPT_PROXY_TLSAUTH_TYPE.html
+   :seealso:
+
+     https://curl.se/libcurl/c/CURLOPT_PROXY_TLSAUTH_TYPE.html
 
 .. method:: curl-proxy-sslcert-setter
+   :specializer: <curl-stringpoint>
 
    :signature:
 
@@ -3065,9 +3865,12 @@ Options
 
    :description:
 
-   See: https://curl.se/libcurl/c/CURLOPT_PROXY_SSLCERT.html
+   :seealso:
+
+     https://curl.se/libcurl/c/CURLOPT_PROXY_SSLCERT.html
 
 .. method:: curl-proxy-sslcerttype-setter
+   :specializer: <curl-stringpoint>
 
    :signature:
 
@@ -3079,9 +3882,12 @@ Options
 
    :description:
 
-   See: https://curl.se/libcurl/c/CURLOPT_PROXY_SSLCERTTYPE.html
+   :seealso:
+
+     https://curl.se/libcurl/c/CURLOPT_PROXY_SSLCERTTYPE.html
 
 .. method:: curl-proxy-sslkey-setter
+   :specializer: <curl-stringpoint>
 
    :signature:
 
@@ -3093,9 +3899,12 @@ Options
 
    :description:
 
-   See: https://curl.se/libcurl/c/CURLOPT_PROXY_SSLKEY.html
+   :seealso:
+
+     https://curl.se/libcurl/c/CURLOPT_PROXY_SSLKEY.html
 
 .. method:: curl-proxy-sslkeytype-setter
+   :specializer: <curl-stringpoint>
 
    :signature:
 
@@ -3107,9 +3916,12 @@ Options
 
    :description:
 
-   See: https://curl.se/libcurl/c/CURLOPT_PROXY_SSLKEYTYPE.html
+   :seealso:
+
+     https://curl.se/libcurl/c/CURLOPT_PROXY_SSLKEYTYPE.html
 
 .. method:: curl-proxy-keypasswd-setter
+   :specializer: <curl-stringpoint>
 
    :signature:
 
@@ -3121,9 +3933,12 @@ Options
 
    :description:
 
-   See: https://curl.se/libcurl/c/CURLOPT_PROXY_KEYPASSWD.html
+   :seealso:
+
+     https://curl.se/libcurl/c/CURLOPT_PROXY_KEYPASSWD.html
 
 .. method:: curl-proxy-ssl-cipher-list-setter
+   :specializer: <curl-stringpoint>
 
    :signature:
 
@@ -3135,9 +3950,12 @@ Options
 
    :description:
 
-   See: https://curl.se/libcurl/c/CURLOPT_PROXY_SSL_CIPHER_LIST.html
+   :seealso:
+
+     https://curl.se/libcurl/c/CURLOPT_PROXY_SSL_CIPHER_LIST.html
 
 .. method:: curl-proxy-crlfile-setter
+   :specializer: <curl-stringpoint>
 
    :signature:
 
@@ -3149,9 +3967,12 @@ Options
 
    :description:
 
-   See: https://curl.se/libcurl/c/CURLOPT_PROXY_CRLFILE.html
+   :seealso:
+
+     https://curl.se/libcurl/c/CURLOPT_PROXY_CRLFILE.html
 
 .. method:: curl-proxy-ssl-options-setter
+   :specializer: <curl-long>
 
    :signature:
 
@@ -3163,9 +3984,12 @@ Options
 
    :description:
 
-   See: https://curl.se/libcurl/c/CURLOPT_PROXY_SSL_OPTIONS.html
+   :seealso:
+
+     https://curl.se/libcurl/c/CURLOPT_PROXY_SSL_OPTIONS.html
 
 .. method:: curl-pre-proxy-setter
+   :specializer: <curl-stringpoint>
 
    :signature:
 
@@ -3177,9 +4001,12 @@ Options
 
    :description:
 
-   See: https://curl.se/libcurl/c/CURLOPT_PRE_PROXY.html
+   :seealso:
+
+     https://curl.se/libcurl/c/CURLOPT_PRE_PROXY.html
 
 .. method:: curl-proxy-pinnedpublickey-setter
+   :specializer: <curl-stringpoint>
 
    :signature:
 
@@ -3191,9 +4018,12 @@ Options
 
    :description:
 
-   See: https://curl.se/libcurl/c/CURLOPT_PROXY_PINNEDPUBLICKEY.html
+   :seealso:
+
+     https://curl.se/libcurl/c/CURLOPT_PROXY_PINNEDPUBLICKEY.html
 
 .. method:: curl-abstract-unix-socket-setter
+   :specializer: <curl-stringpoint>
 
    :signature:
 
@@ -3205,9 +4035,12 @@ Options
 
    :description:
 
-   See: https://curl.se/libcurl/c/CURLOPT_ABSTRACT_UNIX_SOCKET.html
+   :seealso:
+
+     https://curl.se/libcurl/c/CURLOPT_ABSTRACT_UNIX_SOCKET.html
 
 .. method:: curl-suppress-connect-headers-setter
+   :specializer: <curl-long>
 
    :signature:
 
@@ -3219,9 +4052,12 @@ Options
 
    :description:
 
-   See: https://curl.se/libcurl/c/CURLOPT_SUPPRESS_CONNECT_HEADERS.html
+   :seealso:
+
+     https://curl.se/libcurl/c/CURLOPT_SUPPRESS_CONNECT_HEADERS.html
 
 .. method:: curl-request-target-setter
+   :specializer: <curl-stringpoint>
 
    :signature:
 
@@ -3233,9 +4069,12 @@ Options
 
    :description:
 
-   See: https://curl.se/libcurl/c/CURLOPT_REQUEST_TARGET.html
+   :seealso:
+
+     https://curl.se/libcurl/c/CURLOPT_REQUEST_TARGET.html
 
 .. method:: curl-socks5-auth-setter
+   :specializer: <curl-long>
 
    :signature:
 
@@ -3247,9 +4086,12 @@ Options
 
    :description:
 
-   See: https://curl.se/libcurl/c/CURLOPT_SOCKS5_AUTH.html
+   :seealso:
+
+     https://curl.se/libcurl/c/CURLOPT_SOCKS5_AUTH.html
 
 .. method:: curl-ssh-compression-setter
+   :specializer: <curl-long>
 
    :signature:
 
@@ -3261,9 +4103,12 @@ Options
 
    :description:
 
-   See: https://curl.se/libcurl/c/CURLOPT_SSH_COMPRESSION.html
+   :seealso:
+
+     https://curl.se/libcurl/c/CURLOPT_SSH_COMPRESSION.html
 
 .. method:: curl-mimepost-setter
+   :specializer: <curl-objectpoint>
 
    :signature:
 
@@ -3275,9 +4120,12 @@ Options
 
    :description:
 
-   See: https://curl.se/libcurl/c/CURLOPT_MIMEPOST.html
+   :seealso:
+
+     https://curl.se/libcurl/c/CURLOPT_MIMEPOST.html
 
 .. method:: curl-timevalue-large-setter
+   :specializer: <curl-off-t>
 
    :signature:
 
@@ -3289,9 +4137,12 @@ Options
 
    :description:
 
-   See: https://curl.se/libcurl/c/CURLOPT_TIMEVALUE_LARGE.html
+   :seealso:
+
+     https://curl.se/libcurl/c/CURLOPT_TIMEVALUE_LARGE.html
 
 .. method:: curl-happy-eyeballs-timeout-ms-setter
+   :specializer: <curl-long>
 
    :signature:
 
@@ -3303,9 +4154,12 @@ Options
 
    :description:
 
-   See: https://curl.se/libcurl/c/CURLOPT_HAPPY_EYEBALLS_TIMEOUT_MS.html
+   :seealso:
+
+     https://curl.se/libcurl/c/CURLOPT_HAPPY_EYEBALLS_TIMEOUT_MS.html
 
 .. method:: curl-resolver-start-function-setter
+   :specializer: <curl-functionpoint>
 
    :signature:
 
@@ -3317,9 +4171,12 @@ Options
 
    :description:
 
-   See: https://curl.se/libcurl/c/CURLOPT_RESOLVER_START_FUNCTION.html
+   :seealso:
+
+     https://curl.se/libcurl/c/CURLOPT_RESOLVER_START_FUNCTION.html
 
 .. method:: curl-resolver-start-data-setter
+   :specializer: <curl-cbpoint>
 
    :signature:
 
@@ -3331,9 +4188,12 @@ Options
 
    :description:
 
-   See: https://curl.se/libcurl/c/CURLOPT_RESOLVER_START_DATA.html
+   :seealso:
+
+     https://curl.se/libcurl/c/CURLOPT_RESOLVER_START_DATA.html
 
 .. method:: curl-haproxyprotocol-setter
+   :specializer: <curl-long>
 
    :signature:
 
@@ -3345,9 +4205,12 @@ Options
 
    :description:
 
-   See: https://curl.se/libcurl/c/CURLOPT_HAPROXYPROTOCOL.html
+   :seealso:
+
+     https://curl.se/libcurl/c/CURLOPT_HAPROXYPROTOCOL.html
 
 .. method:: curl-dns-shuffle-addresses-setter
+   :specializer: <curl-long>
 
    :signature:
 
@@ -3359,9 +4222,12 @@ Options
 
    :description:
 
-   See: https://curl.se/libcurl/c/CURLOPT_DNS_SHUFFLE_ADDRESSES.html
+   :seealso:
+
+     https://curl.se/libcurl/c/CURLOPT_DNS_SHUFFLE_ADDRESSES.html
 
 .. method:: curl-tls13-ciphers-setter
+   :specializer: <curl-stringpoint>
 
    :signature:
 
@@ -3373,9 +4239,12 @@ Options
 
    :description:
 
-   See: https://curl.se/libcurl/c/CURLOPT_TLS13_CIPHERS.html
+   :seealso:
+
+     https://curl.se/libcurl/c/CURLOPT_TLS13_CIPHERS.html
 
 .. method:: curl-proxy-tls13-ciphers-setter
+   :specializer: <curl-stringpoint>
 
    :signature:
 
@@ -3387,9 +4256,12 @@ Options
 
    :description:
 
-   See: https://curl.se/libcurl/c/CURLOPT_PROXY_TLS13_CIPHERS.html
+   :seealso:
+
+     https://curl.se/libcurl/c/CURLOPT_PROXY_TLS13_CIPHERS.html
 
 .. method:: curl-disallow-username-in-url-setter
+   :specializer: <curl-long>
 
    :signature:
 
@@ -3401,9 +4273,12 @@ Options
 
    :description:
 
-   See: https://curl.se/libcurl/c/CURLOPT_DISALLOW_USERNAME_IN_URL.html
+   :seealso:
+
+     https://curl.se/libcurl/c/CURLOPT_DISALLOW_USERNAME_IN_URL.html
 
 .. method:: curl-doh-url-setter
+   :specializer: <curl-stringpoint>
 
    :signature:
 
@@ -3415,9 +4290,12 @@ Options
 
    :description:
 
-   See: https://curl.se/libcurl/c/CURLOPT_DOH_URL.html
+   :seealso:
+
+     https://curl.se/libcurl/c/CURLOPT_DOH_URL.html
 
 .. method:: curl-upload-buffersize-setter
+   :specializer: <curl-long>
 
    :signature:
 
@@ -3429,9 +4307,12 @@ Options
 
    :description:
 
-   See: https://curl.se/libcurl/c/CURLOPT_UPLOAD_BUFFERSIZE.html
+   :seealso:
+
+     https://curl.se/libcurl/c/CURLOPT_UPLOAD_BUFFERSIZE.html
 
 .. method:: curl-upkeep-interval-ms-setter
+   :specializer: <curl-long>
 
    :signature:
 
@@ -3443,9 +4324,12 @@ Options
 
    :description:
 
-   See: https://curl.se/libcurl/c/CURLOPT_UPKEEP_INTERVAL_MS.html
+   :seealso:
+
+     https://curl.se/libcurl/c/CURLOPT_UPKEEP_INTERVAL_MS.html
 
 .. method:: curl-curlu-setter
+   :specializer: <curl-objectpoint>
 
    :signature:
 
@@ -3457,9 +4341,12 @@ Options
 
    :description:
 
-   See: https://curl.se/libcurl/c/CURLOPT_CURLU.html
+   :seealso:
+
+     https://curl.se/libcurl/c/CURLOPT_CURLU.html
 
 .. method:: curl-trailerfunction-setter
+   :specializer: <curl-functionpoint>
 
    :signature:
 
@@ -3471,9 +4358,12 @@ Options
 
    :description:
 
-   See: https://curl.se/libcurl/c/CURLOPT_TRAILERFUNCTION.html
+   :seealso:
+
+     https://curl.se/libcurl/c/CURLOPT_TRAILERFUNCTION.html
 
 .. method:: curl-trailerdata-setter
+   :specializer: <curl-cbpoint>
 
    :signature:
 
@@ -3485,9 +4375,12 @@ Options
 
    :description:
 
-   See: https://curl.se/libcurl/c/CURLOPT_TRAILERDATA.html
+   :seealso:
+
+     https://curl.se/libcurl/c/CURLOPT_TRAILERDATA.html
 
 .. method:: curl-http09-allowed-setter
+   :specializer: <curl-long>
 
    :signature:
 
@@ -3499,9 +4392,12 @@ Options
 
    :description:
 
-   See: https://curl.se/libcurl/c/CURLOPT_HTTP09_ALLOWED.html
+   :seealso:
+
+     https://curl.se/libcurl/c/CURLOPT_HTTP09_ALLOWED.html
 
 .. method:: curl-altsvc-ctrl-setter
+   :specializer: <curl-long>
 
    :signature:
 
@@ -3513,9 +4409,12 @@ Options
 
    :description:
 
-   See: https://curl.se/libcurl/c/CURLOPT_ALTSVC_CTRL.html
+   :seealso:
+
+     https://curl.se/libcurl/c/CURLOPT_ALTSVC_CTRL.html
 
 .. method:: curl-altsvc-setter
+   :specializer: <curl-stringpoint>
 
    :signature:
 
@@ -3527,9 +4426,12 @@ Options
 
    :description:
 
-   See: https://curl.se/libcurl/c/CURLOPT_ALTSVC.html
+   :seealso:
+
+     https://curl.se/libcurl/c/CURLOPT_ALTSVC.html
 
 .. method:: curl-maxage-conn-setter
+   :specializer: <curl-long>
 
    :signature:
 
@@ -3541,9 +4443,12 @@ Options
 
    :description:
 
-   See: https://curl.se/libcurl/c/CURLOPT_MAXAGE_CONN.html
+   :seealso:
+
+     https://curl.se/libcurl/c/CURLOPT_MAXAGE_CONN.html
 
 .. method:: curl-sasl-authzid-setter
+   :specializer: <curl-stringpoint>
 
    :signature:
 
@@ -3555,9 +4460,12 @@ Options
 
    :description:
 
-   See: https://curl.se/libcurl/c/CURLOPT_SASL_AUTHZID.html
+   :seealso:
+
+     https://curl.se/libcurl/c/CURLOPT_SASL_AUTHZID.html
 
 .. method:: curl-mail-rcpt-allowfails-setter
+   :specializer: <curl-long>
 
    :signature:
 
@@ -3569,9 +4477,12 @@ Options
 
    :description:
 
-   See: https://curl.se/libcurl/c/CURLOPT_MAIL_RCPT_ALLOWFAILS.html
+   :seealso:
+
+     https://curl.se/libcurl/c/CURLOPT_MAIL_RCPT_ALLOWFAILS.html
 
 .. method:: curl-sslcert-blob-setter
+   :specializer: <curl-blob>
 
    :signature:
 
@@ -3583,9 +4494,12 @@ Options
 
    :description:
 
-   See: https://curl.se/libcurl/c/CURLOPT_SSLCERT_BLOB.html
+   :seealso:
+
+     https://curl.se/libcurl/c/CURLOPT_SSLCERT_BLOB.html
 
 .. method:: curl-sslkey-blob-setter
+   :specializer: <curl-blob>
 
    :signature:
 
@@ -3597,9 +4511,12 @@ Options
 
    :description:
 
-   See: https://curl.se/libcurl/c/CURLOPT_SSLKEY_BLOB.html
+   :seealso:
+
+     https://curl.se/libcurl/c/CURLOPT_SSLKEY_BLOB.html
 
 .. method:: curl-proxy-sslcert-blob-setter
+   :specializer: <curl-blob>
 
    :signature:
 
@@ -3611,9 +4528,12 @@ Options
 
    :description:
 
-   See: https://curl.se/libcurl/c/CURLOPT_PROXY_SSLCERT_BLOB.html
+   :seealso:
+
+     https://curl.se/libcurl/c/CURLOPT_PROXY_SSLCERT_BLOB.html
 
 .. method:: curl-proxy-sslkey-blob-setter
+   :specializer: <curl-blob>
 
    :signature:
 
@@ -3625,9 +4545,12 @@ Options
 
    :description:
 
-   See: https://curl.se/libcurl/c/CURLOPT_PROXY_SSLKEY_BLOB.html
+   :seealso:
+
+     https://curl.se/libcurl/c/CURLOPT_PROXY_SSLKEY_BLOB.html
 
 .. method:: curl-issuercert-blob-setter
+   :specializer: <curl-blob>
 
    :signature:
 
@@ -3639,9 +4562,12 @@ Options
 
    :description:
 
-   See: https://curl.se/libcurl/c/CURLOPT_ISSUERCERT_BLOB.html
+   :seealso:
+
+     https://curl.se/libcurl/c/CURLOPT_ISSUERCERT_BLOB.html
 
 .. method:: curl-proxy-issuercert-setter
+   :specializer: <curl-stringpoint>
 
    :signature:
 
@@ -3653,9 +4579,12 @@ Options
 
    :description:
 
-   See: https://curl.se/libcurl/c/CURLOPT_PROXY_ISSUERCERT.html
+   :seealso:
+
+     https://curl.se/libcurl/c/CURLOPT_PROXY_ISSUERCERT.html
 
 .. method:: curl-proxy-issuercert-blob-setter
+   :specializer: <curl-blob>
 
    :signature:
 
@@ -3667,9 +4596,12 @@ Options
 
    :description:
 
-   See: https://curl.se/libcurl/c/CURLOPT_PROXY_ISSUERCERT_BLOB.html
+   :seealso:
+
+     https://curl.se/libcurl/c/CURLOPT_PROXY_ISSUERCERT_BLOB.html
 
 .. method:: curl-ssl-ec-curves-setter
+   :specializer: <curl-stringpoint>
 
    :signature:
 
@@ -3681,9 +4613,12 @@ Options
 
    :description:
 
-   See: https://curl.se/libcurl/c/CURLOPT_SSL_EC_CURVES.html
+   :seealso:
+
+     https://curl.se/libcurl/c/CURLOPT_SSL_EC_CURVES.html
 
 .. method:: curl-hsts-ctrl-setter
+   :specializer: <curl-long>
 
    :signature:
 
@@ -3695,9 +4630,12 @@ Options
 
    :description:
 
-   See: https://curl.se/libcurl/c/CURLOPT_HSTS_CTRL.html
+   :seealso:
+
+     https://curl.se/libcurl/c/CURLOPT_HSTS_CTRL.html
 
 .. method:: curl-hsts-setter
+   :specializer: <curl-stringpoint>
 
    :signature:
 
@@ -3709,9 +4647,12 @@ Options
 
    :description:
 
-   See: https://curl.se/libcurl/c/CURLOPT_HSTS.html
+   :seealso:
+
+     https://curl.se/libcurl/c/CURLOPT_HSTS.html
 
 .. method:: curl-hstsreadfunction-setter
+   :specializer: <curl-functionpoint>
 
    :signature:
 
@@ -3723,9 +4664,12 @@ Options
 
    :description:
 
-   See: https://curl.se/libcurl/c/CURLOPT_HSTSREADFUNCTION.html
+   :seealso:
+
+     https://curl.se/libcurl/c/CURLOPT_HSTSREADFUNCTION.html
 
 .. method:: curl-hstsreaddata-setter
+   :specializer: <curl-cbpoint>
 
    :signature:
 
@@ -3737,9 +4681,12 @@ Options
 
    :description:
 
-   See: https://curl.se/libcurl/c/CURLOPT_HSTSREADDATA.html
+   :seealso:
+
+     https://curl.se/libcurl/c/CURLOPT_HSTSREADDATA.html
 
 .. method:: curl-hstswritefunction-setter
+   :specializer: <curl-functionpoint>
 
    :signature:
 
@@ -3751,9 +4698,12 @@ Options
 
    :description:
 
-   See: https://curl.se/libcurl/c/CURLOPT_HSTSWRITEFUNCTION.html
+   :seealso:
+
+     https://curl.se/libcurl/c/CURLOPT_HSTSWRITEFUNCTION.html
 
 .. method:: curl-hstswritedata-setter
+   :specializer: <curl-cbpoint>
 
    :signature:
 
@@ -3765,9 +4715,12 @@ Options
 
    :description:
 
-   See: https://curl.se/libcurl/c/CURLOPT_HSTSWRITEDATA.html
+   :seealso:
+
+     https://curl.se/libcurl/c/CURLOPT_HSTSWRITEDATA.html
 
 .. method:: curl-aws-sigv4-setter
+   :specializer: <curl-stringpoint>
 
    :signature:
 
@@ -3779,9 +4732,12 @@ Options
 
    :description:
 
-   See: https://curl.se/libcurl/c/CURLOPT_AWS_SIGV4.html
+   :seealso:
+
+     https://curl.se/libcurl/c/CURLOPT_AWS_SIGV4.html
 
 .. method:: curl-doh-ssl-verifypeer-setter
+   :specializer: <curl-long>
 
    :signature:
 
@@ -3793,9 +4749,12 @@ Options
 
    :description:
 
-   See: https://curl.se/libcurl/c/CURLOPT_DOH_SSL_VERIFYPEER.html
+   :seealso:
+
+     https://curl.se/libcurl/c/CURLOPT_DOH_SSL_VERIFYPEER.html
 
 .. method:: curl-doh-ssl-verifyhost-setter
+   :specializer: <curl-long>
 
    :signature:
 
@@ -3807,9 +4766,12 @@ Options
 
    :description:
 
-   See: https://curl.se/libcurl/c/CURLOPT_DOH_SSL_VERIFYHOST.html
+   :seealso:
+
+     https://curl.se/libcurl/c/CURLOPT_DOH_SSL_VERIFYHOST.html
 
 .. method:: curl-doh-ssl-verifystatus-setter
+   :specializer: <curl-long>
 
    :signature:
 
@@ -3821,9 +4783,12 @@ Options
 
    :description:
 
-   See: https://curl.se/libcurl/c/CURLOPT_DOH_SSL_VERIFYSTATUS.html
+   :seealso:
+
+     https://curl.se/libcurl/c/CURLOPT_DOH_SSL_VERIFYSTATUS.html
 
 .. method:: curl-cainfo-blob-setter
+   :specializer: <curl-blob>
 
    :signature:
 
@@ -3835,9 +4800,12 @@ Options
 
    :description:
 
-   See: https://curl.se/libcurl/c/CURLOPT_CAINFO_BLOB.html
+   :seealso:
+
+     https://curl.se/libcurl/c/CURLOPT_CAINFO_BLOB.html
 
 .. method:: curl-proxy-cainfo-blob-setter
+   :specializer: <curl-blob>
 
    :signature:
 
@@ -3849,9 +4817,12 @@ Options
 
    :description:
 
-   See: https://curl.se/libcurl/c/CURLOPT_PROXY_CAINFO_BLOB.html
+   :seealso:
+
+     https://curl.se/libcurl/c/CURLOPT_PROXY_CAINFO_BLOB.html
 
 .. method:: curl-ssh-host-public-key-sha256-setter
+   :specializer: <curl-stringpoint>
 
    :signature:
 
@@ -3863,9 +4834,12 @@ Options
 
    :description:
 
-   See: https://curl.se/libcurl/c/CURLOPT_SSH_HOST_PUBLIC_KEY_SHA256.html
+   :seealso:
+
+     https://curl.se/libcurl/c/CURLOPT_SSH_HOST_PUBLIC_KEY_SHA256.html
 
 .. method:: curl-prereqfunction-setter
+   :specializer: <curl-functionpoint>
 
    :signature:
 
@@ -3877,9 +4851,12 @@ Options
 
    :description:
 
-   See: https://curl.se/libcurl/c/CURLOPT_PREREQFUNCTION.html
+   :seealso:
+
+     https://curl.se/libcurl/c/CURLOPT_PREREQFUNCTION.html
 
 .. method:: curl-prereqdata-setter
+   :specializer: <curl-cbpoint>
 
    :signature:
 
@@ -3891,9 +4868,12 @@ Options
 
    :description:
 
-   See: https://curl.se/libcurl/c/CURLOPT_PREREQDATA.html
+   :seealso:
+
+     https://curl.se/libcurl/c/CURLOPT_PREREQDATA.html
 
 .. method:: curl-maxlifetime-conn-setter
+   :specializer: <curl-long>
 
    :signature:
 
@@ -3905,9 +4885,12 @@ Options
 
    :description:
 
-   See: https://curl.se/libcurl/c/CURLOPT_MAXLIFETIME_CONN.html
+   :seealso:
+
+     https://curl.se/libcurl/c/CURLOPT_MAXLIFETIME_CONN.html
 
 .. method:: curl-mime-options-setter
+   :specializer: <curl-long>
 
    :signature:
 
@@ -3919,9 +4902,12 @@ Options
 
    :description:
 
-   See: https://curl.se/libcurl/c/CURLOPT_MIME_OPTIONS.html
+   :seealso:
+
+     https://curl.se/libcurl/c/CURLOPT_MIME_OPTIONS.html
 
 .. method:: curl-ssh-hostkeyfunction-setter
+   :specializer: <curl-functionpoint>
 
    :signature:
 
@@ -3933,9 +4919,12 @@ Options
 
    :description:
 
-   See: https://curl.se/libcurl/c/CURLOPT_SSH_HOSTKEYFUNCTION.html
+   :seealso:
+
+     https://curl.se/libcurl/c/CURLOPT_SSH_HOSTKEYFUNCTION.html
 
 .. method:: curl-ssh-hostkeydata-setter
+   :specializer: <curl-cbpoint>
 
    :signature:
 
@@ -3947,9 +4936,12 @@ Options
 
    :description:
 
-   See: https://curl.se/libcurl/c/CURLOPT_SSH_HOSTKEYDATA.html
+   :seealso:
+
+     https://curl.se/libcurl/c/CURLOPT_SSH_HOSTKEYDATA.html
 
 .. method:: curl-protocols-str-setter
+   :specializer: <curl-stringpoint>
 
    :signature:
 
@@ -3961,9 +4953,12 @@ Options
 
    :description:
 
-   See: https://curl.se/libcurl/c/CURLOPT_PROTOCOLS_STR.html
+   :seealso:
+
+     https://curl.se/libcurl/c/CURLOPT_PROTOCOLS_STR.html
 
 .. method:: curl-redir-protocols-str-setter
+   :specializer: <curl-stringpoint>
 
    :signature:
 
@@ -3975,9 +4970,12 @@ Options
 
    :description:
 
-   See: https://curl.se/libcurl/c/CURLOPT_REDIR_PROTOCOLS_STR.html
+   :seealso:
+
+     https://curl.se/libcurl/c/CURLOPT_REDIR_PROTOCOLS_STR.html
 
 .. method:: curl-ws-options-setter
+   :specializer: <curl-long>
 
    :signature:
 
@@ -3989,9 +4987,12 @@ Options
 
    :description:
 
-   See: https://curl.se/libcurl/c/CURLOPT_WS_OPTIONS.html
+   :seealso:
+
+     https://curl.se/libcurl/c/CURLOPT_WS_OPTIONS.html
 
 .. method:: curl-ca-cache-timeout-setter
+   :specializer: <curl-long>
 
    :signature:
 
@@ -4003,9 +5004,12 @@ Options
 
    :description:
 
-   See: https://curl.se/libcurl/c/CURLOPT_CA_CACHE_TIMEOUT.html
+   :seealso:
+
+     https://curl.se/libcurl/c/CURLOPT_CA_CACHE_TIMEOUT.html
 
 .. method:: curl-quick-exit-setter
+   :specializer: <curl-long>
 
    :signature:
 
@@ -4017,9 +5021,12 @@ Options
 
    :description:
 
-   See: https://curl.se/libcurl/c/CURLOPT_QUICK_EXIT.html
+   :seealso:
+
+     https://curl.se/libcurl/c/CURLOPT_QUICK_EXIT.html
 
 .. method:: curl-haproxy-client-ip-setter
+   :specializer: <curl-stringpoint>
 
    :signature:
 
@@ -4031,9 +5038,12 @@ Options
 
    :description:
 
-   See: https://curl.se/libcurl/c/CURLOPT_HAPROXY_CLIENT_IP.html
+   :seealso:
+
+     https://curl.se/libcurl/c/CURLOPT_HAPROXY_CLIENT_IP.html
 
 .. method:: curl-server-response-timeout-ms-setter
+   :specializer: <curl-long>
 
    :signature:
 
@@ -4045,9 +5055,12 @@ Options
 
    :description:
 
-   See: https://curl.se/libcurl/c/CURLOPT_SERVER_RESPONSE_TIMEOUT_MS.html
+   :seealso:
+
+     https://curl.se/libcurl/c/CURLOPT_SERVER_RESPONSE_TIMEOUT_MS.html
 
 .. method:: curl-ech-setter
+   :specializer: <curl-stringpoint>
 
    :signature:
 
@@ -4059,9 +5072,12 @@ Options
 
    :description:
 
-   See: https://curl.se/libcurl/c/CURLOPT_ECH.html
+   :seealso:
+
+     https://curl.se/libcurl/c/CURLOPT_ECH.html
 
 .. method:: curl-tcp-keepcnt-setter
+   :specializer: <curl-long>
 
    :signature:
 
@@ -4073,4 +5089,6 @@ Options
 
    :description:
 
-   See: https://curl.se/libcurl/c/CURLOPT_TCP_KEEPCNT.html
+   :seealso:
+
+     https://curl.se/libcurl/c/CURLOPT_TCP_KEEPCNT.html
