@@ -584,7 +584,7 @@ define method initialize
 end method;
 
 define function curl-easy-cleanup
-    (curl :: <curl-easy>) => ) 
+    (curl :: <curl-easy>) => () 
   c-curl-easy-cleanup(curl.curl-handle)
 end;
 
