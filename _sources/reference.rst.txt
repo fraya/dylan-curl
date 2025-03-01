@@ -5,11 +5,16 @@ Reference
 .. current-library:: dylan-curl
 .. current-module:: curl-easy
 
-Constants
-=========
-
 Global initialization
----------------------
+=====================
+
+.. global_constants
+
+Initialization constants
+------------------------
+
+Bit flags used to configure the library's global initialization
+options.
 
 .. note::
 
@@ -25,28 +30,105 @@ Global initialization
 - :const:`$curl-global-ack-eintr`
 
 Functions
+---------
+
+.. function:: curl-library-initialized?
+
+   :signature:
+
+      curl-library-initialized? => *initialized?*
+
+   :value initialized?:
+
+      An instance of :drm:`<boolean>`. Returns :drm:`#t` if the
+      library has been globally initialized, :drm:`#f` otherwise.
+
+   :seealso:
+
+      - :func:`curl-library-setup`
+      - :func:`curl-library-cleanup`
+
+.. function:: curl-library-setup
+
+   Initializes globally the library.
+
+   This function ensures that the curl library is properly
+   initialized, preventing problems when it has already been
+   initialized elsewhere.
+
+   It makes that :func:`curl-library-initialized?` returns :drm:`#t`.
+
+   :signature:
+
+      curl-library-setup *flags* => ()
+
+   :param #key flags:
+
+      A bit pattern that tells libcurl exactly what features to init.
+      In normal operation, you must use :const:`$curl-global-all` or
+      :const:`$curl-global-default` since right now are the same.
+      An instance of :drm:`<integer>`. Default value is
+      :const:`$curl-global-default`.
+
+   :signals:
+
+      A :class:`<curl-init-error>` if there was an error initializing
+      the library. The rest of functions/methods cannot be used.
+
+   :example:
+
+      .. code-block:: dylan
+
+         curl-library-setup();
+	 curl-library-setup(#key flags: $curl-global-ssl);
+
+   :discussion:
+
+      This function avoids that repeated calls to `curl_global_init
+      <https://curl.se/libcurl/c/curl_global_init.html>`_ cause
+      problems.
+
+      Use this in test suites to setup the library before using
+      functions that depend on it being initialized.
+
+      .. code-block:: dylan
+
+	 define suite my-test-suite
+	    (setup-function: curl-library-setup,
+	     cleanup-function: curl-library-cleanup)
+	    // test suite
+	 end suite;
+
+   :seealso:
+
+      - `Initialization constants`_
+      - :func:`curl-library-initialized?`
+      - :func:`curl-library-cleanup`
+      - :macro:`with-curl-global`
+
+.. function:: curl-library-cleanup
+
+   Release resources adquired by the library.
+
+   :signature:
+
+      curl-library-cleanup => ()
+
+   :discussion:
+
+      Calling this function actually makes that
+      :func:`curl-library-initialized?` returns :drm:`#f`. These can
+      change in the future to avoid problems with nested calls. See
+      :macro:`with-curl-global`.
+
+   :seealso:
+
+      - :func:`curl-library-initialized?`
+      - :func:`curl-library-setup`
+      - :macro:`with-curl-global`
+
+Functions
 =========
-
-Global
-------
-
-.. function:: curl-global-init
-
-   :signature:
-
-      curl-global-init *flags* => *code*
-
-   :description:
-
-   See `curl_global_init <https://curl.se/libcurl/c/curl_global_init.html>`_
-
-.. function:: curl-global-cleanup
-
-   :signature:
-
-      curl-global-cleanup => ()
-
-   See `curl_global_cleanup <https://curl.se/libcurl/c/curl_global_cleanup.html>`_
 
 General
 -------
@@ -101,7 +183,7 @@ Macros
 	  curl-easy-cleanup(curl)
 	end block;
 
-.. dylan:macro:: with-global-curl
+.. dylan:macro:: with-curl-global
    :statement:
 
    This macro simplifies the initialization and cleanup of the
@@ -111,37 +193,39 @@ Macros
 
    :macrocall:
       .. parsed-literal::
-	 with-global-curl (*flags*) body end
+	 with-curl-global (*flags*) body end
 
-   :param flags:
+   :discussion:
 
-      A bit pattern that tells libcurl exactly what features to init.
-      In normal operation, you must use :const:`$curl-global-all` or
-      :const:`$curl-global-default` since right now are the same.
+      This code is equivalent to:
 
-   :signals:
+      .. code-block:: dylan
 
-      A :class:`<curl-init-error>` if there was an error initializing
-      the library. The rest of functions/methods cannot be used.
+	 block()
+	   curl-library-setup(flags)
+	   body;
+	 rescue
+	   curl-library-cleanup()
+         end;
 
    :example:
 
      .. code-block:: dylan
 
-        with-global-curl ($curl-global-all)
+        with-curl-global ($curl-global-all)
           with-curl-easy (curl)
             curl.url := "https://example.com";
             curl-easy-perform(curl);
 	    // do staff
           end;
-        end with-global-curl;
+        end with-curl-global;
 
    :seealso:
 
       * `Global preparation <https://curl.se/libcurl/c/libcurl-tutorial.html>`_.
       * `Global flags <#global-flags>`_
-      * :func:`curl-global-init`
-      * :func:`curl-global-cleanup`
+      * :func:`curl-library-setup`
+      * :func:`curl-library-cleanup`
 
 Options
 =======

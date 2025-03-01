@@ -250,10 +250,12 @@
         <article role="main" id="furo-main-content">
           <section id="reference">
 <h1>Reference<a class="headerlink" href="#reference" title="Link to this heading">¶</a></h1>
-<section id="constants">
-<h2>Constants<a class="headerlink" href="#constants" title="Link to this heading">¶</a></h2>
 <section id="global-initialization">
-<h3>Global initialization<a class="headerlink" href="#global-initialization" title="Link to this heading">¶</a></h3>
+<h2>Global initialization<a class="headerlink" href="#global-initialization" title="Link to this heading">¶</a></h2>
+<section id="initialization-constants">
+<h3>Initialization constants<a class="headerlink" href="#initialization-constants" title="Link to this heading">¶</a></h3>
+<p>Bit flags used to configure the library’s global initialization
+options.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>See <a class="reference external" href="https://curl.se/libcurl/c/curl_global_init.html">curl_global_init</a> in libcurl’s
@@ -268,37 +270,117 @@ documentation for a complete description of this flags.</p>
 <li><p><code class="xref dylan dylan-const docutils literal notranslate"><span class="pre">$curl-global-ack-eintr</span></code></p></li>
 </ul>
 </section>
-</section>
 <section id="functions">
-<h2>Functions<a class="headerlink" href="#functions" title="Link to this heading">¶</a></h2>
-<section id="global">
-<h3>Global<a class="headerlink" href="#global" title="Link to this heading">¶</a></h3>
+<h3>Functions<a class="headerlink" href="#functions" title="Link to this heading">¶</a></h3>
 <dl class="dylan function">
-<dt class="sig sig-object dylan-api dylan" id="dylan-curl:curl-easy:curl-global-init">
-<span class="sig-name descname"><span class="pre">curl-global-init</span></span> <em class="property"><span class="pre">Function</span></em><a class="headerlink" href="#dylan-curl:curl-easy:curl-global-init" title="Link to this definition">¶</a></dt>
+<dt class="sig sig-object dylan-api dylan" id="dylan-curl:curl-easy:curl-library-initialized?">
+<span class="sig-name descname"><span class="pre">curl-library-initialized?</span></span> <em class="property"><span class="pre">Function</span></em><a class="headerlink" href="#dylan-curl:curl-easy:curl-library-initialized?" title="Link to this definition">¶</a></dt>
 <dd><dl class="field-list simple">
 <dt class="field-odd">Signature<span class="colon">:</span></dt>
-<dd class="field-odd"><p>curl-global-init <em>flags</em> =&gt; <em>code</em></p>
+<dd class="field-odd"><p>curl-library-initialized? =&gt; <em>initialized?</em></p>
+</dd>
+<dt class="field-even">Values<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>initialized?</strong> – An instance of <a class="reference external" href="https://opendylan.org/books/drm/Simple_Object_Classes#boolean"><code class="xref drm docutils literal notranslate"><span class="pre">&lt;boolean&gt;</span></code></a>. Returns <a class="reference external" href="https://opendylan.org/books/drm/Other_Built-In_Objects_Defined#true"><code class="xref drm docutils literal notranslate"><span class="pre">#t</span></code></a> if the
+library has been globally initialized, <a class="reference external" href="https://opendylan.org/books/drm/Other_Built-In_Objects_Defined#false"><code class="xref drm docutils literal notranslate"><span class="pre">#f</span></code></a> otherwise.</p></li>
+</ul>
+</dd>
+<dt class="field-odd">See also<span class="colon">:</span></dt>
+<dd class="field-odd"><p><ul class="simple">
+<li><p><a class="reference internal" href="#dylan-curl:curl-easy:curl-library-setup"><code class="xref dylan dylan-func docutils literal notranslate"><span class="pre">curl-library-setup</span></code></a></p></li>
+<li><p><a class="reference internal" href="#dylan-curl:curl-easy:curl-library-cleanup"><code class="xref dylan dylan-func docutils literal notranslate"><span class="pre">curl-library-cleanup</span></code></a></p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="dylan function">
+<dt class="sig sig-object dylan-api dylan" id="dylan-curl:curl-easy:curl-library-setup">
+<span class="sig-name descname"><span class="pre">curl-library-setup</span></span> <em class="property"><span class="pre">Function</span></em><a class="headerlink" href="#dylan-curl:curl-easy:curl-library-setup" title="Link to this definition">¶</a></dt>
+<dd><p>Initializes globally the library.</p>
+<p>This function ensures that the curl library is properly
+initialized, preventing problems when it has already been
+initialized elsewhere.</p>
+<p>It makes that <a class="reference internal" href="#dylan-curl:curl-easy:curl-library-initialized?"><code class="xref dylan dylan-func docutils literal notranslate"><span class="pre">curl-library-initialized?</span></code></a> returns <a class="reference external" href="https://opendylan.org/books/drm/Other_Built-In_Objects_Defined#true"><code class="xref drm docutils literal notranslate"><span class="pre">#t</span></code></a>.</p>
+<dl class="field-list">
+<dt class="field-odd">Signature<span class="colon">:</span></dt>
+<dd class="field-odd"><p>curl-library-setup <em>flags</em> =&gt; ()</p>
+</dd>
+<dt class="field-even">Parameters<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>flags</strong> (<em>#key</em>) – A bit pattern that tells libcurl exactly what features to init.
+In normal operation, you must use <code class="xref dylan dylan-const docutils literal notranslate"><span class="pre">$curl-global-all</span></code> or
+<code class="xref dylan dylan-const docutils literal notranslate"><span class="pre">$curl-global-default</span></code> since right now are the same.
+An instance of <a class="reference external" href="https://opendylan.org/books/drm/Number_Classes#integer"><code class="xref drm docutils literal notranslate"><span class="pre">&lt;integer&gt;</span></code></a>. Default value is
+<code class="xref dylan dylan-const docutils literal notranslate"><span class="pre">$curl-global-default</span></code>.</p></li>
+</ul>
+</dd>
+<dt class="field-odd">Conditions<span class="colon">:</span></dt>
+<dd class="field-odd"><p>A <code class="xref dylan dylan-class docutils literal notranslate"><span class="pre">&lt;curl-init-error&gt;</span></code> if there was an error initializing
+the library. The rest of functions/methods cannot be used.</p>
+</dd>
+<dt class="field-even">Example<span class="colon">:</span></dt>
+<dd class="field-even"><div class="highlight-dylan notranslate"><div class="highlight"><pre><span></span><span class="n">curl-library-setup</span><span class="p">();</span>
+<span class="n">curl-library-setup</span><span class="p">(</span><span class="k">#key</span><span class="w"> </span><span class="k">flags:</span><span class="w"> </span><span class="no">$curl-global-ssl</span><span class="p">);</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-odd">Discussion<span class="colon">:</span></dt>
+<dd class="field-odd"><p><p>This function avoids that repeated calls to <a class="reference external" href="https://curl.se/libcurl/c/curl_global_init.html">curl_global_init</a> cause
+problems.</p>
+<p>Use this in test suites to setup the library before using
+functions that depend on it being initialized.</p>
+<div class="highlight-dylan notranslate"><div class="highlight"><pre><span></span><span class="k">define</span><span class="w"> </span><span class="n">suite</span><span class="w"> </span><span class="n">my-test-suite</span>
+<span class="w">   </span><span class="p">(</span><span class="k">setup-function:</span><span class="w"> </span><span class="n">curl-library-setup</span><span class="p">,</span>
+<span class="w">    </span><span class="k">cleanup-function:</span><span class="w"> </span><span class="n">curl-library-cleanup</span><span class="p">)</span>
+<span class="w">   </span><span class="c1">// test suite</span>
+<span class="k">end</span><span class="w"> </span><span class="n">suite</span><span class="p">;</span>
+</pre></div>
+</div>
+</p>
+</dd>
+<dt class="field-even">See also<span class="colon">:</span></dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><a class="reference internal" href="#initialization-constants">Initialization constants</a></p></li>
+<li><p><a class="reference internal" href="#dylan-curl:curl-easy:curl-library-initialized?"><code class="xref dylan dylan-func docutils literal notranslate"><span class="pre">curl-library-initialized?</span></code></a></p></li>
+<li><p><a class="reference internal" href="#dylan-curl:curl-easy:curl-library-cleanup"><code class="xref dylan dylan-func docutils literal notranslate"><span class="pre">curl-library-cleanup</span></code></a></p></li>
+<li><p><a class="reference internal" href="#dylan-curl:curl-easy:with-curl-global"><code class="xref dylan dylan-macro docutils literal notranslate"><span class="pre">with-curl-global</span></code></a></p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="dylan function">
+<dt class="sig sig-object dylan-api dylan" id="dylan-curl:curl-easy:curl-library-cleanup">
+<span class="sig-name descname"><span class="pre">curl-library-cleanup</span></span> <em class="property"><span class="pre">Function</span></em><a class="headerlink" href="#dylan-curl:curl-easy:curl-library-cleanup" title="Link to this definition">¶</a></dt>
+<dd><p>Release resources adquired by the library.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Signature<span class="colon">:</span></dt>
+<dd class="field-odd"><p>curl-library-cleanup =&gt; ()</p>
 </dd>
 <dt class="field-even">Discussion<span class="colon">:</span></dt>
-<dd class="field-even"><p></p>
+<dd class="field-even"><p>Calling this function actually makes that
+<a class="reference internal" href="#dylan-curl:curl-easy:curl-library-initialized?"><code class="xref dylan dylan-func docutils literal notranslate"><span class="pre">curl-library-initialized?</span></code></a> returns <a class="reference external" href="https://opendylan.org/books/drm/Other_Built-In_Objects_Defined#false"><code class="xref drm docutils literal notranslate"><span class="pre">#f</span></code></a>. These can
+change in the future to avoid problems with nested calls. See
+<a class="reference internal" href="#dylan-curl:curl-easy:with-curl-global"><code class="xref dylan dylan-macro docutils literal notranslate"><span class="pre">with-curl-global</span></code></a>.</p>
+</dd>
+<dt class="field-odd">See also<span class="colon">:</span></dt>
+<dd class="field-odd"><p><ul class="simple">
+<li><p><a class="reference internal" href="#dylan-curl:curl-easy:curl-library-initialized?"><code class="xref dylan dylan-func docutils literal notranslate"><span class="pre">curl-library-initialized?</span></code></a></p></li>
+<li><p><a class="reference internal" href="#dylan-curl:curl-easy:curl-library-setup"><code class="xref dylan dylan-func docutils literal notranslate"><span class="pre">curl-library-setup</span></code></a></p></li>
+<li><p><a class="reference internal" href="#dylan-curl:curl-easy:with-curl-global"><code class="xref dylan dylan-macro docutils literal notranslate"><span class="pre">with-curl-global</span></code></a></p></li>
+</ul>
+</p>
 </dd>
 </dl>
-<p>See <a class="reference external" href="https://curl.se/libcurl/c/curl_global_init.html">curl_global_init</a></p>
-</dd></dl>
-
-<dl class="dylan function">
-<dt class="sig sig-object dylan-api dylan" id="dylan-curl:curl-easy:curl-global-cleanup">
-<span class="sig-name descname"><span class="pre">curl-global-cleanup</span></span> <em class="property"><span class="pre">Function</span></em><a class="headerlink" href="#dylan-curl:curl-easy:curl-global-cleanup" title="Link to this definition">¶</a></dt>
-<dd><dl class="field-list simple">
-<dt class="field-odd">Signature<span class="colon">:</span></dt>
-<dd class="field-odd"><p>curl-global-cleanup =&gt; ()</p>
-</dd>
-</dl>
-<p>See <a class="reference external" href="https://curl.se/libcurl/c/curl_global_cleanup.html">curl_global_cleanup</a></p>
 </dd></dl>
 
 </section>
+</section>
+<section id="id2">
+<h2>Functions<a class="headerlink" href="#id2" title="Link to this heading">¶</a></h2>
 <section id="general">
 <h3>General<a class="headerlink" href="#general" title="Link to this heading">¶</a></h3>
 <dl class="dylan function">
@@ -355,45 +437,46 @@ initialized.</p>
 </dd></dl>
 
 <dl class="dylan macro">
-<dt class="sig sig-object dylan-api dylan" id="dylan-curl:curl-easy:with-global-curl">
-<span class="sig-name descname"><span class="pre">with-global-curl</span></span> <em class="property"><span class="pre">Statement</span> <span class="pre">Macro</span></em><a class="headerlink" href="#dylan-curl:curl-easy:with-global-curl" title="Link to this definition">¶</a></dt>
+<dt class="sig sig-object dylan-api dylan" id="dylan-curl:curl-easy:with-curl-global">
+<span class="sig-name descname"><span class="pre">with-curl-global</span></span> <em class="property"><span class="pre">Statement</span> <span class="pre">Macro</span></em><a class="headerlink" href="#dylan-curl:curl-easy:with-curl-global" title="Link to this definition">¶</a></dt>
 <dd><p>This macro simplifies the initialization and cleanup of the
 <cite>libcurl</cite> library in Open Dylan.  It ensures that <cite>libcurl</cite>’s
 global variables are initialized before the code is executed and
 properly cleaned up afterwards.</p>
 <dl class="field-list">
 <dt class="field-odd">Macro Call<span class="colon">:</span></dt>
-<dd class="field-odd"><p><pre class="literal-block">with-global-curl (<em>flags</em>) body end</pre>
+<dd class="field-odd"><p><pre class="literal-block">with-curl-global (<em>flags</em>) body end</pre>
 </p>
 </dd>
-<dt class="field-even">Parameters<span class="colon">:</span></dt>
-<dd class="field-even"><ul class="simple">
-<li><p><strong>flags</strong> – A bit pattern that tells libcurl exactly what features to init.
-In normal operation, you must use <code class="xref dylan dylan-const docutils literal notranslate"><span class="pre">$curl-global-all</span></code> or
-<code class="xref dylan dylan-const docutils literal notranslate"><span class="pre">$curl-global-default</span></code> since right now are the same.</p></li>
-</ul>
+<dt class="field-even">Discussion<span class="colon">:</span></dt>
+<dd class="field-even"><p><p>This code is equivalent to:</p>
+<div class="highlight-dylan notranslate"><div class="highlight"><pre><span></span><span class="nb">block</span><span class="p">()</span>
+<span class="w">  </span><span class="n">curl-library-setup</span><span class="p">(</span><span class="n">flags</span><span class="p">)</span>
+<span class="w">  </span><span class="n">body</span><span class="p">;</span>
+<span class="n">rescue</span>
+<span class="w">  </span><span class="n">curl-library-cleanup</span><span class="p">()</span>
+<span class="k">end</span><span class="p">;</span>
+</pre></div>
+</div>
+</p>
 </dd>
-<dt class="field-odd">Signals<span class="colon">:</span></dt>
-<dd class="field-odd"><p>A <code class="xref dylan dylan-class docutils literal notranslate"><span class="pre">&lt;curl-init-error&gt;</span></code> if there was an error initializing
-the library. The rest of functions/methods cannot be used.</p>
-</dd>
-<dt class="field-even">Example<span class="colon">:</span></dt>
-<dd class="field-even"><div class="highlight-dylan notranslate"><div class="highlight"><pre><span></span><span class="n">with-global-curl</span><span class="w"> </span><span class="p">(</span><span class="no">$curl-global-all</span><span class="p">)</span>
+<dt class="field-odd">Example<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="highlight-dylan notranslate"><div class="highlight"><pre><span></span><span class="n">with-curl-global</span><span class="w"> </span><span class="p">(</span><span class="no">$curl-global-all</span><span class="p">)</span>
 <span class="w">  </span><span class="n">with-curl-easy</span><span class="w"> </span><span class="p">(</span><span class="n">curl</span><span class="p">)</span>
 <span class="w">    </span><span class="n">curl</span><span class="p">.</span><span class="n">url</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="s">&quot;https://example.com&quot;</span><span class="p">;</span>
 <span class="w">    </span><span class="n">curl-easy-perform</span><span class="p">(</span><span class="n">curl</span><span class="p">);</span>
 <span class="w">    </span><span class="c1">// do staff</span>
 <span class="w">  </span><span class="k">end</span><span class="p">;</span>
-<span class="k">end</span><span class="w"> </span><span class="n">with-global-curl</span><span class="p">;</span>
+<span class="k">end</span><span class="w"> </span><span class="n">with-curl-global</span><span class="p">;</span>
 </pre></div>
 </div>
 </dd>
-<dt class="field-odd">See also<span class="colon">:</span></dt>
-<dd class="field-odd"><p><ul class="simple">
+<dt class="field-even">See also<span class="colon">:</span></dt>
+<dd class="field-even"><p><ul class="simple">
 <li><p><a class="reference external" href="https://curl.se/libcurl/c/libcurl-tutorial.html">Global preparation</a>.</p></li>
 <li><p><a class="reference external" href="#global-flags">Global flags</a></p></li>
-<li><p><a class="reference internal" href="#dylan-curl:curl-easy:curl-global-init"><code class="xref dylan dylan-func docutils literal notranslate"><span class="pre">curl-global-init</span></code></a></p></li>
-<li><p><a class="reference internal" href="#dylan-curl:curl-easy:curl-global-cleanup"><code class="xref dylan dylan-func docutils literal notranslate"><span class="pre">curl-global-cleanup</span></code></a></p></li>
+<li><p><a class="reference internal" href="#dylan-curl:curl-easy:curl-library-setup"><code class="xref dylan dylan-func docutils literal notranslate"><span class="pre">curl-library-setup</span></code></a></p></li>
+<li><p><a class="reference internal" href="#dylan-curl:curl-easy:curl-library-cleanup"><code class="xref dylan dylan-func docutils literal notranslate"><span class="pre">curl-library-cleanup</span></code></a></p></li>
 </ul>
 </p>
 </dd>
@@ -8311,12 +8394,12 @@ the library. The rest of functions/methods cannot be used.</p>
           <div class="toc-tree">
             <ul>
 <li><a class="reference internal" href="#">Reference</a><ul>
-<li><a class="reference internal" href="#constants">Constants</a><ul>
-<li><a class="reference internal" href="#global-initialization">Global initialization</a></li>
+<li><a class="reference internal" href="#global-initialization">Global initialization</a><ul>
+<li><a class="reference internal" href="#initialization-constants">Initialization constants</a></li>
+<li><a class="reference internal" href="#functions">Functions</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#functions">Functions</a><ul>
-<li><a class="reference internal" href="#global">Global</a></li>
+<li><a class="reference internal" href="#id2">Functions</a><ul>
 <li><a class="reference internal" href="#general">General</a></li>
 </ul>
 </li>
