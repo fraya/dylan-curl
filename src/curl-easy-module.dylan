@@ -302,6 +302,9 @@ define module curl-easy
   create
     <curl>,
     <curl-easy>,
+    curl-library-initialized?,
+    curl-library-setup,
+    curl-library-cleanup,
     with-curl-easy,
     with-curl-global;
 
@@ -312,8 +315,6 @@ define module curl-easy
     c-curl-easy-send,
     c-curl-easy-unescape,
     c-curl-easy-upkeep,
-    curl-global-init,
-    curl-global-cleanup,
     curl-easy-cleanup,
     curl-easy-dup,
     curl-easy-escape,
@@ -733,4 +734,7 @@ define module curl-easy-impl
 
   use common-dylan;
   use c-ffi;
+
+  export
+    *curl-library-initialized?*;
 end module;

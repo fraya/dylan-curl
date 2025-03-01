@@ -7,9 +7,11 @@ define library curl-easy-test-suite
   use strings;
   use system;
   use testworks;
-
   use dylan-curl,
-    import: { curl-easy };
+    import: { curl-easy,
+              curl-easy-impl };
+  export
+    curl-easy-test-suite;
 end library;
 
 define module curl-easy-test-suite
@@ -26,6 +28,8 @@ define module curl-easy-test-suite
   use testworks;
 
   use curl-easy;
+  use curl-easy-impl;
 
-  export curl-easy-test-suite;
+  export
+    suite-httpbin;
 end module;

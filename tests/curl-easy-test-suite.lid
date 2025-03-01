@@ -5,6 +5,7 @@ Files: library.dylan
        test-escape-unescape.dylan
        test-getinfo-cainfo.dylan
        test-get-simple-http-page.dylan
+       test-global.dylan
        test-httpbin.dylan
        test-https.dylan
        test-option-headers.dylan

@@ -491,17 +491,41 @@ define C-function curl-global-cleanup
   c-name: "curl_global_cleanup";
 end C-function;
 
+define variable *curl-library-initialized?* :: <boolean>
+  = #f;
+
+define function curl-library-initialized?
+    () => (initialized? :: <boolean>)
+  *curl-library-initialized?*
+end;
+
+define function curl-library-setup
+    (#key flags :: <integer> = $curl-global-default) => ()
+  unless(*curl-library-initialized?*)
+    let status = curl-global-init(flags);
+    if (status ~= $curle-ok)
+      signal(make(<curl-init-error>))
+    end;
+    *curl-library-initialized?* := #t
+  end unless;
+end function;
+
+define function curl-library-cleanup
+    () => ()
+  when(*curl-library-initialized?*)
+    curl-global-cleanup();
+    *curl-library-initialized?* := #f
+  end when
+end function;
+
 define macro with-curl-global
   { with-curl-global (?flags:expression) ?body:body end }
-    => { let status = curl-global-init(?flags);
-         if (status ~= $curle-ok)
-           signal(make(<curl-init-error>))
-         end;
+    => { curl-library-setup(flags: ?flags);		 
          block ()
            ?body
          cleanup
-           curl-global-cleanup()
-         end block }
+	   curl-library-cleanup()
+	 end block }
 end macro;
 
 define C-function curl-slist-append

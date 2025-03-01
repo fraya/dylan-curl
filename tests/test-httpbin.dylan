@@ -1,6 +1,19 @@
-Module:     curl-easy-test-suite
-Copyright:  Copyright (C) 2024, Dylan Hackers. All rights reserved.
-License:    See License.txt in this distribution for details.
+Module:      curl-easy-test-suite
+Copyright:   Copyright (C) 2024, Dylan Hackers. All rights reserved.
+License:     See License.txt in this distribution for details.
+Description: Tests using 'httpbin.org'. To use a local container
+             use the environment variables 'HTTPBIN' and 'HTTPBIN_PORT'.
+             See README.md in this directory.
+
+define constant $httpbin-default-site = "httpbin.org";
+define constant $httpbin-default-port = "80";
+
+define function httpbin
+    (path :: <string>) => (url :: <string>)
+  let site = environment-variable("HTTPBIN") | $httpbin-default-site;
+  let port = environment-variable("HTTPBIN_PORT") | $httpbin-default-port;
+  concatenate("http://", site, ":", port, path);
+end;
 
 define test test-postfields (tags: #("io"))
   with-curl-easy (curl)
@@ -62,8 +75,8 @@ define test test-auth-digest (tags: #("io", "httpbin"))
 end test test-auth-digest;
 
 define suite suite-httpbin
-    (setup-function: curry(curl-global-init, $curl-global-default),
-     cleanup-function: curl-global-cleanup)
+    (setup-function: curl-library-setup,
+     cleanup-function: curl-library-cleanup)
   test test-postfields;
   test test-http-methods;
   test test-auth-basic;
