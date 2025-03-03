@@ -283,23 +283,23 @@ define C-struct <curl-tlssessioninfo>
 end C-struct;
   
 define C-struct <curl-header> 
-  slot curl-header-name   :: <c-string>;
-  slot curl-header-value  :: <c-string>;
-  slot curl-header-amount :: <c-int>;
-  slot curl-header-index  :: <c-int>;
-  slot curl-header-origin :: <c-unsigned-int>;
-  slot curl-header-anchor :: <c-void*>;
+  slot curl-header-name   :: <C-string>;
+  slot curl-header-value  :: <C-string>;
+  slot curl-header-amount :: <C-int>;
+  slot curl-header-index  :: <C-int>;
+  slot curl-header-origin :: <C-unsigned-int>;
+  slot curl-header-anchor :: <C-void*>;
   pointer-type-name: <curl-header*>;
 end C-struct;
 
 define C-struct <curl-slist>
-  slot curl-slist-data :: <c-string>;
+  slot curl-slist-data :: <C-string>;
   slot curl-slist-next :: <curl-slist*>;
   pointer-type-name: <curl-slist*>;
 end C-struct;
 
 define C-struct <curl-certinfo>
-  slot curl-certinfo-num-of-certs :: <c-int>;
+  slot curl-certinfo-num-of-certs :: <C-int>;
   slot curl-certinfo-certinfo :: <curl-slist*>;
   pointer-type-name: <curl-certinfo*>;
 end;
@@ -307,10 +307,10 @@ end;
 // See: https://github.com/curl/curl/blob/280ff5ca0328bfc40968282faea6033a2cef7a92/include/curl/options.h#L1-L70
 
 define C-struct <curl-easy-option>
-  slot curl-easy-option-name  :: <c-string>;
-  slot curl-easy-option-id    :: <c-int>;
-  slot curl-easy-option-type  :: <c-int>; 
-  slot curl-easy-option-flags :: <c-unsigned-int>;
+  slot curl-easy-option-name  :: <C-string>;
+  slot curl-easy-option-id    :: <C-int>;
+  slot curl-easy-option-type  :: <C-int>; 
+  slot curl-easy-option-flags :: <C-unsigned-int>;
   pointer-type-name: <curl-easy-option*>;
 end C-struct;
 
@@ -349,9 +349,9 @@ end C-function;
 define C-function c-curl-easy-escape
   // https://curl.se/libcurl/c/curl_easy_escape.html
   input parameter handle :: <curl-easy-handle>;
-  input parameter url :: <c-string>;
-  input parameter length :: <c-int>;
-  result value :: <c-string>;
+  input parameter url :: <C-string>;
+  input parameter length :: <C-int>;
+  result value :: <C-string>;
   c-name: "curl_easy_escape";
 end C-function;
 
@@ -359,12 +359,12 @@ define C-function c-curl-easy-header
   // https://curl.se/libcurl/c/curl_easy_header.html
   // https://everything.curl.dev/helpers/headerapi/struct.html
   input parameter handle  :: <curl-easy-handle>;
-  input parameter name    :: <c-string>;
-  input parameter index   :: <c-int>;
-  input parameter origin  :: <c-unsigned-int>;
-  input parameter request :: <c-int>;
+  input parameter name    :: <C-string>;
+  input parameter index   :: <C-int>;
+  input parameter origin  :: <C-unsigned-int>;
+  input parameter request :: <C-int>;
   output parameter hout   :: <curl-header*>;
-  result curlhe-code :: <c-int>;
+  result curlhe-code :: <C-int>;
   c-name: "curl_easy_header";
 end C-function;
 
@@ -377,21 +377,21 @@ end C-function;
 define C-function c-curl-easy-next-header
   // https://curl.se/libcurl/c/curl_easy_nextheader.html
   input parameter handle  :: <curl-easy-handle>;
-  input parameter origin  :: <c-unsigned-int>;
-  input parameter request :: <c-int>;
+  input parameter origin  :: <C-unsigned-int>;
+  input parameter request :: <C-int>;
   input parameter prev    :: <curl-header*>;
   result next-header :: <curl-header*>;
   c-name: "curl_easy_nextheader";
 end C-function;
 
 define C-function curl-easy-option-by-id
-  input parameter id :: <c-int>;
+  input parameter id :: <C-int>;
   result curl-option :: <curl-easy-option*>;
   c-name: "curl_easy_option_by_id";
 end C-function;
 
 define C-function curl-easy-option-by-name
-  input parameter name :: <c-string>;
+  input parameter name :: <C-string>;
   result curl-option   :: <curl-easy-option*>;
   c-name: "curl_easy_option_by_name";
 end C-function;
@@ -404,15 +404,15 @@ end C-function;
 
 define C-function c-curl-easy-pause
   input parameter handle  :: <curl-easy-handle>;
-  input parameter bitmask :: <c-int>;
-  result curl-code :: <c-int>;
+  input parameter bitmask :: <C-int>;
+  result curl-code :: <C-int>;
   c-name: "curl_easy_pause";
 end C-function;
 
 define C-function c-curl-easy-perform
   // https://curl.se/libcurl/c/curl_easy_perform.html
   input parameter handle :: <curl-easy-handle>;
-  result status :: <c-int>;
+  result status :: <C-int>;
   c-name: "curl_easy_perform";
 end C-function;
 
@@ -420,10 +420,10 @@ end C-function;
 // define C-function curl-easy-recv
 //   // https://curl.se/libcurl/c/curl_easy_recv.html
 //   input parameter handle :: <curl-easy-handle>;
-//   input output parameter buffer :: <c-void*>;
-//   input parameter buflen :: <c-int>;
-//   output parameter n :: <c-int*>;
-//   result status :: <c-int>;
+//   input output parameter buffer :: <C-void*>;
+//   input parameter buflen :: <C-int>;
+//   output parameter n :: <C-int*>;
+//   result status :: <C-int>;
 //   c-name: "curl_easy_recv_shim";
 // end C-function;
 
@@ -436,17 +436,17 @@ end C-function;
 define C-function c-curl-easy-send
   // https://curl.se/libcurl/c/curl_easy_send.html
   input parameter handle :: <curl-easy-handle>;
-  input parameter buffer :: <c-void*>;
-  input parameter buflen :: <c-int>;
-  output parameter n :: <c-int*>;
-  result status :: <c-int>;
+  input parameter buffer :: <C-void*>;
+  input parameter buflen :: <C-int>;
+  output parameter n :: <C-int*>;
+  result status :: <C-int>;
   c-name: "curl_easy_send";
 end C-function;
 
 define C-function c-curl-easy-strerror
   // https://curl.se/libcurl/c/curl_easy_strerror.html
-  input parameter error-number :: <c-int>;
-  result error-message :: <c-string>;
+  input parameter error-number :: <C-int>;
+  result error-message :: <C-string>;
   c-name: "curl_easy_strerror";
 end C-function;
 
@@ -463,14 +463,14 @@ end C-function;
 define C-function c-curl-easy-upkeep
   // https://curl.se/libcurl/c/curl_easy_upkeep.html
   input parameter handle :: <curl-easy-handle>;
-  result status :: <c-int>;
+  result status :: <C-int>;
   c-name: "curl_easy_upkeep";
 end C-function;
 
 define C-function curl-global-init
   // https://curl.se/libcurl/c/curl_global_init.html
-  input parameter flags :: <c-int>;
-  result curl-code :: <c-int>;
+  input parameter flags :: <C-int>;
+  result curl-code :: <C-int>;
   c-name: "curl_global_init";
 end C-function;
 
@@ -481,8 +481,8 @@ end C-function;
 // NOTE: only from version 8.3
 // define C-function curl-global-trace
 //   // https://curl.se/libcurl/c/curl_global_trace.html
-//   input parameter config :: <c-string>;
-//   result curl-code :: <c-int>;
+//   input parameter config :: <C-string>;
+//   result curl-code :: <C-int>;
 //   c-name: "curl_global_trace";
 // end C-function;
 
@@ -531,7 +531,7 @@ end macro;
 define C-function curl-slist-append
   // https://curl.se/libcurl/c/curl_slist_append.html
   input parameter slist  :: <curl-slist*>;
-  input parameter string :: <c-string>;
+  input parameter string :: <C-string>;
   result new-slist :: <curl-slist*>;
   c-name: "curl_slist_append";
 end C-function;
@@ -544,7 +544,7 @@ end C-function;
 
 define C-function curl-version
   // https://curl.se/libcurl/c/curl_version.html
-  result version :: <c-string>;
+  result version :: <C-string>;
   c-name: "curl_version";
 end C-function;
 
@@ -671,56 +671,56 @@ define function curl-write-callback
 end;
 
 define function curl-header-callback
-    (ptr :: <c-void*>, size :: <integer>, nmemb :: <integer>, stream :: <c-void*>)
+    (ptr :: <C-void*>, size :: <integer>, nmemb :: <integer>, stream :: <C-void*>)
  => (bytes-written :: <integer>)
   *curl-header-callback*(ptr, size, nmemb, stream)
 end;
 
 define function curl-debug-callback
-    (handle :: <curl-easy-handle>, type :: <integer>, data :: <string>, size :: <integer>, clientp :: <c-void*>)
+    (handle :: <curl-easy-handle>, type :: <integer>, data :: <string>, size :: <integer>, clientp :: <C-void*>)
  => (code :: <integer>)
   *curl-debug-callback*(handle, type, data, size, clientp)
 end;
 
 define function curl-progress-callback
-    (clientp :: <c-void*>, dt :: <integer>, dn :: <integer>, ut :: <integer>, unow :: <integer>)
+    (clientp :: <C-void*>, dt :: <integer>, dn :: <integer>, ut :: <integer>, unow :: <integer>)
  => (status :: <integer>)
   *curl-progress-callback*(clientp, dt, dn, ut, unow)
 end;
 
-define c-callable-wrapper $curl-write-callback of curl-write-callback
-  input parameter ptr       :: <c-string>;
-  input parameter size      :: <c-int>;
-  input parameter nmemb     :: <c-int>;
+define C-callable-wrapper $curl-write-callback of curl-write-callback
+  input parameter ptr       :: <C-string>;
+  input parameter size      :: <C-int>;
+  input parameter nmemb     :: <C-int>;
   input parameter user-data :: <c-dylan-object>;
-  result bytes-written :: <c-int>;
-end c-callable-wrapper;
+  result bytes-written :: <C-int>;
+end C-callable-wrapper;
 
-define c-callable-wrapper $curl-header-callback of curl-header-callback
-  input parameter ptr    :: <c-void*>;
-  input parameter size   :: <c-int>;
-  input parameter nmemb  :: <c-int>;
-  input parameter stream :: <c-void*>;
-  result bytes-written :: <c-int>;
-end c-callable-wrapper;
+define C-callable-wrapper $curl-header-callback of curl-header-callback
+  input parameter ptr    :: <C-void*>;
+  input parameter size   :: <C-int>;
+  input parameter nmemb  :: <C-int>;
+  input parameter stream :: <C-void*>;
+  result bytes-written :: <C-int>;
+end C-callable-wrapper;
 
-define c-callable-wrapper $curl-debug-callback of curl-debug-callback
+define C-callable-wrapper $curl-debug-callback of curl-debug-callback
   input parameter handle  :: <curl-easy-handle>;
-  input parameter type    :: <c-int>;
-  input parameter data    :: <c-string>;
-  input parameter size    :: <c-int>;
-  input parameter clientp :: <c-void*>;
-  result code :: <c-int>;
-end c-callable-wrapper;
+  input parameter type    :: <C-int>;
+  input parameter data    :: <C-string>;
+  input parameter size    :: <C-int>;
+  input parameter clientp :: <C-void*>;
+  result code :: <C-int>;
+end C-callable-wrapper;
 
-define c-callable-wrapper $curl-progress-callback of curl-progress-callback
+define C-callable-wrapper $curl-progress-callback of curl-progress-callback
   input parameter clientp :: <c-dylan-object>;
   input parameter dltotal :: <c-unsigned-long>;
   input parameter dlnow   :: <c-unsigned-long>;
-  input parameter ultotal :: <c-int>;
-  input parameter ulnow   :: <c-int>;
-  result status :: <c-int>;
-end c-callable-wrapper;
+  input parameter ultotal :: <C-int>;
+  input parameter ulnow   :: <C-int>;
+  result status :: <C-int>;
+end C-callable-wrapper;
 
 //////////////////////////////////////////////////////////////////////////////
 //
@@ -734,73 +734,73 @@ end c-callable-wrapper;
 
 define C-function curl-setopt-long
   input parameter handle :: <curl-easy-handle>;
-  input parameter option :: <c-int>;
-  input parameter value :: <c-long>;
-  result curl-code :: <c-int>;
+  input parameter option :: <C-int>;
+  input parameter value :: <C-long>;
+  result curl-code :: <C-int>;
   c-name: "curl_setopt_long";
 end C-function;
 
 define C-function curl-setopt-objectpoint
   input parameter handle :: <curl-easy-handle>;
-  input parameter option :: <c-int>;
-  input parameter value :: <c-void*>;
-  result curl-code :: <c-int>;
+  input parameter option :: <C-int>;
+  input parameter value :: <C-void*>;
+  result curl-code :: <C-int>;
   c-name: "curl_setopt_objectpoint";
 end C-function;
 
 define C-function curl-setopt-functionpoint
   input parameter handle :: <curl-easy-handle>;
-  input parameter option :: <c-int>;
-  input parameter value :: <c-function-pointer>;
-  result curl-code :: <c-int>;
+  input parameter option :: <C-int>;
+  input parameter value :: <C-function-pointer>;
+  result curl-code :: <C-int>;
   c-name: "curl_setopt_functionpoint";
 end C-function;
 
 define C-function curl-setopt-off-t
   input parameter handle :: <curl-easy-handle>;
-  input parameter option :: <c-int>;
-  input parameter value :: <c-long>;
-  result curl-code :: <c-int>;
+  input parameter option :: <C-int>;
+  input parameter value :: <C-long>;
+  result curl-code :: <C-int>;
   c-name: "curl_setopt_off_t";
 end C-function;
 
 define C-function curl-setopt-blob
   input parameter handle :: <curl-easy-handle>;
-  input parameter option :: <c-int>;
+  input parameter option :: <C-int>;
   input parameter stblob :: <curlopt-blob>;
-  result curl-code :: <c-int>;
+  result curl-code :: <C-int>;
   c-name: "curl_setopt_blob";
 end C-function;
 
 define C-function curl-setopt-stringpoint
   input parameter handle :: <curl-easy-handle>;
-  input parameter option :: <c-int>;
-  input parameter value  :: <c-string>;
-  result curl-code :: <c-int>;
+  input parameter option :: <C-int>;
+  input parameter value  :: <C-string>;
+  result curl-code :: <C-int>;
   c-name: "curl_setopt_stringpoint";
 end C-function;
 
 define C-function curl-setopt-slistpoint
   input parameter handle :: <curl-easy-handle>;
-  input parameter option :: <c-int>;
+  input parameter option :: <C-int>;
   input parameter value  :: <curlopt-slistpoint>;
-  result curl-code :: <c-int>;
+  result curl-code :: <C-int>;
   c-name: "curl_setopt_slistpoint";
 end C-function;
 
 define C-function curl-setopt-cbpoint
   input parameter handle :: <curl-easy-handle>;
-  input parameter option :: <c-int>;
-  input parameter value  :: <c-void*>;
-  result curl-code :: <c-int>;
+  input parameter option :: <C-int>;
+  input parameter value  :: <C-void*>;
+  result curl-code :: <C-int>;
   c-name: "curl_setopt_cbpoint";
 end C-function;
 
 define C-function curl-setopt-values
   input parameter handle :: <curl-easy-handle>;
-  input parameter option :: <c-int>;
+  input parameter option :: <C-int>;
   input parameter vals   :: <c-long>;
-  result curl-code :: <c-int>;
+  result curl-code :: <C-int>;
   c-name: "curl_setopt_values";
 end C-function;
 
@@ -1225,64 +1225,64 @@ define constant <curlinfo-off-t>  = <curl-off-t>;
 
 define C-function curl-easy-getinfo-string
   input  parameter handle    :: <curl-easy-handle>;
-  input  parameter option    :: <c-int>;
-  output parameter curl-code :: <c-int*>;
-  result value :: <c-string>;
+  input  parameter option    :: <C-int>;
+  output parameter curl-code :: <C-int*>;
+  result value :: <C-string>;
   c-name: "curl_easy_getinfo_string";
 end C-function;
 
 define C-function curl-easy-getinfo-long
   input  parameter handle    :: <curl-easy-handle>;
-  input  parameter option    :: <c-int>;
-  output parameter curl-code :: <c-int*>;
+  input  parameter option    :: <C-int>;
+  output parameter curl-code :: <C-int*>;
   result value :: <c-long>;
   c-name: "curl_easy_getinfo_long";
 end C-function;
 
 define C-function curl-easy-getinfo-double
   input  parameter handle    :: <curl-easy-handle>;
-  input  parameter option    :: <c-int>;
-  output parameter curl-code :: <c-int*>;
+  input  parameter option    :: <C-int>;
+  output parameter curl-code :: <C-int*>;
   result value :: <c-double>;
   c-name: "curl_easy_getinfo_double";
 end C-function;
 
 define C-function curl-easy-getinfo-off-t
   input  parameter handle    :: <curl-easy-handle>;
-  input  parameter option    :: <c-int>;
-  output parameter curl-code :: <c-int*>;
-  result value :: <c-int>;
+  input  parameter option    :: <C-int>;
+  output parameter curl-code :: <C-int*>;
+  result value :: <C-int>;
   c-name: "curl_easy_getinfo_off_t";
 end C-function;
 
 define C-function curl-easy-getinfo-slist
   input  parameter handle    :: <curl-easy-handle>;
-  input  parameter option    :: <c-int>;
-  output parameter curl-code :: <c-int*>;
+  input  parameter option    :: <C-int>;
+  output parameter curl-code :: <C-int*>;
   result value :: <curl-slist*>;
   c-name: "curl_easy_getinfo_slist";
 end C-function;
 
 define C-function curl-easy-getinfo-ptr
   input  parameter handle    :: <curl-easy-handle>;
-  input  parameter option    :: <c-int>;
-  output parameter curl-code :: <c-int*>;
+  input  parameter option    :: <C-int>;
+  output parameter curl-code :: <C-int*>;
   result value :: <C-void*>;
   c-name: "curl_easy_getinfo_ptr";
 end C-function;
 
 // define C-function curl-easy-getinfo-tlssessioninfo
 //   input  parameter handle    :: <curl-easy-handle>;
-//   input  parameter option    :: <c-int>;
-//   output parameter curl-code :: <c-int*>;
+//   input  parameter option    :: <C-int>;
+//   output parameter curl-code :: <C-int*>;
 //   result value :: <curl-tlssessioninfo*>;
 //   c-name: "curl_easy_getinfo_tlssessioninfo";
 // end C-function;
 
 // define C-function curl-easy-getinfo-certinfo
 //   input  parameter handle    :: <curl-easy-handle>;
-//   input  parameter option    :: <c-int>;
-//   output parameter curl-code :: <c-int*>;
+//   input  parameter option    :: <C-int>;
+//   output parameter curl-code :: <C-int*>;
 //   result value :: <curl-certinfo*>;
 //   c-name: "curl_easy_getinfo_certinfo";
 // end C-function;
