@@ -27,7 +27,7 @@ define test test-chkspeed (tags: #("io", "slow"))
 	curl.curl-useragent := "dylan-curl-speedchecker/1.0";
 	curl.curl-writefunction := $curl-write-callback;
 	curl.curl-xferinfofunction := $curl-progress-callback;
-	curl.curl-noprogress := 0;
+	curl.curl-noprogress := #f;
 	with-open-file (stream = filename, direction: #"output", if-exists: #"replace")
 	  dynamic-bind(*curl-write-callback* = handle-download)
 	    dynamic-bind(*curl-progress-callback* = progress-callback)

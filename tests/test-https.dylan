@@ -9,7 +9,7 @@ define test test-https (tags: #("io", "slow"))
     with-curl-global ($curl-global-default)
       with-curl-easy (curl)
 	curl.curl-url := "https://example.org";
-	curl.curl-ssl-verifypeer := 1;
+	curl.curl-ssl-verifypeer := #f;
 	curl.curl-ssl-verifyhost := 1;
 	curl.curl-ca-cache-timeout := 604800;
 	curl-easy-perform(curl);

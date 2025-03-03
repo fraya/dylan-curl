@@ -39,7 +39,7 @@ define test test-debug-callback (tags: #("io"))
       with-curl-easy (curl)
         dynamic-bind (*curl-debug-callback* = dump-debug-callback)
 	  curl.curl-url := "https://example.com/";
-          curl.curl-verbose := 1;  // verbose to use debug-callback
+          curl.curl-verbose := #t;  // verbose to use debug-callback
           curl.curl-debugfunction := $curl-debug-callback;
           curl-easy-perform(curl);
         end dynamic-bind;

@@ -49,6 +49,11 @@ CURLcode curl_setopt_values(CURL *handle, CURLoption option, int values)
   return curl_easy_setopt(handle, option, (long) values);
 }
 
+CURLcode curl_setopt_boolean(CURL *handle, CURLoption option, int value)
+{
+  return curl_easy_setopt(handle, option, (long) value);
+}
+
 /**
  * CURL info functions shim
  */

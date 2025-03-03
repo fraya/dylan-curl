@@ -66,7 +66,7 @@ define test test-auth-digest (tags: #("io", "httpbin"))
   with-curl-easy (curl)
     let url = httpbin("/digest-auth/auth/user/passwd");
     curl.curl-url := url;
-    curl.curl-verbose := 0;
+    curl.curl-verbose := #f;
     curl.curl-userpwd := "user:passwd";
     curl.curl-httpauth := $curlauth-digest;
     curl-easy-perform(curl);

@@ -281,8 +281,8 @@ define C-struct <curl-tlssessioninfo>
   slot curl-tlssessioninfo-internals :: <C-void*>;
   pointer-type-name: <curl-tlssessioninfo*>;
 end C-struct;
-  
-define C-struct <curl-header> 
+
+define C-struct <curl-header>
   slot curl-header-name   :: <C-string>;
   slot curl-header-value  :: <C-string>;
   slot curl-header-amount :: <C-int>;
@@ -520,7 +520,7 @@ end function;
 
 define macro with-curl-global
   { with-curl-global (?flags:expression) ?body:body end }
-    => { curl-library-setup(flags: ?flags);		 
+    => { curl-library-setup(flags: ?flags);
          block ()
            ?body
          cleanup
@@ -608,7 +608,7 @@ define method initialize
 end method;
 
 define function curl-easy-cleanup
-    (curl :: <curl-easy>) => () 
+    (curl :: <curl-easy>) => ()
   c-curl-easy-cleanup(curl.curl-handle)
 end;
 
@@ -724,6 +724,25 @@ end C-callable-wrapper;
 
 //////////////////////////////////////////////////////////////////////////////
 //
+// Maps the <boolean> type to <integer>, where functions interpret
+// 0 as #f (false) and 1 as #t (true).
+//
+//////////////////////////////////////////////////////////////////////////////
+
+define C-mapped-subtype <curl-boolean> (<C-int>)
+  map <boolean>,
+    export-function:
+    method (v :: <boolean>) => (result :: <integer>)
+      as(<integer>, if(v) 1 else 0 end if)
+    end,
+    import-function:
+    method (v :: <integer>) => (result :: <boolean>)
+      ~zero?(v)
+    end;
+end C-mapped-subtype;
+
+//////////////////////////////////////////////////////////////////////////////
+//
 // `curl-easy-setopt` shim functions.
 //
 // A "shim" function is created for each `$curl-setopt-xxx` constant to
@@ -804,6 +823,13 @@ define C-function curl-setopt-values
   c-name: "curl_setopt_values";
 end C-function;
 
+define C-function curl-setopt-boolean
+  input parameter handle :: <curl-easy-handle>;
+  input parameter option :: <C-int>;
+  input parameter value  :: <curl-boolean>;
+  result curl-code :: <C-int>;
+  c-name: "curl_setopt_boolean";
+end C-function;
 
 //////////////////////////////////////////////////////////////////////////////
 //
@@ -820,6 +846,7 @@ define constant <curlopt-stringpoint> = <string>;
 define constant <curlopt-slistpoint> = <curl-slist*>;
 define constant <curlopt-cbpoint> = <c-dylan-object>;
 define constant <curlopt-values> = <integer>;
+define constant <curlopt-boolean> = <boolean>;
 
 ///////////////////////////////////////////////////////////////////////////////
 //
@@ -842,6 +869,7 @@ define constant $curlopttype-stringpoint   = $curlopttype-objectpoint;
 define constant $curlopttype-slistpoint    = $curlopttype-objectpoint;
 define constant $curlopttype-cbpoint       = $curlopttype-objectpoint;
 define constant $curlopttype-values        = $curlopttype-long;
+define constant $curlopttype-boolean       = $curlopttype-long;
 
 //////////////////////////////////////////////////////////////////////////////
 //
@@ -909,7 +937,7 @@ define curlopt slistpoint httpheader = 23;
 define curlopt objectpoint httppost = 24;
 define curlopt stringpoint sslcert = 25;
 define curlopt stringpoint keypasswd = 26;
-define curlopt long crlf = 27;
+define curlopt boolean crlf = 27;
 define curlopt slistpoint quote = 28;
 define curlopt cbpoint headerdata = 29;
 define curlopt stringpoint cookiefile = 31;
@@ -922,74 +950,74 @@ define curlopt objectpoint stderr = 37;
 // 38 is not used
 define curlopt slistpoint postquote = 39;
 // 40 is not used
-define curlopt long verbose = 41;
-define curlopt long header = 42;
-define curlopt long noprogress = 43;
-define curlopt long nobody = 44;
-define curlopt long failonerror = 45;
-define curlopt long upload = 46;
-define curlopt long post = 47;
-define curlopt long dirlistonly = 48;
+define curlopt boolean verbose = 41;
+define curlopt boolean header = 42;
+define curlopt boolean noprogress = 43;
+define curlopt boolean nobody = 44;
+define curlopt boolean failonerror = 45;
+define curlopt boolean upload = 46;
+define curlopt boolean post = 47;
+define curlopt boolean dirlistonly = 48;
 define curlopt long append = 50;
 define curlopt values netrc = 51;
 define curlopt long followlocation = 52;
-define curlopt long transfertext = 53;
+define curlopt boolean transfertext = 53;
 // 54 is deprecated use upload
-define curlopt long put = 54;
+define curlopt boolean put = 54;
 // 55 is obsolete
 // 56 is deprecated use xferinfofunction
 define curlopt functionpoint progressfunction = 56;
 define curlopt cbpoint xferinfodata = 57;
-define curlopt long autoreferer = 58;
+define curlopt boolean autoreferer = 58;
 define curlopt long proxyport = 59;
 define curlopt long postfieldsize = 60;
-define curlopt long httpproxytunnel = 61;
+define curlopt boolean httpproxytunnel = 61;
 define curlopt stringpoint interface = 62;
 define curlopt stringpoint krblevel = 63;
-define curlopt long ssl-verifypeer = 64;
+define curlopt boolean ssl-verifypeer = 64;
 define curlopt stringpoint cainfo = 65;
 // 66 is obsolete
 // 67 is obsolete
 define curlopt long maxredirs = 68;
-define curlopt long filetime = 69;
+define curlopt boolean filetime = 69;
 define curlopt slistpoint telnetoptions = 70;
 define curlopt long maxconnects = 71;
 // 72 is obsolete
 // 73 is obsolete
-define curlopt long fresh-connect = 74;
-define curlopt long forbid-reuse = 75;
+define curlopt boolean fresh-connect = 74;
+define curlopt boolean forbid-reuse = 75;
 define curlopt stringpoint random-file = 76;
 // 77 is deprecated, serves no purpose anymore
 define curlopt stringpoint egdsocket = 77;
 define curlopt long connecttimeout = 78;
 define curlopt functionpoint headerfunction = 79;
-define curlopt long httpget = 80;
+define curlopt boolean httpget = 80;
 define curlopt long ssl-verifyhost = 81;
 define curlopt stringpoint cookiejar = 82;
 define curlopt stringpoint ssl-cipher-list = 83;
 define curlopt values http-version = 84;
-define curlopt long ftp-use-epsv = 85;
+define curlopt boolean ftp-use-epsv = 85;
 define curlopt stringpoint sslcerttype = 86;
 define curlopt stringpoint sslkeytype = 87;
 define curlopt stringpoint sslengine = 89;
 define curlopt long sslengine-default = 90;
 // 91 deprecated, use curlopt-share
-define curlopt long dns-use-global-cache = 91;
+define curlopt boolean dns-use-global-cache = 91;
 define curlopt long dns-cache-timeout = 92;
 define curlopt slistpoint prequote = 93;
 define curlopt functionpoint debugfunction = 94;
 define curlopt cbpoint debugdata = 95;
-define curlopt long cookiesession = 96;
+define curlopt boolean cookiesession = 96;
 define curlopt stringpoint capath = 97;
 define curlopt long buffersize = 98;
-define curlopt long nosignal = 99;
+define curlopt boolean nosignal = 99;
 define curlopt objectpoint share = 100;
 define curlopt values proxytype = 101;
 define curlopt stringpoint accept-encoding = 102;
 define curlopt objectpoint private = 103;
 define curlopt slistpoint http200aliases = 104;
-define curlopt long unrestricted-auth = 105;
-define curlopt long ftp-use-eprt = 106;
+define curlopt boolean unrestricted-auth = 105;
+define curlopt boolean ftp-use-eprt = 106;
 define curlopt values httpauth = 107;
 define curlopt functionpoint ssl-ctx-function = 108;
 define curlopt cbpoint ssl-ctx-data = 109;
@@ -1004,7 +1032,7 @@ define curlopt off-t maxfilesize-large = 117;
 define curlopt stringpoint netrc-file = 118;
 define curlopt values use-ssl = 119;
 define curlopt off-t postfieldsize-large = 120;
-define curlopt long tcp-nodelay = 121;
+define curlopt boolean tcp-nodelay = 121;
 // 122-128 obsolete
 define curlopt values ftpsslauth = 129;
 // 130 deprecated, use curlopt-seekfunction
@@ -1048,7 +1076,7 @@ define curlopt cbpoint seekdata = 168;
 define curlopt stringpoint crlfile = 169;
 define curlopt stringpoint issuercert = 170;
 define curlopt long address-scope = 171;
-define curlopt long certinfo = 172;
+define curlopt boolean certinfo = 172;
 define curlopt stringpoint username = 173;
 define curlopt stringpoint password = 174;
 define curlopt stringpoint proxyusername = 175;
@@ -1086,36 +1114,36 @@ define curlopt long tcp-keepidle = 214;
 define curlopt long tcp-keepintvl = 215;
 define curlopt values ssl-options = 216;
 define curlopt stringpoint mail-auth = 217;
-define curlopt long sasl-ir = 218;
+define curlopt boolean sasl-ir = 218;
 define curlopt functionpoint xferinfofunction = 219;
 define curlopt stringpoint xoauth2-bearer = 220;
 define curlopt stringpoint dns-interface = 221;
 define curlopt stringpoint dns-local-ip4 = 222;
 define curlopt stringpoint dns-local-ip6 = 223;
 define curlopt stringpoint login-options = 224;
-define curlopt long ssl-enable-alpn = 226;
+define curlopt boolean ssl-enable-alpn = 226;
 define curlopt long expect-100-timeout-ms = 227;
 define curlopt slistpoint proxyheader = 228;
 define curlopt values headeropt = 229;
 define curlopt stringpoint pinnedpublickey = 230;
 define curlopt stringpoint unix-socket-path = 231;
-define curlopt long ssl-verifystatus = 232;
-define curlopt long ssl-falsestart = 233;
-define curlopt long path-as-is = 234;
+define curlopt boolean ssl-verifystatus = 232;
+define curlopt boolean ssl-falsestart = 233;
+define curlopt boolean path-as-is = 234;
 define curlopt stringpoint proxy-service-name = 235;
 define curlopt stringpoint service-name = 236;
-define curlopt long pipewait = 237;
+define curlopt boolean pipewait = 237;
 define curlopt stringpoint default-protocol = 238;
 define curlopt long stream-weight = 239;
 define curlopt objectpoint stream-depends = 240;
 define curlopt objectpoint stream-depends-e = 241;
-define curlopt long tftp-no-options = 242;
+define curlopt boolean tftp-no-options = 242;
 define curlopt slistpoint connect-to = 243;
-define curlopt long tcp-fastopen = 244;
+define curlopt boolean tcp-fastopen = 244;
 define curlopt long keep-sending-on-error = 245;
 define curlopt stringpoint proxy-cainfo = 246;
 define curlopt stringpoint proxy-capath = 247;
-define curlopt long proxy-ssl-verifypeer = 248;
+define curlopt boolean proxy-ssl-verifypeer = 248;
 define curlopt long proxy-ssl-verifyhost = 249;
 define curlopt values proxy-sslversion = 250;
 define curlopt stringpoint proxy-tlsauth-username = 251;
@@ -1173,9 +1201,9 @@ define curlopt cbpoint hstsreaddata = 302;
 define curlopt functionpoint hstswritefunction = 303;
 define curlopt cbpoint hstswritedata = 304;
 define curlopt stringpoint aws-sigv4 = 305;
-define curlopt long doh-ssl-verifypeer = 306;
+define curlopt boolean doh-ssl-verifypeer = 306;
 define curlopt long doh-ssl-verifyhost = 307;
-define curlopt long doh-ssl-verifystatus = 308;
+define curlopt boolean doh-ssl-verifystatus = 308;
 define curlopt blob cainfo-blob = 309;
 define curlopt blob proxy-cainfo-blob = 310;
 define curlopt stringpoint ssh-host-public-key-sha256 = 311;
@@ -1290,7 +1318,7 @@ end C-function;
 //////////////////////////////////////////////////////////////////////////////
 //
 // The following constants are assigned a unique identifier based on a
-// type-specific base index. Each `curlinfo` constant's value is calculated 
+// type-specific base index. Each `curlinfo` constant's value is calculated
 // by adding its unique offset to this base index.
 //
 // Reference: 
