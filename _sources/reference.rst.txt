@@ -656,15 +656,15 @@ Options
      https://curl.se/libcurl/c/CURLOPT_KEYPASSWD.html
 
 .. method:: curl-crlf-setter
-   :specializer: <curl-long>
+   :specializer: <curl-boolean>
 
    :signature:
 
      curl-crlf-setter (curl option) => (option)
 
    :parameter curl: An instance of :class:`<curl-easy>`
-   :parameter option: An instance of :class:`<curl-long>`
-   :value option: An instance of :class:`<curl-long>`
+   :parameter option: An instance of :class:`<curl-boolean>`
+   :value option: An instance of :class:`<curl-boolean>`
 
    :description:
 
@@ -826,15 +826,15 @@ Options
      https://curl.se/libcurl/c/CURLOPT_POSTQUOTE.html
 
 .. method:: curl-verbose-setter
-   :specializer: <curl-long>
+   :specializer: <curl-boolean>
 
    :signature:
 
      curl-verbose-setter (curl option) => (option)
 
    :parameter curl: An instance of :class:`<curl-easy>`
-   :parameter option: An instance of :class:`<curl-long>`
-   :value option: An instance of :class:`<curl-long>`
+   :parameter option: An instance of :class:`<curl-boolean>`
+   :value option: An instance of :class:`<curl-boolean>`
 
    :description:
 
@@ -843,15 +843,15 @@ Options
      https://curl.se/libcurl/c/CURLOPT_VERBOSE.html
 
 .. method:: curl-header-setter
-   :specializer: <curl-long>
+   :specializer: <curl-boolean>
 
    :signature:
 
      curl-header-setter (curl option) => (option)
 
    :parameter curl: An instance of :class:`<curl-easy>`
-   :parameter option: An instance of :class:`<curl-long>`
-   :value option: An instance of :class:`<curl-long>`
+   :parameter option: An instance of :class:`<curl-boolean>`
+   :value option: An instance of :class:`<curl-boolean>`
 
    :description:
 
@@ -860,15 +860,15 @@ Options
      https://curl.se/libcurl/c/CURLOPT_HEADER.html
 
 .. method:: curl-noprogress-setter
-   :specializer: <curl-long>
+   :specializer: <curl-boolean>
 
    :signature:
 
      curl-noprogress-setter (curl option) => (option)
 
    :parameter curl: An instance of :class:`<curl-easy>`
-   :parameter option: An instance of :class:`<curl-long>`
-   :value option: An instance of :class:`<curl-long>`
+   :parameter option: An instance of :class:`<curl-boolean>`
+   :value option: An instance of :class:`<curl-boolean>`
 
    :description:
 
@@ -877,15 +877,15 @@ Options
      https://curl.se/libcurl/c/CURLOPT_NOPROGRESS.html
 
 .. method:: curl-nobody-setter
-   :specializer: <curl-long>
+   :specializer: <curl-boolean>
 
    :signature:
 
      curl-nobody-setter (curl option) => (option)
 
    :parameter curl: An instance of :class:`<curl-easy>`
-   :parameter option: An instance of :class:`<curl-long>`
-   :value option: An instance of :class:`<curl-long>`
+   :parameter option: An instance of :class:`<curl-boolean>`
+   :value option: An instance of :class:`<curl-boolean>`
 
    :description:
 
@@ -894,15 +894,15 @@ Options
      https://curl.se/libcurl/c/CURLOPT_NOBODY.html
 
 .. method:: curl-failonerror-setter
-   :specializer: <curl-long>
+   :specializer: <curl-boolean>
 
    :signature:
 
      curl-failonerror-setter (curl option) => (option)
 
    :parameter curl: An instance of :class:`<curl-easy>`
-   :parameter option: An instance of :class:`<curl-long>`
-   :value option: An instance of :class:`<curl-long>`
+   :parameter option: An instance of :class:`<curl-boolean>`
+   :value option: An instance of :class:`<curl-boolean>`
 
    :description:
 
@@ -911,15 +911,15 @@ Options
      https://curl.se/libcurl/c/CURLOPT_FAILONERROR.html
 
 .. method:: curl-upload-setter
-   :specializer: <curl-long>
+   :specializer: <curl-boolean>
 
    :signature:
 
      curl-upload-setter (curl option) => (option)
 
    :parameter curl: An instance of :class:`<curl-easy>`
-   :parameter option: An instance of :class:`<curl-long>`
-   :value option: An instance of :class:`<curl-long>`
+   :parameter option: An instance of :class:`<curl-boolean>`
+   :value option: An instance of :class:`<curl-boolean>`
 
    :description:
 
@@ -928,15 +928,15 @@ Options
      https://curl.se/libcurl/c/CURLOPT_UPLOAD.html
 
 .. method:: curl-post-setter
-   :specializer: <curl-long>
+   :specializer: <curl-boolean>
 
    :signature:
 
      curl-post-setter (curl option) => (option)
 
    :parameter curl: An instance of :class:`<curl-easy>`
-   :parameter option: An instance of :class:`<curl-long>`
-   :value option: An instance of :class:`<curl-long>`
+   :parameter option: An instance of :class:`<curl-boolean>`
+   :value option: An instance of :class:`<curl-boolean>`
 
    :description:
 
@@ -945,15 +945,15 @@ Options
      https://curl.se/libcurl/c/CURLOPT_POST.html
 
 .. method:: curl-dirlistonly-setter
-   :specializer: <curl-long>
+   :specializer: <curl-boolean>
 
    :signature:
 
      curl-dirlistonly-setter (curl option) => (option)
 
    :parameter curl: An instance of :class:`<curl-easy>`
-   :parameter option: An instance of :class:`<curl-long>`
-   :value option: An instance of :class:`<curl-long>`
+   :parameter option: An instance of :class:`<curl-boolean>`
+   :value option: An instance of :class:`<curl-boolean>`
 
    :description:
 
@@ -1013,15 +1013,15 @@ Options
      https://curl.se/libcurl/c/CURLOPT_FOLLOWLOCATION.html
 
 .. method:: curl-transfertext-setter
-   :specializer: <curl-long>
+   :specializer: <curl-boolean>
 
    :signature:
 
      curl-transfertext-setter (curl option) => (option)
 
    :parameter curl: An instance of :class:`<curl-easy>`
-   :parameter option: An instance of :class:`<curl-long>`
-   :value option: An instance of :class:`<curl-long>`
+   :parameter option: An instance of :class:`<curl-boolean>`
+   :value option: An instance of :class:`<curl-boolean>`
 
    :description:
 
@@ -1030,15 +1030,15 @@ Options
      https://curl.se/libcurl/c/CURLOPT_TRANSFERTEXT.html
 
 .. method:: curl-put-setter
-   :specializer: <curl-long>
+   :specializer: <curl-boolean>
 
    :signature:
 
      curl-put-setter (curl option) => (option)
 
    :parameter curl: An instance of :class:`<curl-easy>`
-   :parameter option: An instance of :class:`<curl-long>`
-   :value option: An instance of :class:`<curl-long>`
+   :parameter option: An instance of :class:`<curl-boolean>`
+   :value option: An instance of :class:`<curl-boolean>`
 
    :description:
 
@@ -1081,15 +1081,15 @@ Options
      https://curl.se/libcurl/c/CURLOPT_XFERINFODATA.html
 
 .. method:: curl-autoreferer-setter
-   :specializer: <curl-long>
+   :specializer: <curl-boolean>
 
    :signature:
 
      curl-autoreferer-setter (curl option) => (option)
 
    :parameter curl: An instance of :class:`<curl-easy>`
-   :parameter option: An instance of :class:`<curl-long>`
-   :value option: An instance of :class:`<curl-long>`
+   :parameter option: An instance of :class:`<curl-boolean>`
+   :value option: An instance of :class:`<curl-boolean>`
 
    :description:
 
@@ -1132,15 +1132,15 @@ Options
      https://curl.se/libcurl/c/CURLOPT_POSTFIELDSIZE.html
 
 .. method:: curl-httpproxytunnel-setter
-   :specializer: <curl-long>
+   :specializer: <curl-boolean>
 
    :signature:
 
      curl-httpproxytunnel-setter (curl option) => (option)
 
    :parameter curl: An instance of :class:`<curl-easy>`
-   :parameter option: An instance of :class:`<curl-long>`
-   :value option: An instance of :class:`<curl-long>`
+   :parameter option: An instance of :class:`<curl-boolean>`
+   :value option: An instance of :class:`<curl-boolean>`
 
    :description:
 
@@ -1183,15 +1183,15 @@ Options
      https://curl.se/libcurl/c/CURLOPT_KRBLEVEL.html
 
 .. method:: curl-ssl-verifypeer-setter
-   :specializer: <curl-long>
+   :specializer: <curl-boolean>
 
    :signature:
 
      curl-ssl-verifypeer-setter (curl option) => (option)
 
    :parameter curl: An instance of :class:`<curl-easy>`
-   :parameter option: An instance of :class:`<curl-long>`
-   :value option: An instance of :class:`<curl-long>`
+   :parameter option: An instance of :class:`<curl-boolean>`
+   :value option: An instance of :class:`<curl-boolean>`
 
    :description:
 
@@ -1234,15 +1234,15 @@ Options
      https://curl.se/libcurl/c/CURLOPT_MAXREDIRS.html
 
 .. method:: curl-filetime-setter
-   :specializer: <curl-long>
+   :specializer: <curl-boolean>
 
    :signature:
 
      curl-filetime-setter (curl option) => (option)
 
    :parameter curl: An instance of :class:`<curl-easy>`
-   :parameter option: An instance of :class:`<curl-long>`
-   :value option: An instance of :class:`<curl-long>`
+   :parameter option: An instance of :class:`<curl-boolean>`
+   :value option: An instance of :class:`<curl-boolean>`
 
    :description:
 
@@ -1285,15 +1285,15 @@ Options
      https://curl.se/libcurl/c/CURLOPT_MAXCONNECTS.html
 
 .. method:: curl-fresh-connect-setter
-   :specializer: <curl-long>
+   :specializer: <curl-boolean>
 
    :signature:
 
      curl-fresh-connect-setter (curl option) => (option)
 
    :parameter curl: An instance of :class:`<curl-easy>`
-   :parameter option: An instance of :class:`<curl-long>`
-   :value option: An instance of :class:`<curl-long>`
+   :parameter option: An instance of :class:`<curl-boolean>`
+   :value option: An instance of :class:`<curl-boolean>`
 
    :description:
 
@@ -1302,15 +1302,15 @@ Options
      https://curl.se/libcurl/c/CURLOPT_FRESH_CONNECT.html
 
 .. method:: curl-forbid-reuse-setter
-   :specializer: <curl-long>
+   :specializer: <curl-boolean>
 
    :signature:
 
      curl-forbid-reuse-setter (curl option) => (option)
 
    :parameter curl: An instance of :class:`<curl-easy>`
-   :parameter option: An instance of :class:`<curl-long>`
-   :value option: An instance of :class:`<curl-long>`
+   :parameter option: An instance of :class:`<curl-boolean>`
+   :value option: An instance of :class:`<curl-boolean>`
 
    :description:
 
@@ -1387,15 +1387,15 @@ Options
      https://curl.se/libcurl/c/CURLOPT_HEADERFUNCTION.html
 
 .. method:: curl-httpget-setter
-   :specializer: <curl-long>
+   :specializer: <curl-boolean>
 
    :signature:
 
      curl-httpget-setter (curl option) => (option)
 
    :parameter curl: An instance of :class:`<curl-easy>`
-   :parameter option: An instance of :class:`<curl-long>`
-   :value option: An instance of :class:`<curl-long>`
+   :parameter option: An instance of :class:`<curl-boolean>`
+   :value option: An instance of :class:`<curl-boolean>`
 
    :description:
 
@@ -1472,15 +1472,15 @@ Options
      https://curl.se/libcurl/c/CURLOPT_HTTP_VERSION.html
 
 .. method:: curl-ftp-use-epsv-setter
-   :specializer: <curl-long>
+   :specializer: <curl-boolean>
 
    :signature:
 
      curl-ftp-use-epsv-setter (curl option) => (option)
 
    :parameter curl: An instance of :class:`<curl-easy>`
-   :parameter option: An instance of :class:`<curl-long>`
-   :value option: An instance of :class:`<curl-long>`
+   :parameter option: An instance of :class:`<curl-boolean>`
+   :value option: An instance of :class:`<curl-boolean>`
 
    :description:
 
@@ -1557,15 +1557,15 @@ Options
      https://curl.se/libcurl/c/CURLOPT_SSLENGINE_DEFAULT.html
 
 .. method:: curl-dns-use-global-cache-setter
-   :specializer: <curl-long>
+   :specializer: <curl-boolean>
 
    :signature:
 
      curl-dns-use-global-cache-setter (curl option) => (option)
 
    :parameter curl: An instance of :class:`<curl-easy>`
-   :parameter option: An instance of :class:`<curl-long>`
-   :value option: An instance of :class:`<curl-long>`
+   :parameter option: An instance of :class:`<curl-boolean>`
+   :value option: An instance of :class:`<curl-boolean>`
 
    :description:
 
@@ -1642,15 +1642,15 @@ Options
      https://curl.se/libcurl/c/CURLOPT_DEBUGDATA.html
 
 .. method:: curl-cookiesession-setter
-   :specializer: <curl-long>
+   :specializer: <curl-boolean>
 
    :signature:
 
      curl-cookiesession-setter (curl option) => (option)
 
    :parameter curl: An instance of :class:`<curl-easy>`
-   :parameter option: An instance of :class:`<curl-long>`
-   :value option: An instance of :class:`<curl-long>`
+   :parameter option: An instance of :class:`<curl-boolean>`
+   :value option: An instance of :class:`<curl-boolean>`
 
    :description:
 
@@ -1693,15 +1693,15 @@ Options
      https://curl.se/libcurl/c/CURLOPT_BUFFERSIZE.html
 
 .. method:: curl-nosignal-setter
-   :specializer: <curl-long>
+   :specializer: <curl-boolean>
 
    :signature:
 
      curl-nosignal-setter (curl option) => (option)
 
    :parameter curl: An instance of :class:`<curl-easy>`
-   :parameter option: An instance of :class:`<curl-long>`
-   :value option: An instance of :class:`<curl-long>`
+   :parameter option: An instance of :class:`<curl-boolean>`
+   :value option: An instance of :class:`<curl-boolean>`
 
    :description:
 
@@ -1795,15 +1795,15 @@ Options
      https://curl.se/libcurl/c/CURLOPT_HTTP200ALIASES.html
 
 .. method:: curl-unrestricted-auth-setter
-   :specializer: <curl-long>
+   :specializer: <curl-boolean>
 
    :signature:
 
      curl-unrestricted-auth-setter (curl option) => (option)
 
    :parameter curl: An instance of :class:`<curl-easy>`
-   :parameter option: An instance of :class:`<curl-long>`
-   :value option: An instance of :class:`<curl-long>`
+   :parameter option: An instance of :class:`<curl-boolean>`
+   :value option: An instance of :class:`<curl-boolean>`
 
    :description:
 
@@ -1812,15 +1812,15 @@ Options
      https://curl.se/libcurl/c/CURLOPT_UNRESTRICTED_AUTH.html
 
 .. method:: curl-ftp-use-eprt-setter
-   :specializer: <curl-long>
+   :specializer: <curl-boolean>
 
    :signature:
 
      curl-ftp-use-eprt-setter (curl option) => (option)
 
    :parameter curl: An instance of :class:`<curl-easy>`
-   :parameter option: An instance of :class:`<curl-long>`
-   :value option: An instance of :class:`<curl-long>`
+   :parameter option: An instance of :class:`<curl-boolean>`
+   :value option: An instance of :class:`<curl-boolean>`
 
    :description:
 
@@ -2067,15 +2067,15 @@ Options
      https://curl.se/libcurl/c/CURLOPT_POSTFIELDSIZE_LARGE.html
 
 .. method:: curl-tcp-nodelay-setter
-   :specializer: <curl-long>
+   :specializer: <curl-boolean>
 
    :signature:
 
      curl-tcp-nodelay-setter (curl option) => (option)
 
    :parameter curl: An instance of :class:`<curl-easy>`
-   :parameter option: An instance of :class:`<curl-long>`
-   :value option: An instance of :class:`<curl-long>`
+   :parameter option: An instance of :class:`<curl-boolean>`
+   :value option: An instance of :class:`<curl-boolean>`
 
    :description:
 
@@ -2730,15 +2730,15 @@ Options
      https://curl.se/libcurl/c/CURLOPT_ADDRESS_SCOPE.html
 
 .. method:: curl-certinfo-setter
-   :specializer: <curl-long>
+   :specializer: <curl-boolean>
 
    :signature:
 
      curl-certinfo-setter (curl option) => (option)
 
    :parameter curl: An instance of :class:`<curl-easy>`
-   :parameter option: An instance of :class:`<curl-long>`
-   :value option: An instance of :class:`<curl-long>`
+   :parameter option: An instance of :class:`<curl-boolean>`
+   :value option: An instance of :class:`<curl-boolean>`
 
    :description:
 
@@ -3342,15 +3342,15 @@ Options
      https://curl.se/libcurl/c/CURLOPT_MAIL_AUTH.html
 
 .. method:: curl-sasl-ir-setter
-   :specializer: <curl-long>
+   :specializer: <curl-boolean>
 
    :signature:
 
      curl-sasl-ir-setter (curl option) => (option)
 
    :parameter curl: An instance of :class:`<curl-easy>`
-   :parameter option: An instance of :class:`<curl-long>`
-   :value option: An instance of :class:`<curl-long>`
+   :parameter option: An instance of :class:`<curl-boolean>`
+   :value option: An instance of :class:`<curl-boolean>`
 
    :description:
 
@@ -3461,15 +3461,15 @@ Options
      https://curl.se/libcurl/c/CURLOPT_LOGIN_OPTIONS.html
 
 .. method:: curl-ssl-enable-alpn-setter
-   :specializer: <curl-long>
+   :specializer: <curl-boolean>
 
    :signature:
 
      curl-ssl-enable-alpn-setter (curl option) => (option)
 
    :parameter curl: An instance of :class:`<curl-easy>`
-   :parameter option: An instance of :class:`<curl-long>`
-   :value option: An instance of :class:`<curl-long>`
+   :parameter option: An instance of :class:`<curl-boolean>`
+   :value option: An instance of :class:`<curl-boolean>`
 
    :description:
 
@@ -3563,15 +3563,15 @@ Options
      https://curl.se/libcurl/c/CURLOPT_UNIX_SOCKET_PATH.html
 
 .. method:: curl-ssl-verifystatus-setter
-   :specializer: <curl-long>
+   :specializer: <curl-boolean>
 
    :signature:
 
      curl-ssl-verifystatus-setter (curl option) => (option)
 
    :parameter curl: An instance of :class:`<curl-easy>`
-   :parameter option: An instance of :class:`<curl-long>`
-   :value option: An instance of :class:`<curl-long>`
+   :parameter option: An instance of :class:`<curl-boolean>`
+   :value option: An instance of :class:`<curl-boolean>`
 
    :description:
 
@@ -3580,15 +3580,15 @@ Options
      https://curl.se/libcurl/c/CURLOPT_SSL_VERIFYSTATUS.html
 
 .. method:: curl-ssl-falsestart-setter
-   :specializer: <curl-long>
+   :specializer: <curl-boolean>
 
    :signature:
 
      curl-ssl-falsestart-setter (curl option) => (option)
 
    :parameter curl: An instance of :class:`<curl-easy>`
-   :parameter option: An instance of :class:`<curl-long>`
-   :value option: An instance of :class:`<curl-long>`
+   :parameter option: An instance of :class:`<curl-boolean>`
+   :value option: An instance of :class:`<curl-boolean>`
 
    :description:
 
@@ -3597,15 +3597,15 @@ Options
      https://curl.se/libcurl/c/CURLOPT_SSL_FALSESTART.html
 
 .. method:: curl-path-as-is-setter
-   :specializer: <curl-long>
+   :specializer: <curl-boolean>
 
    :signature:
 
      curl-path-as-is-setter (curl option) => (option)
 
    :parameter curl: An instance of :class:`<curl-easy>`
-   :parameter option: An instance of :class:`<curl-long>`
-   :value option: An instance of :class:`<curl-long>`
+   :parameter option: An instance of :class:`<curl-boolean>`
+   :value option: An instance of :class:`<curl-boolean>`
 
    :description:
 
@@ -3648,15 +3648,15 @@ Options
      https://curl.se/libcurl/c/CURLOPT_SERVICE_NAME.html
 
 .. method:: curl-pipewait-setter
-   :specializer: <curl-long>
+   :specializer: <curl-boolean>
 
    :signature:
 
      curl-pipewait-setter (curl option) => (option)
 
    :parameter curl: An instance of :class:`<curl-easy>`
-   :parameter option: An instance of :class:`<curl-long>`
-   :value option: An instance of :class:`<curl-long>`
+   :parameter option: An instance of :class:`<curl-boolean>`
+   :value option: An instance of :class:`<curl-boolean>`
 
    :description:
 
@@ -3733,15 +3733,15 @@ Options
      https://curl.se/libcurl/c/CURLOPT_STREAM_DEPENDS_E.html
 
 .. method:: curl-tftp-no-options-setter
-   :specializer: <curl-long>
+   :specializer: <curl-boolean>
 
    :signature:
 
      curl-tftp-no-options-setter (curl option) => (option)
 
    :parameter curl: An instance of :class:`<curl-easy>`
-   :parameter option: An instance of :class:`<curl-long>`
-   :value option: An instance of :class:`<curl-long>`
+   :parameter option: An instance of :class:`<curl-boolean>`
+   :value option: An instance of :class:`<curl-boolean>`
 
    :description:
 
@@ -3767,15 +3767,15 @@ Options
      https://curl.se/libcurl/c/CURLOPT_CONNECT_TO.html
 
 .. method:: curl-tcp-fastopen-setter
-   :specializer: <curl-long>
+   :specializer: <curl-boolean>
 
    :signature:
 
      curl-tcp-fastopen-setter (curl option) => (option)
 
    :parameter curl: An instance of :class:`<curl-easy>`
-   :parameter option: An instance of :class:`<curl-long>`
-   :value option: An instance of :class:`<curl-long>`
+   :parameter option: An instance of :class:`<curl-boolean>`
+   :value option: An instance of :class:`<curl-boolean>`
 
    :description:
 
@@ -3835,15 +3835,15 @@ Options
      https://curl.se/libcurl/c/CURLOPT_PROXY_CAPATH.html
 
 .. method:: curl-proxy-ssl-verifypeer-setter
-   :specializer: <curl-long>
+   :specializer: <curl-boolean>
 
    :signature:
 
      curl-proxy-ssl-verifypeer-setter (curl option) => (option)
 
    :parameter curl: An instance of :class:`<curl-easy>`
-   :parameter option: An instance of :class:`<curl-long>`
-   :value option: An instance of :class:`<curl-long>`
+   :parameter option: An instance of :class:`<curl-boolean>`
+   :value option: An instance of :class:`<curl-boolean>`
 
    :description:
 
@@ -4821,15 +4821,15 @@ Options
      https://curl.se/libcurl/c/CURLOPT_AWS_SIGV4.html
 
 .. method:: curl-doh-ssl-verifypeer-setter
-   :specializer: <curl-long>
+   :specializer: <curl-boolean>
 
    :signature:
 
      curl-doh-ssl-verifypeer-setter (curl option) => (option)
 
    :parameter curl: An instance of :class:`<curl-easy>`
-   :parameter option: An instance of :class:`<curl-long>`
-   :value option: An instance of :class:`<curl-long>`
+   :parameter option: An instance of :class:`<curl-boolean>`
+   :value option: An instance of :class:`<curl-boolean>`
 
    :description:
 
@@ -4855,15 +4855,15 @@ Options
      https://curl.se/libcurl/c/CURLOPT_DOH_SSL_VERIFYHOST.html
 
 .. method:: curl-doh-ssl-verifystatus-setter
-   :specializer: <curl-long>
+   :specializer: <curl-boolean>
 
    :signature:
 
      curl-doh-ssl-verifystatus-setter (curl option) => (option)
 
    :parameter curl: An instance of :class:`<curl-easy>`
-   :parameter option: An instance of :class:`<curl-long>`
-   :value option: An instance of :class:`<curl-long>`
+   :parameter option: An instance of :class:`<curl-boolean>`
+   :value option: An instance of :class:`<curl-boolean>`
 
    :description:
 
