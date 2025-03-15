@@ -36,12 +36,12 @@ end function;
 define test test-debug-callback (tags: #("io"))
   block ()
     with-curl-global ($curl-global-default)
-      with-curl-easy (curl)
+      with-curl-easy (curl = make(<curl-easy>),
+	                    url = "https://example.com/",
+	                    verbose = #t,  // verbose to use debug-callback
+	                    debugfunction = $curl-debug-callback)
         dynamic-bind (*curl-debug-callback* = dump-debug-callback)
-	  curl.curl-url := "https://example.com/";
-          curl.curl-verbose := #t;  // verbose to use debug-callback
-          curl.curl-debugfunction := $curl-debug-callback;
-          curl-easy-perform(curl);
+	        curl-easy-perform(curl);
         end dynamic-bind;
         assert-true(#t);
       end with-curl-easy;

@@ -524,8 +524,8 @@ define macro with-curl-global
          block ()
            ?body
          cleanup
-	   curl-library-cleanup()
-	 end block }
+           curl-library-cleanup()
+         end block }
 end macro;
 
 define C-function curl-slist-append
@@ -548,18 +548,28 @@ define C-function curl-version
   c-name: "curl_version";
 end C-function;
 
+define macro set-curl-options
+   { set-curl-options (?curl:variable) }
+     => { ?curl }
+   { set-curl-options (?curl:variable, ?option:name = ?value:expression, ?more:*) }
+     => { "curl-" ## ?option ## "-setter"(?value, ?curl);
+          set-curl-options(?curl, ?more) }
+end macro set-curl-options;
+
 define macro with-curl-easy
-  { with-curl-easy (?curl:name) ?body:body end }
-    => { let ?curl = #f;
+  { with-curl-easy (?curl:variable = ?handler:expression, ?options:*) ?body:body end }
+    => { let _curl = #f;
          block ()
-	   ?curl := make(<curl-easy>);
-	   ?body
-	 cleanup
-	   if (?curl)
-	     curl-easy-cleanup(?curl)
-	   end;
+           _curl := ?handler;
+           let ?curl :: <curl-easy> = _curl;
+           set-curl-options(?curl, ?options);
+           ?body
+         cleanup
+           if (_curl)
+             curl-easy-cleanup(_curl)
+           end;
          end block }
-end macro;
+end macro with-curl-easy;
 
 ///////////////////////////////////////////////////////////////////////////////
 //
@@ -884,10 +894,14 @@ define constant $curlopttype-boolean       = $curlopttype-long;
 //
 //////////////////////////////////////////////////////////////////////////////
 
+define variable *curl-options* = 0;
+
 define macro curlopt-definer
   { define curlopt ?type:name ?id:name = ?number:expression }
     => { define constant "$curlopt-" ## ?id
            = "$curlopttype-" ## ?type + ?number;
+
+         *curl-options* := *curl-options* + 1;
 
          define method "curl-" ## ?id ## "-setter"
              (option :: "<curlopt-" ## ?type ## ">", curl :: <curl-easy>)

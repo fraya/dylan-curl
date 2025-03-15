@@ -34,7 +34,7 @@ In libcurl, you create a handle using `curl_easy_init
 <https://curl.se/libcurl/c/curl_easy_init.html>`_. In the Open Dylan
 wrapper, you create an object of the :class:`<curl-easy>` class.
 
-.. code-block:: c
+.. code-block:: C
    :caption: C example
 
    CURL *curl = curl_easy_init();
@@ -43,16 +43,22 @@ wrapper, you create an object of the :class:`<curl-easy>` class.
      curl_easy_cleanup(curl);
    }
 
-.. code-block:: dylan
-   :caption: Dylan example
-
-   with-curl-easy (curl)
-     ...
-   end;
-
 The macro :macro:`with-curl-easy` handles both initialization and
 automatic cleanup when it is no longer accessible. If initialization
 fails, a :class:`<curl-init-error>` exception is raised.
+
+.. code-block:: dylan
+   :caption: Dylan example
+
+   block ()
+     with-curl-easy (curl = make(<curl-easy>))
+       // perform request
+       // gather information about the request
+     end;
+   exception (err :: <curl-init-error>)
+     format-err("Error initializing curl: %s\n",
+                 err.curl-error-message)
+   end;
 
 Setting Parameters
 ^^^^^^^^^^^^^^^^^^
@@ -87,19 +93,36 @@ handled either immediately at the point of the operation or deferred
 to another method for centralized error handling.
 
 .. code-block:: dylan
-   :caption: In Dylan errors can be captured in a block somewhere.
-
-   with-curl-easy (curl)
-     curl.curl-url := "https://example.com";
-   end;
-
-   ...
+   :caption: In Dylan errors can be captured in a block.
 
    block ()
-     // somewhere in the code an option is incorrect
-     // and is handled here
+     with-curl-easy (curl = make(<curl-easy>))
+       curl.curl-url := "https://example.com";
+       // perform request
+       // gather information
+     end;
    exception (err :: <curl-option-error>)
-     format-err("Error setting option: %s\n", err.curl-error-message)
+     format-err("Error setting option: %s\n",
+                 err.curl-error-message)
+   end block;
+
+If you need to set a lot of options, you can pass them to the
+:macro:`with-curl-easy` with less verbosity.
+
+.. code-block:: dylan
+
+   block ()
+     with-curl-easy (curl = make(<curl-easy>),
+                     url = "https://example.org",
+                     ssl-verifypeer = #f,
+                     ssl-verifyhost = 1,
+                     ca-cache-timeout = 604800)
+       // perform request
+       // gather information
+     end with-curl-easy;
+   exception (err :: <curl-option-error>)
+     format-err("Error setting option: %s\n",
+                 err.curl-error-message)
    end block;
 
 Performing the Request
@@ -125,11 +148,12 @@ In Opendylan :func:`curl-perform` raises a
 .. code-block:: dylan
    :caption: Dylan example
 
-   block ()
+   block () 
      curl-easy-perform(curl);
      format-out("Request completed successfully.\n")
    exception (err :: <curl-perform-error>)
-      format-err("Curl failed: %s\n", curl.curl-error-message)
+      format-err("Curl failed: %s\n",
+                  curl.curl-error-message)
    end block;
 
 Retrieving Information
@@ -166,11 +190,11 @@ wrapper, you access the information directly using property syntax.
    :caption: Dylan Example
 
    block ()
-      with-curl-easy (curl)
-        curl.curl-url := "https://example.com/";
+      with-curl-easy (curl = make(<curl>),
+                      url = "https://example.com/")
         curl-easy-perform(curl);
         format-out("Time: %d", curl.total-time)
-      end
+      end;
    exception (err :: <curl-info-error>)
       format-err("curl easy getinfo failed: %s\n",
                  err.curl-error-message)

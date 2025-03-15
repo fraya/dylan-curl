@@ -7,4 +7,5 @@ define library dylan-curl
   
   use common-dylan;
   use c-ffi;
+  use io;
 end library;

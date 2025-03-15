@@ -4,7 +4,7 @@ Copyright: Copyright (C) 2025, Dylan Hackers. All rights reserved.
 
 define test test-curl-easy-escape ()
   with-curl-global ($curl-global-default)
-    with-curl-easy (curl)
+    with-curl-easy (curl = make(<curl-easy>))
       let data = "data to convert";
       let expected = "data%20to%20convert";
       let output1 = curl-easy-escape(curl, data, length: 15);
@@ -17,18 +17,18 @@ end test;
 
 define test test-curl-easy-unescape () 
   with-curl-global ($curl-global-default)
-    with-curl-easy (curl)
+    with-curl-easy (curl = make(<curl-easy>))
       let escaped = "%63%75%72%6c";
       let expected = "curl";
       let expected-length = 4;
       let (decoded, decoded-length)
-	= curl-easy-unescape(curl, escaped, length: 12);
+	      = curl-easy-unescape(curl, escaped, length: 12);
       assert-equal(expected, decoded,
 		   "Decoded string is as expected");
       assert-equal(expected-length, decoded-length,
 		   "Decoded length is as expected");
       let (decoded, decoded-length)
-	= curl-easy-unescape(curl, escaped);
+	      = curl-easy-unescape(curl, escaped);
       assert-equal(expected, decoded);
       assert-equal(expected-length, decoded-length);
     end with-curl-easy;
