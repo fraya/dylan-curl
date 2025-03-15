@@ -342,6 +342,8 @@ define module curl-easy
     $curl-progress-callback;
 
   // Curl options
+  create
+    *curl-options*;
 
   create
     <curlopt-stringpoint>,
@@ -731,9 +733,11 @@ end module curl-easy;
 
 define module curl-easy-impl
   use curl-easy;
-
+  
   use common-dylan;
   use c-ffi;
+  use format;
+  use format-out;
 
   export
     *curl-library-initialized?*;

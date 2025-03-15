@@ -5,15 +5,15 @@ License:    See License.txt in this distribution for details.
 Reference:  https://curl.se/libcurl/c/https.html
 
 define test test-https (tags: #("io", "slow"))
-  block () 
+  block ()
     with-curl-global ($curl-global-default)
-      with-curl-easy (curl)
-	curl.curl-url := "https://example.org";
-	curl.curl-ssl-verifypeer := #f;
-	curl.curl-ssl-verifyhost := 1;
-	curl.curl-ca-cache-timeout := 604800;
-	curl-easy-perform(curl);
-	assert-true(#t);
+      with-curl-easy (curl = make(<curl-easy>),
+                      url = "https://example.org",
+                      ssl-verifypeer = #f,
+                      ssl-verifyhost = 1,
+                      ca-cache-timeout = 604800)
+        curl-easy-perform(curl);
+        assert-true(#t);
       end with-curl-easy;
     end with-curl-global;
   exception (err :: <curl-error>)

@@ -5,12 +5,12 @@ License:    See License.txt in this distribution for details.
 
 define test test-option-headers (tags: #("io", "httpbin"))
   with-curl-global($curl-global-default)
-    with-curl-easy (curl)
-      curl.curl-url := httpbin("/headers");
-      let headers = null-pointer(<curlopt-slistpoint>);
-      headers := curl-slist-append(headers, "X-Custom-Header: Chucho");
-      headers := curl-slist-append(headers, "Another-Header: Good");
-      curl.curl-httpheader := headers;
+    let headers = null-pointer(<curlopt-slistpoint>);
+    headers := curl-slist-append(headers, "X-Custom-Header: Chucho");
+    headers := curl-slist-append(headers, "Another-Header: Good");
+    with-curl-easy (curl = make(<curl-easy>),
+                    url = httpbin("/headers"),
+                    httpheader = headers)
       curl-easy-perform(curl);
       curl-slist-free-all(headers);
       assert-true(#t);

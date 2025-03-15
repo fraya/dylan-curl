@@ -6,14 +6,14 @@ Copyright: Copyright (C) 2025, Dylan Hackers. All rights reserved.
 
 define test test-get-simple-http-page (tags: #("io"))
   block ()
-    with-curl-global($curl-global-default)
-      with-curl-easy (curl)
-	curl.curl-url := "https://example.com/";
-	curl.curl-followlocation := 1;
-	curl-easy-perform(curl);
-	assert-true(#t);
-      end;
-    end;
+    with-curl-global ($curl-global-default)
+      with-curl-easy (curl = make(<curl-easy>),
+                      url = "https://example.com",
+                      followlocation = 1)
+	      curl-easy-perform(curl);
+	      assert-true(#t);
+      end with-curl-easy;
+    end with-curl-global;
   exception (err :: <curl-error>)
     format-out("Curl failed: %s\n", err.curl-error-message);
   end block;

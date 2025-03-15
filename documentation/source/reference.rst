@@ -153,21 +153,35 @@ Macros
 
    :macrocall:
      .. parsed-literal::
-	with-curl-easy (*name*) body end
+        with-curl-easy (*variable* = *expression*, *option* = *value*, ...) body end
 
    :example:
 
      .. code-block:: dylan
+        :caption: Simple macro form
 
-        with-curl-easy (curl)
-          curl.url := "example.com";
-	  curl-easy-perform(curl);
-	end;
+        with-curl-easy (curl = make(<curl-easy>))
+          curl.curl-url := "http://example.com";
+          curl-easy-perform(curl);
+        end;
+
+   :example:
+    
+     .. code-block:: dylan
+        :caption: Passing options to macro
+
+        with-curl-easy (curl = make(<curl-easy>),
+                        url = "http://example.com",
+                        verbose = #t)
+          curl-easy-perform(curl);
+        end;
 
    :signals:
 
       :class:`<curl-init-error>` if the curl handle could not be
       initialized.
+
+      :class:`<curl-option-error>` if an option is incorrect.
 
    :discussion:
 
@@ -214,7 +228,7 @@ Macros
 
         with-curl-global ($curl-global-all)
           with-curl-easy (curl)
-            curl.url := "https://example.com";
+            curl.curl-url := "https://example.com";
             curl-easy-perform(curl);
 	    // do staff
           end;

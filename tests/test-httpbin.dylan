@@ -16,16 +16,16 @@ define function httpbin
 end;
 
 define test test-postfields (tags: #("io"))
-  with-curl-easy (curl)
-    curl.curl-url := httpbin("/post");
-    curl.curl-postfields := "name=daniel&project=curl";
+  with-curl-easy (curl = make(<curl-easy>),
+                  url = httpbin("/post"),
+                  postfields = "name=daniel&project=curl")
     curl-easy-perform(curl);
     assert-equal(200, curl.curl-response-code);
   end with-curl-easy;
 end test;
 
 define test test-http-methods (tags: #("io", "httpbin"))
-  with-curl-easy (curl)
+  with-curl-easy (curl = make(<curl-easy>))
     let http-methods = list("delete", "get", "patch", "post", "put");
     for (http-method in http-methods)
       curl.curl-url := concatenate(httpbin("/"), http-method);
@@ -37,10 +37,10 @@ define test test-http-methods (tags: #("io", "httpbin"))
 end test;
 
 define test test-auth-basic (tags: #("io", "httpbin"))
-  with-curl-easy (curl)
-    curl.curl-url := httpbin("/basic-auth/admin/hunter42");
-    curl.curl-username := "admin";
-    curl.curl-password := "hunter42";
+  with-curl-easy (curl = make(<curl-easy>),
+                  url = httpbin("/basic-auth/admin/hunter42"),
+                  username = "admin",
+                  password = "hunter42")
     curl.curl-easy-perform;
     assert-equal(200, curl.curl-response-code);
   end with-curl-easy;
@@ -48,12 +48,12 @@ end test;
 
 define test test-auth-bearer (tags: #("io", "httpbin"))
   let headers = null-pointer(<curlopt-slistpoint>);
+  let bearer = "hunter42";
   block ()
-    with-curl-easy (curl)
-      curl.curl-url := httpbin("/bearer");
-      let bearer = "hunter42";
-      headers := curl-slist-append(headers, concatenate("Authorization: Bearer ", bearer));
-      curl.curl-httpheader := headers;
+    headers := curl-slist-append(headers, concatenate("Authorization: Bearer ", bearer));
+    with-curl-easy (curl = make(<curl-easy>),
+                    url = httpbin("/bearer"),
+	                  httpheader = headers)
       curl-easy-perform(curl);
       assert-equal(200, curl.curl-response-code);
     end with-curl-easy;      
@@ -63,12 +63,12 @@ define test test-auth-bearer (tags: #("io", "httpbin"))
 end test test-auth-bearer;
 
 define test test-auth-digest (tags: #("io", "httpbin"))
-  with-curl-easy (curl)
-    let url = httpbin("/digest-auth/auth/user/passwd");
-    curl.curl-url := url;
-    curl.curl-verbose := #f;
-    curl.curl-userpwd := "user:passwd";
-    curl.curl-httpauth := $curlauth-digest;
+  let url = httpbin("/digest-auth/auth/user/passwd");
+  with-curl-easy (curl = make(<curl-easy>),
+                  url = url,
+                  verbose = #f,
+                  userpwd = "user:passwd",
+                  httpauth = $curlauth-digest)
     curl-easy-perform(curl);
     assert-equal(200, curl.curl-response-code);
   end with-curl-easy;
