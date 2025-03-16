@@ -441,7 +441,7 @@ initialized.</p>
 <div class="highlight-dylan notranslate"><div class="highlight"><pre><span></span><span class="k">let</span><span class="w"> </span><span class="n">curl</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="l">#f</span><span class="p">;</span>
 <span class="nb">block</span><span class="w"> </span><span class="p">()</span>
 <span class="w">  </span><span class="n">curl</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nb">make</span><span class="p">(</span><span class="nc">&lt;curl-easy&gt;</span><span class="p">);</span>
-<span class="w">  </span><span class="p">...</span><span class="w"> </span><span class="n">body</span><span class="w"> </span><span class="p">...</span>
+<span class="w">  </span><span class="n">body</span><span class="w"> </span><span class="p">...</span>
 <span class="k">cleanup</span>
 <span class="w">  </span><span class="n">curl-easy-cleanup</span><span class="p">(</span><span class="n">curl</span><span class="p">)</span>
 <span class="k">end</span><span class="w"> </span><span class="nb">block</span><span class="p">;</span>
@@ -481,7 +481,7 @@ properly cleaned up afterwards.</p>
 <span class="w">  </span><span class="n">with-curl-easy</span><span class="w"> </span><span class="p">(</span><span class="n">curl</span><span class="p">)</span>
 <span class="w">    </span><span class="n">curl</span><span class="p">.</span><span class="n">curl-url</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="s">&quot;https://example.com&quot;</span><span class="p">;</span>
 <span class="w">    </span><span class="n">curl-easy-perform</span><span class="p">(</span><span class="n">curl</span><span class="p">);</span>
-<span class="w">    </span><span class="c1">// do staff</span>
+<span class="w">    </span><span class="c1">// retrieve information</span>
 <span class="w">  </span><span class="k">end</span><span class="p">;</span>
 <span class="k">end</span><span class="w"> </span><span class="n">with-curl-global</span><span class="p">;</span>
 </pre></div>
@@ -494,6 +494,68 @@ properly cleaned up afterwards.</p>
 <li><p><a class="reference internal" href="#dylan-curl:curl-easy:curl-library-setup"><code class="xref dylan dylan-func docutils literal notranslate"><span class="pre">curl-library-setup</span></code></a></p></li>
 <li><p><a class="reference internal" href="#dylan-curl:curl-easy:curl-library-cleanup"><code class="xref dylan dylan-func docutils literal notranslate"><span class="pre">curl-library-cleanup</span></code></a></p></li>
 </ul>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="headers">
+<h2>Headers<a class="headerlink" href="#headers" title="Link to this heading">¶</a></h2>
+<dl class="dylan function">
+<dt class="sig sig-object dylan-api dylan" id="dylan-curl:curl-easy:add-header!">
+<span class="sig-name descname"><span class="pre">add-header!</span></span> <em class="property"><span class="pre">Function</span></em><a class="headerlink" href="#dylan-curl:curl-easy:add-header!" title="Link to this definition">¶</a></dt>
+<dd><dl class="field-list">
+<dt class="field-odd">Signature<span class="colon">:</span></dt>
+<dd class="field-odd"><p>add-header! (<em>curl</em> #rest <em>headers</em>) =&gt; (<em>curl</em>)</p>
+</dd>
+<dt class="field-even">Parameters<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>curl</strong> – An instance of <code class="xref dylan dylan-class docutils literal notranslate"><span class="pre">&lt;curl-easy&gt;</span></code></p></li>
+<li><p><strong>headers</strong> (<em>#rest</em>) – 0 or more <a class="reference external" href="https://opendylan.org/books/drm/Collection_Classes#string"><code class="xref drm docutils literal notranslate"><span class="pre">&lt;string&gt;</span></code></a> headers</p></li>
+</ul>
+</dd>
+<dt class="field-odd">Values<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>curl</strong> – An instance of <code class="xref dylan dylan-class docutils literal notranslate"><span class="pre">&lt;curl-easy&gt;</span></code></p></li>
+</ul>
+</dd>
+<dt class="field-even">Example<span class="colon">:</span></dt>
+<dd class="field-even"><div class="highlight-dylan notranslate"><div class="highlight"><pre><span></span><span class="n">add-header!</span><span class="p">(</span><span class="s">&quot;Content-type: application/json&quot;</span><span class="p">,</span>
+<span class="w">            </span><span class="s">&quot;Authorization: Bearer you_token_here&quot;</span><span class="p">);</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="dylan method">
+<dt class="sig sig-object dylan-api dylan" id="dylan-curl:curl-easy:curl-header-setter([string])">
+<span class="sig-name descname"><span class="pre">curl-header-setter(&lt;string&gt;)</span></span> <em class="property"><span class="pre">Method</span></em><a class="headerlink" href="#dylan-curl:curl-easy:curl-header-setter([string])" title="Link to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Signature<span class="colon">:</span></dt>
+<dd class="field-odd"><p>curl-header-setter (header curl) =&gt; (header)</p>
+</dd>
+<dt class="field-even">Parameters<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>curl</strong> – An instance of <code class="xref dylan dylan-class docutils literal notranslate"><span class="pre">&lt;curl-easy&gt;</span></code></p></li>
+<li><p><strong>header</strong> – An instance of <a class="reference external" href="https://opendylan.org/books/drm/Collection_Classes#string"><code class="xref drm docutils literal notranslate"><span class="pre">&lt;string&gt;</span></code></a></p></li>
+</ul>
+</dd>
+<dt class="field-odd">Values<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>header</strong> – An instance of <a class="reference external" href="https://opendylan.org/books/drm/Collection_Classes#string"><code class="xref drm docutils literal notranslate"><span class="pre">&lt;string&gt;</span></code></a></p></li>
+</ul>
+</dd>
+<dt class="field-even">Discussion<span class="colon">:</span></dt>
+<dd class="field-even"><p><p>Sets a HTTP header. Each use adds a header to the headers
+list.</p>
+<p>If the key is repeated the values are appended, not replaced.</p>
+<div class="highlight-dylan notranslate"><div class="highlight"><pre><span></span><span class="n">curl</span><span class="p">.</span><span class="n">curl-header</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="s">&quot;X-friend: you&quot;</span><span class="p">;</span>
+<span class="n">curl</span><span class="p">.</span><span class="n">curl-header</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="s">&quot;X-friend: her&quot;</span><span class="p">;</span>
+<span class="c1">// &quot;X-friend: you, her&quot;</span>
+</pre></div>
+</div>
 </p>
 </dd>
 </dl>
@@ -8430,6 +8492,11 @@ properly cleaned up afterwards.</p>
 <li><a class="reference internal" href="#macros">Macros</a><ul>
 <li><a class="reference internal" href="#dylan-curl:curl-easy:with-curl-easy"><code class="docutils literal notranslate"><span class="pre">with-curl-easy</span></code></a></li>
 <li><a class="reference internal" href="#dylan-curl:curl-easy:with-curl-global"><code class="docutils literal notranslate"><span class="pre">with-curl-global</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#headers">Headers</a><ul>
+<li><a class="reference internal" href="#dylan-curl:curl-easy:add-header!"><code class="docutils literal notranslate"><span class="pre">add-header!</span></code></a></li>
+<li><a class="reference internal" href="#dylan-curl:curl-easy:curl-header-setter([string])"><code class="docutils literal notranslate"><span class="pre">curl-header-setter(&lt;string&gt;)</span></code></a></li>
 </ul>
 </li>
 <li><a class="reference internal" href="#options">Options</a><ul>

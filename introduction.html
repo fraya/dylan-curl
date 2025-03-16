@@ -276,8 +276,8 @@ and their corresponding Open Dylan equivalents.</p>
 <h3>Creating a CURL Handle<a class="headerlink" href="#creating-a-curl-handle" title="Link to this heading">¶</a></h3>
 <p>In libcurl, you create a handle using <a class="reference external" href="https://curl.se/libcurl/c/curl_easy_init.html">curl_easy_init</a>. In the Open Dylan
 wrapper, you create an object of the <code class="xref dylan dylan-class docutils literal notranslate"><span class="pre">&lt;curl-easy&gt;</span></code> class.</p>
-<div class="literal-block-wrapper docutils container" id="id1">
-<div class="code-block-caption"><span class="caption-text">C example</span><a class="headerlink" href="#id1" title="Link to this code">¶</a></div>
+<div class="literal-block-wrapper docutils container" id="id3">
+<div class="code-block-caption"><span class="caption-text">C example</span><a class="headerlink" href="#id3" title="Link to this code">¶</a></div>
 <div class="highlight-C notranslate"><div class="highlight"><pre><span></span><span class="n">CURL</span><span class="w"> </span><span class="o">*</span><span class="n">curl</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">curl_easy_init</span><span class="p">();</span>
 <span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">curl</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
 <span class="w">  </span><span class="p">...</span>
@@ -289,8 +289,8 @@ wrapper, you create an object of the <code class="xref dylan dylan-class docutil
 <p>The macro <a class="reference internal" href="reference.html#dylan-curl:curl-easy:with-curl-easy"><code class="xref dylan dylan-macro docutils literal notranslate"><span class="pre">with-curl-easy</span></code></a> handles both initialization and
 automatic cleanup when it is no longer accessible. If initialization
 fails, a <code class="xref dylan dylan-class docutils literal notranslate"><span class="pre">&lt;curl-init-error&gt;</span></code> exception is raised.</p>
-<div class="literal-block-wrapper docutils container" id="id2">
-<div class="code-block-caption"><span class="caption-text">Dylan example</span><a class="headerlink" href="#id2" title="Link to this code">¶</a></div>
+<div class="literal-block-wrapper docutils container" id="id4">
+<div class="code-block-caption"><span class="caption-text">Dylan example</span><a class="headerlink" href="#id4" title="Link to this code">¶</a></div>
 <div class="highlight-dylan notranslate"><div class="highlight"><pre><span></span><span class="nb">block</span><span class="w"> </span><span class="p">()</span>
 <span class="w">  </span><span class="n">with-curl-easy</span><span class="w"> </span><span class="p">(</span><span class="n">curl</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">make</span><span class="p">(</span><span class="nc">&lt;curl-easy&gt;</span><span class="p">))</span>
 <span class="w">    </span><span class="c1">// perform request</span>
@@ -311,8 +311,8 @@ representing the option name is paired with its value. In the Open
 Dylan wrapper, options are set directly using property syntax, such as
 <code class="docutils literal notranslate"><span class="pre">curl.curl-option-name</span> <span class="pre">:=</span> <span class="pre">value</span></code>. If an error occurs while setting a
 parameter, a <code class="xref dylan dylan-class docutils literal notranslate"><span class="pre">&lt;curl-option-error&gt;</span></code> exception is raised.</p>
-<div class="literal-block-wrapper docutils container" id="id3">
-<div class="code-block-caption"><span class="caption-text">Example showing the error checking, usually hidden in examples.</span><a class="headerlink" href="#id3" title="Link to this code">¶</a></div>
+<div class="literal-block-wrapper docutils container" id="id5">
+<div class="code-block-caption"><span class="caption-text">Example showing the error checking, usually hidden in examples.</span><a class="headerlink" href="#id5" title="Link to this code">¶</a></div>
 <div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="n">CURLCODE</span><span class="w"> </span><span class="n">code</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">curl_easy_setopt</span><span class="p">(</span><span class="n">curl</span><span class="p">,</span><span class="w"> </span><span class="n">CURLOPT_URL</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;https://example.com&quot;</span><span class="p">);</span>
 <span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">code</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="n">CURLE_OK</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
 <span class="w">   </span><span class="n">fprintf</span><span class="p">(</span><span class="n">stderr</span><span class="p">,</span>
@@ -332,8 +332,8 @@ value and exit correctly at the first serious error.”</em></p>
 checked. If an error occurs, an exception is raised, allowing it to be
 handled either immediately at the point of the operation or deferred
 to another method for centralized error handling.</p>
-<div class="literal-block-wrapper docutils container" id="id4">
-<div class="code-block-caption"><span class="caption-text">In Dylan errors can be captured in a block.</span><a class="headerlink" href="#id4" title="Link to this code">¶</a></div>
+<div class="literal-block-wrapper docutils container" id="id6">
+<div class="code-block-caption"><span class="caption-text">In Dylan errors can be captured in a block.</span><a class="headerlink" href="#id6" title="Link to this code">¶</a></div>
 <div class="highlight-dylan notranslate"><div class="highlight"><pre><span></span><span class="nb">block</span><span class="w"> </span><span class="p">()</span>
 <span class="w">  </span><span class="n">with-curl-easy</span><span class="w"> </span><span class="p">(</span><span class="n">curl</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">make</span><span class="p">(</span><span class="nc">&lt;curl-easy&gt;</span><span class="p">))</span>
 <span class="w">    </span><span class="n">curl</span><span class="p">.</span><span class="n">curl-url</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="s">&quot;https://example.com&quot;</span><span class="p">;</span>
@@ -369,8 +369,8 @@ to another method for centralized error handling.</p>
 <h3>Performing the Request<a class="headerlink" href="#performing-the-request" title="Link to this heading">¶</a></h3>
 <p>In libcurl, the request is executed using <cite>curl_easy_perform</cite>. The
 Open Dylan equivalent is the method <a class="reference internal" href="reference.html#dylan-curl:curl-easy:curl-easy-perform"><code class="xref dylan dylan-func docutils literal notranslate"><span class="pre">curl-easy-perform</span></code></a>.</p>
-<div class="literal-block-wrapper docutils container" id="id5">
-<div class="code-block-caption"><span class="caption-text">C Example</span><a class="headerlink" href="#id5" title="Link to this code">¶</a></div>
+<div class="literal-block-wrapper docutils container" id="id7">
+<div class="code-block-caption"><span class="caption-text">C Example</span><a class="headerlink" href="#id7" title="Link to this code">¶</a></div>
 <div class="highlight-C notranslate"><div class="highlight"><pre><span></span><span class="n">CURLcode</span><span class="w"> </span><span class="n">res</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">curl_easy_perform</span><span class="p">(</span><span class="n">curl</span><span class="p">);</span>
 
 <span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">res</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="n">CURLE_OK</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
@@ -383,8 +383,8 @@ Open Dylan equivalent is the method <a class="reference internal" href="referenc
 </div>
 <p>In Opendylan <code class="xref dylan dylan-func docutils literal notranslate"><span class="pre">curl-perform</span></code> raises a
 <code class="xref dylan dylan-class docutils literal notranslate"><span class="pre">&lt;curl-perform-error&gt;</span></code>.</p>
-<div class="literal-block-wrapper docutils container" id="id6">
-<div class="code-block-caption"><span class="caption-text">Dylan example</span><a class="headerlink" href="#id6" title="Link to this code">¶</a></div>
+<div class="literal-block-wrapper docutils container" id="id8">
+<div class="code-block-caption"><span class="caption-text">Dylan example</span><a class="headerlink" href="#id8" title="Link to this code">¶</a></div>
 <div class="highlight-dylan notranslate"><div class="highlight"><pre><span></span><span class="nb">block</span><span class="w"> </span><span class="p">()</span>
 <span class="w">  </span><span class="n">curl-easy-perform</span><span class="p">(</span><span class="n">curl</span><span class="p">);</span>
 <span class="w">  </span><span class="n">format-out</span><span class="p">(</span><span class="s">&quot;Request completed successfully.</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">)</span>
@@ -401,8 +401,8 @@ Open Dylan equivalent is the method <a class="reference internal" href="referenc
 <p>In libcurl, retrieving information is done with <code class="docutils literal notranslate"><span class="pre">curl_easy_getinfo</span></code>,
 passing a constant for the type of information. In the Open Dylan
 wrapper, you access the information directly using property syntax.</p>
-<div class="literal-block-wrapper docutils container" id="id7">
-<div class="code-block-caption"><span class="caption-text">C example getting the total time of previous transfer</span><a class="headerlink" href="#id7" title="Link to this code">¶</a></div>
+<div class="literal-block-wrapper docutils container" id="id9">
+<div class="code-block-caption"><span class="caption-text">C example getting the total time of previous transfer</span><a class="headerlink" href="#id9" title="Link to this code">¶</a></div>
 <div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="kt">double</span><span class="w"> </span><span class="n">total_time</span><span class="p">;</span>
 <span class="n">CURLCODE</span><span class="w"> </span><span class="n">res</span><span class="p">;</span>
 
@@ -425,8 +425,8 @@ wrapper, you access the information directly using property syntax.</p>
 </pre></div>
 </div>
 </div>
-<div class="literal-block-wrapper docutils container" id="id8">
-<div class="code-block-caption"><span class="caption-text">Dylan Example</span><a class="headerlink" href="#id8" title="Link to this code">¶</a></div>
+<div class="literal-block-wrapper docutils container" id="id10">
+<div class="code-block-caption"><span class="caption-text">Dylan Example</span><a class="headerlink" href="#id10" title="Link to this code">¶</a></div>
 <div class="highlight-dylan notranslate"><div class="highlight"><pre><span></span><span class="nb">block</span><span class="w"> </span><span class="p">()</span>
 <span class="w">   </span><span class="n">with-curl-easy</span><span class="w"> </span><span class="p">(</span><span class="n">curl</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">make</span><span class="p">(</span><span class="nc">&lt;curl&gt;</span><span class="p">),</span>
 <span class="w">                   </span><span class="n">url</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;https://example.com/&quot;</span><span class="p">)</span>
@@ -444,6 +444,106 @@ wrapper, you access the information directly using property syntax.</p>
 </div>
 </div>
 </section>
+</section>
+<section id="headers">
+<h2>Headers<a class="headerlink" href="#headers" title="Link to this heading">¶</a></h2>
+<p>Libcurl offers manipulation of HTTP headers using <cite>CURLOPT_HTTPHEADER</cite>
+option.</p>
+<p>Libcurl’s <cite>CURLOPT_HTTPHEADER</cite> option allows you to send custom HTTP
+headers with your requests.  The option accepts a linked list of
+header strings, which you build using <cite>curl_slist</cite> and <cite>curl_slist_append</cite>.</p>
+<div class="literal-block-wrapper docutils container" id="id11">
+<div class="code-block-caption"><span class="caption-text">Libcurl example using HTTP headers</span><a class="headerlink" href="#id11" title="Link to this code">¶</a></div>
+<div class="highlight-C notranslate"><div class="highlight"><pre><span></span><span class="n">CURL</span><span class="w"> </span><span class="o">*</span><span class="n">curl</span><span class="p">;</span>
+<span class="n">CURLcode</span><span class="w"> </span><span class="n">res</span><span class="p">;</span>
+
+<span class="n">curl_global_init</span><span class="p">(</span><span class="n">CURL_GLOBAL_DEFAULT</span><span class="p">);</span>
+<span class="n">curl</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">curl_easy_init</span><span class="p">();</span>
+
+<span class="k">struct</span><span class="w"> </span><span class="nc">curl_slist</span><span class="w"> </span><span class="o">*</span><span class="n">headers</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">NULL</span><span class="p">;</span>
+<span class="n">headers</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">curl_slist_append</span><span class="p">(</span><span class="n">headers</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;Content-Type: application/json&quot;</span><span class="p">);</span>
+<span class="n">headers</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">curl_slist_append</span><span class="p">(</span><span class="n">headers</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;Authorization: Bearer your_token_here&quot;</span><span class="p">);</span>
+<span class="n">headers</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">curl_slist_append</span><span class="p">(</span><span class="n">headers</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;X-Custom-Header: Custom Value&quot;</span><span class="p">);</span>
+
+<span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">curl</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="n">curl_easy_setopt</span><span class="p">(</span><span class="n">curl</span><span class="p">,</span><span class="w"> </span><span class="n">CURLOPT_URL</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;https://api.example.com/data&quot;</span><span class="p">);</span>
+<span class="w">  </span><span class="n">curl_easy_setopt</span><span class="p">(</span><span class="n">curl</span><span class="p">,</span><span class="w"> </span><span class="n">CURLOPT_HTTPHEADER</span><span class="p">,</span><span class="w"> </span><span class="n">headers</span><span class="p">);</span>
+
+<span class="w">  </span><span class="c1">// ... other curl options ...</span>
+
+<span class="w">  </span><span class="n">res</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">curl_easy_perform</span><span class="p">(</span><span class="n">curl</span><span class="p">);</span>
+
+<span class="w">  </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">res</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="n">CURLE_OK</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">     </span><span class="n">fprintf</span><span class="p">(</span><span class="n">stderr</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;curl_easy_perform() failed: %s</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">curl_easy_strerror</span><span class="p">(</span><span class="n">res</span><span class="p">));</span>
+<span class="w">  </span><span class="p">}</span>
+
+<span class="w">  </span><span class="n">curl_slist_free_all</span><span class="p">(</span><span class="n">headers</span><span class="p">);</span>
+<span class="w">  </span><span class="n">curl_easy_cleanup</span><span class="p">(</span><span class="n">curl</span><span class="p">);</span>
+<span class="p">}</span>
+<span class="n">curl_global_cleanup</span><span class="p">();</span>
+</pre></div>
+</div>
+</div>
+<p>The above example could be translated to Opendylan in three ways:</p>
+<div class="literal-block-wrapper docutils container" id="id12">
+<div class="code-block-caption"><span class="caption-text">Using <cite>add-header!</cite></span><a class="headerlink" href="#id12" title="Link to this code">¶</a></div>
+<div class="highlight-dylan notranslate"><div class="highlight"><pre><span></span><span class="n">with-curl-global</span><span class="p">(</span><span class="no">$curl-global-default</span><span class="p">)</span>
+<span class="w">  </span><span class="n">with-curl-easy</span><span class="p">(</span><span class="n">curl</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">make</span><span class="p">(</span><span class="nc">&lt;curl-easy&gt;</span><span class="p">),</span>
+<span class="w">                 </span><span class="n">url</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;https://api.example.com/data&quot;</span><span class="p">)</span>
+
+<span class="w">    </span><span class="n">add-header!</span><span class="p">(</span><span class="n">curl</span><span class="p">,</span>
+<span class="w">                </span><span class="s">&quot;Content-Type: application/json&quot;</span><span class="p">,</span>
+<span class="w">                </span><span class="s">&quot;Authorization: Bearer your_token_here&quot;</span><span class="p">,</span>
+<span class="w">                </span><span class="s">&quot;X-Custom-Header: Custom Value&quot;</span><span class="p">);</span>
+
+<span class="w">    </span><span class="c1">// ... other curl options ...</span>
+
+<span class="w">    </span><span class="n">curl-easy-perform</span><span class="p">(</span><span class="n">curl</span><span class="p">);</span>
+
+<span class="w">    </span><span class="k">end</span><span class="w"> </span><span class="n">with-curl-easy</span><span class="p">;</span>
+<span class="k">end</span><span class="w"> </span><span class="n">with-curl-global</span><span class="p">;</span>
+</pre></div>
+</div>
+</div>
+<p>Or passing the options to <a class="reference internal" href="reference.html#dylan-curl:curl-easy:with-curl-easy"><code class="xref dylan dylan-macro docutils literal notranslate"><span class="pre">with-curl-easy</span></code></a>:</p>
+<div class="literal-block-wrapper docutils container" id="id13">
+<div class="code-block-caption"><span class="caption-text">Using <cite>with-curl-easy</cite> options</span><a class="headerlink" href="#id13" title="Link to this code">¶</a></div>
+<div class="highlight-dylan notranslate"><div class="highlight"><pre><span></span><span class="n">with-curl-global</span><span class="p">(</span><span class="no">$curl-global-default</span><span class="p">)</span>
+<span class="w">  </span><span class="n">with-curl-easy</span><span class="p">(</span><span class="n">curl</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">make</span><span class="p">(</span><span class="nc">&lt;curl-easy&gt;</span><span class="p">),</span>
+<span class="w">                 </span><span class="n">url</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;https://api.example.com/data&quot;</span><span class="p">,</span>
+<span class="w">                 </span><span class="n">header</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;Content-Type: application/json&quot;</span><span class="p">,</span>
+<span class="w">                 </span><span class="n">header</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;Authorization: Bearer your_token_here&quot;</span><span class="p">,</span>
+<span class="w">                 </span><span class="n">header</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;X-Custom-Header: Custom Value&quot;</span><span class="p">)</span>
+
+<span class="w">    </span><span class="c1">// ... other curl options ...</span>
+
+<span class="w">    </span><span class="n">curl-easy-perform</span><span class="p">(</span><span class="n">curl</span><span class="p">);</span>
+
+<span class="w">  </span><span class="k">end</span><span class="w"> </span><span class="n">with-curl-easy</span><span class="p">;</span>
+<span class="k">end</span><span class="w"> </span><span class="n">with-curl-global</span><span class="p">;</span>
+</pre></div>
+</div>
+</div>
+<p>Or using the setter method <a href="#id1"><span class="problematic" id="id2">:meth:`curl-header-setter`</span></a></p>
+<div class="literal-block-wrapper docutils container" id="id14">
+<div class="code-block-caption"><span class="caption-text">Using <cite>curl-header-setter</cite></span><a class="headerlink" href="#id14" title="Link to this code">¶</a></div>
+<div class="highlight-dylan notranslate"><div class="highlight"><pre><span></span><span class="n">with-curl-global</span><span class="p">(</span><span class="no">$curl-global-default</span><span class="p">)</span>
+<span class="w">  </span><span class="n">with-curl-easy</span><span class="p">(</span><span class="n">curl</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">make</span><span class="p">(</span><span class="nc">&lt;curl-easy&gt;</span><span class="p">),</span>
+<span class="w">                        </span><span class="n">url</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;https://api.example.com/data&quot;</span><span class="p">)</span>
+
+<span class="w">    </span><span class="n">curl</span><span class="p">.</span><span class="n">curl-header</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="s">&quot;Content-Type: application/json&quot;</span><span class="p">;</span>
+<span class="w">    </span><span class="n">curl</span><span class="p">.</span><span class="n">curl-header</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="s">&quot;Authorization: Bearer your_token_here&quot;</span><span class="p">;</span>
+<span class="w">    </span><span class="n">curl</span><span class="p">.</span><span class="n">curl-header</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="s">&quot;X-Custom-Header: Custom Value&quot;</span><span class="p">;</span>
+
+<span class="w">    </span><span class="c1">// ... other curl options ...</span>
+
+<span class="w">    </span><span class="n">curl-easy-perform</span><span class="p">(</span><span class="n">curl</span><span class="p">);</span>
+
+<span class="w">  </span><span class="k">end</span><span class="w"> </span><span class="n">with-curl-easy</span><span class="p">;</span>
+<span class="k">end</span><span class="w"> </span><span class="n">with-curl-global</span><span class="p">;</span>
+</pre></div>
+</div>
+</div>
 </section>
 </section>
 
@@ -510,6 +610,7 @@ wrapper, you access the information directly using property syntax.</p>
 <li><a class="reference internal" href="#retrieving-information">Retrieving Information</a></li>
 </ul>
 </li>
+<li><a class="reference internal" href="#headers">Headers</a></li>
 </ul>
 </li>
 </ul>
