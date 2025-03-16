@@ -202,3 +202,104 @@ wrapper, you access the information directly using property syntax.
       format-err("curl easy perform failed: %s\n",
                  err.curl-error-message)
    end block;
+
+Headers
+-------
+
+Libcurl offers manipulation of HTTP headers using `CURLOPT_HTTPHEADER`
+option.
+
+Libcurl's `CURLOPT_HTTPHEADER` option allows you to send custom HTTP
+headers with your requests.  The option accepts a linked list of
+header strings, which you build using `curl_slist` and `curl_slist_append`.
+
+.. code-block:: C
+   :caption: Libcurl example using HTTP headers
+
+   CURL *curl;
+   CURLcode res;
+
+   curl_global_init(CURL_GLOBAL_DEFAULT);
+   curl = curl_easy_init();
+
+   struct curl_slist *headers = NULL;
+   headers = curl_slist_append(headers, "Content-Type: application/json");
+   headers = curl_slist_append(headers, "Authorization: Bearer your_token_here");
+   headers = curl_slist_append(headers, "X-Custom-Header: Custom Value");
+
+   if (curl) {
+     curl_easy_setopt(curl, CURLOPT_URL, "https://api.example.com/data");
+     curl_easy_setopt(curl, CURLOPT_HTTPHEADER, headers);
+
+     // ... other curl options ...
+
+     res = curl_easy_perform(curl);
+
+     if (res != CURLE_OK) {
+        fprintf(stderr, "curl_easy_perform() failed: %s\n", curl_easy_strerror(res));
+     }
+
+     curl_slist_free_all(headers);
+     curl_easy_cleanup(curl);
+   }
+   curl_global_cleanup();
+
+The above example could be translated to Opendylan in three ways:
+
+.. code-block:: dylan
+   :caption: Using `add-header!`
+
+   with-curl-global($curl-global-default)
+     with-curl-easy(curl = make(<curl-easy>),
+                    url = "https://api.example.com/data")
+
+       add-header!(curl,
+                   "Content-Type: application/json",
+                   "Authorization: Bearer your_token_here",
+                   "X-Custom-Header: Custom Value");
+
+       // ... other curl options ...
+
+       curl-easy-perform(curl);
+
+       end with-curl-easy;
+   end with-curl-global;
+
+Or passing the options to :macro:`with-curl-easy`:
+
+.. code-block:: dylan
+   :caption: Using `with-curl-easy` options
+
+   with-curl-global($curl-global-default)
+     with-curl-easy(curl = make(<curl-easy>),
+                    url = "https://api.example.com/data",
+                    header = "Content-Type: application/json",
+                    header = "Authorization: Bearer your_token_here",
+                    header = "X-Custom-Header: Custom Value")
+
+       // ... other curl options ...
+
+       curl-easy-perform(curl);
+
+     end with-curl-easy;
+   end with-curl-global;
+
+Or using the setter method :meth:`curl-header-setter`
+
+.. code-block:: dylan
+   :caption: Using `curl-header-setter`
+
+   with-curl-global($curl-global-default)
+     with-curl-easy(curl = make(<curl-easy>),
+                           url = "https://api.example.com/data")
+
+       curl.curl-header := "Content-Type: application/json";
+       curl.curl-header := "Authorization: Bearer your_token_here";
+       curl.curl-header := "X-Custom-Header: Custom Value";
+
+       // ... other curl options ...
+
+       curl-easy-perform(curl);
+
+     end with-curl-easy;
+   end with-curl-global;

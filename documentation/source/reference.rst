@@ -166,7 +166,7 @@ Macros
         end;
 
    :example:
-    
+
      .. code-block:: dylan
         :caption: Passing options to macro
 
@@ -189,13 +189,13 @@ Macros
 
      .. code-block:: dylan
 
-	let curl = #f;
+        let curl = #f;
         block ()
-	  curl := make(<curl-easy>);
-	  ... body ...
-	cleanup
-	  curl-easy-cleanup(curl)
-	end block;
+          curl := make(<curl-easy>);
+          body ...
+        cleanup
+          curl-easy-cleanup(curl)
+        end block;
 
 .. dylan:macro:: with-curl-global
    :statement:
@@ -207,7 +207,7 @@ Macros
 
    :macrocall:
       .. parsed-literal::
-	 with-curl-global (*flags*) body end
+         with-curl-global (*flags*) body end
 
    :discussion:
 
@@ -215,11 +215,11 @@ Macros
 
       .. code-block:: dylan
 
-	 block()
-	   curl-library-setup(flags)
-	   body;
-	 rescue
-	   curl-library-cleanup()
+         block()
+           curl-library-setup(flags)
+           body;
+         rescue
+           curl-library-cleanup()
          end;
 
    :example:
@@ -230,7 +230,7 @@ Macros
           with-curl-easy (curl)
             curl.curl-url := "https://example.com";
             curl-easy-perform(curl);
-	    // do staff
+            // retrieve information
           end;
         end with-curl-global;
 
@@ -240,6 +240,53 @@ Macros
       * `Global flags <#global-flags>`_
       * :func:`curl-library-setup`
       * :func:`curl-library-cleanup`
+
+Headers
+=======
+
+.. function:: add-header!
+
+   :signature:
+
+      add-header! (*curl* #rest *headers*) => (*curl*)
+
+   :parameter curl:
+      An instance of :class:`<curl-easy>`
+   :parameter #rest headers:
+      0 or more :drm:`<string>` headers
+   :value curl:
+      An instance of :class:`<curl-easy>`
+
+   :example:
+
+      .. code-block:: dylan
+
+         add-header!("Content-type: application/json",
+                     "Authorization: Bearer you_token_here");
+
+.. method:: curl-header-setter
+   :specializer: <string>
+
+   :signature:
+
+      curl-header-setter (header curl) => (header)
+
+   :parameter curl: An instance of :class:`<curl-easy>`
+   :parameter header: An instance of :drm:`<string>`
+   :value header: An instance of :drm:`<string>`
+
+   :description:
+
+      Sets a HTTP header. Each use adds a header to the headers
+      list.
+
+      If the key is repeated the values are appended, not replaced.
+
+      .. code-block:: dylan
+
+         curl.curl-header := "X-friend: you";
+         curl.curl-header := "X-friend: her";
+         // "X-friend: you, her"
 
 Options
 =======

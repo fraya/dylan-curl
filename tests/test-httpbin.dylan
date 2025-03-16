@@ -47,19 +47,13 @@ define test test-auth-basic (tags: #("io", "httpbin"))
 end test;
 
 define test test-auth-bearer (tags: #("io", "httpbin"))
-  let headers = null-pointer(<curlopt-slistpoint>);
   let bearer = "hunter42";
-  block ()
-    headers := curl-slist-append(headers, concatenate("Authorization: Bearer ", bearer));
-    with-curl-easy (curl = make(<curl-easy>),
-                    url = httpbin("/bearer"),
-	                  httpheader = headers)
-      curl-easy-perform(curl);
-      assert-equal(200, curl.curl-response-code);
-    end with-curl-easy;      
-  cleanup
-      curl-slist-free-all(headers);
-  end block;
+  with-curl-easy (curl = make(<curl-easy>),
+                  url = httpbin("/bearer"))
+    curl.curl-header := concatenate("Authorization: Bearer ", bearer);
+    curl-easy-perform(curl);
+    assert-equal(200, curl.curl-response-code);
+  end with-curl-easy;
 end test test-auth-bearer;
 
 define test test-auth-digest (tags: #("io", "httpbin"))

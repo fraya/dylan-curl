@@ -607,6 +607,8 @@ define abstract class <curl> (<object>) end;
 define open class <curl-easy> (<curl>)
   constant slot curl-handle :: <curl-easy-handle> = c-curl-easy-init(),
     init-keyword: handle:;
+  slot curl-headers :: <curlopt-slistpoint> = null-pointer(<curlopt-slistpoint>),
+    init-keyword: headers:;
 end;
 
 define method initialize
@@ -619,6 +621,7 @@ end method;
 
 define function curl-easy-cleanup
     (curl :: <curl-easy>) => ()
+  curl-slist-free-all(curl.curl-headers);
   c-curl-easy-cleanup(curl.curl-handle)
 end;
 
@@ -626,6 +629,20 @@ define function curl-easy-dup
     (curl :: <curl-easy>) => (dup :: <curl-easy>)
   make(<curl-easy>,
        handle: c-curl-easy-duphandle(curl.curl-handle))
+end;
+
+define function add-header!
+    (curl :: <curl-easy>, #rest headers) => (curl :: <curl-easy>)
+  for (header in headers)
+    curl.curl-headers := curl-slist-append(curl.curl-headers, header)
+  end;
+  curl
+end;
+
+define method curl-header-setter
+    (header :: <string>, curl :: <curl-easy>) => (header :: <string>)
+  add-header!(curl, header);
+  header
 end;
 
 define function curl-easy-escape
@@ -641,6 +658,11 @@ end;
 
 define function curl-easy-perform
     (curl :: <curl-easy>) => ()
+  // set headers
+  unless (null-pointer?(curl.curl-headers))
+    curl.curl-httpheader := curl.curl-headers
+  end;
+  // perform request
   let curl-code = c-curl-easy-perform(curl.curl-handle);
   unless (curl-code = $curle-ok)
     signal(make(<curl-perform-error>, code: curl-code))
@@ -649,6 +671,7 @@ end;
 
 define function curl-easy-reset
     (curl :: <curl-easy>) => ()
+  curl.curl-headers := null-pointer(<curlopt-slistpoint>);
   c-curl-easy-reset(curl.curl-handle)
 end;
 

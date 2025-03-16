@@ -259,6 +259,12 @@ define module curl-easy
     curl-header-anchor,
     curl-header-anchor-setter;
 
+  // header related methods
+
+  create
+    add-header!,
+    curl-header-setter;
+
   // Curl slist
 
   create
@@ -325,8 +331,6 @@ define module curl-easy
     // curl-easy-recv,
     curl-easy-reset,
     curl-easy-unescape,
-    curl-slist-append,
-    curl-slist-free-all,
     curl-version;
 
   // callbacks
