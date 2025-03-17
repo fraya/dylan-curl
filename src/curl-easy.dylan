@@ -548,21 +548,12 @@ define C-function curl-version
   c-name: "curl_version";
 end C-function;
 
-define macro set-curl-options
-   { set-curl-options (?curl:variable) }
-     => { ?curl }
-   { set-curl-options (?curl:variable, ?option:name = ?value:expression, ?more:*) }
-     => { "curl-" ## ?option ## "-setter"(?value, ?curl);
-          set-curl-options(?curl, ?more) }
-end macro set-curl-options;
-
 define macro with-curl-easy
-  { with-curl-easy (?curl:variable = ?handler:expression, ?options:*) ?body:body end }
+  { with-curl-easy (?curl:variable = ?handler:expression) ?body:body end }
     => { let _curl = #f;
          block ()
            _curl := ?handler;
            let ?curl :: <curl-easy> = _curl;
-           set-curl-options(?curl, ?options);
            ?body
          cleanup
            if (_curl)
@@ -602,6 +593,9 @@ define class <curl-info-error> (<curl-error>) end;
 //
 ///////////////////////////////////////////////////////////////////////////////
 
+define variable *curl-options*
+  = make(<table>);
+
 define abstract class <curl> (<object>) end;
 
 define open class <curl-easy> (<curl>)
@@ -611,13 +605,27 @@ define open class <curl-easy> (<curl>)
     init-keyword: headers:;
 end;
 
-define method initialize
-    (curl :: <curl-easy>, #key)
-  next-method();
+define method make
+    (class == <curl-easy>, #rest options, #key) => (_ :: <curl-easy>)
+  let curl = next-method();
+
   if (null-pointer?(curl.curl-handle))
     signal(make(<curl-init-error>))
   end;
-end method;
+
+  // initialize options
+  for (i from 0 below options.size - 1 by 2)
+    let keyword = options[i];
+    let value = options[i + 1];
+    let setter = element(*curl-options*, keyword, default: #f);
+    if (~setter)
+      signal(make(<curl-option-error>, code: $curle-failed-init))
+    end;
+    setter(value, curl);
+  end;
+
+  curl
+end;
 
 define function curl-easy-cleanup
     (curl :: <curl-easy>) => ()
@@ -917,25 +925,23 @@ define constant $curlopttype-boolean       = $curlopttype-long;
 //
 //////////////////////////////////////////////////////////////////////////////
 
-define variable *curl-options* = 0;
-
 define macro curlopt-definer
   { define curlopt ?type:name ?id:name = ?number:expression }
     => { define constant "$curlopt-" ## ?id
            = "$curlopttype-" ## ?type + ?number;
 
-         *curl-options* := *curl-options* + 1;
-
          define method "curl-" ## ?id ## "-setter"
              (option :: "<curlopt-" ## ?type ## ">", curl :: <curl-easy>)
-	  => (option :: "<curlopt-" ## ?type ## ">")
-	     let handle = curl.curl-handle;
-	     let code = "curl-setopt-" ## ?type (handle, "$curlopt-" ## ?id, option);
-	     if (code ~= $curle-ok)
-	       signal(make(<curl-option-error>, code: code))
-	     end;
-	     option
-         end method }
+          => (option :: "<curlopt-" ## ?type ## ">")
+           let handle = curl.curl-handle;
+           let code = "curl-setopt-" ## ?type (handle, "$curlopt-" ## ?id, option);
+           if (code ~= $curle-ok)
+             signal(make(<curl-option-error>, code: code))
+           end;
+           option
+         end method;
+
+         *curl-options*[?#"id"] := "curl-" ## ?id ## "-setter"; }
 end macro curlopt-definer;
 
 ///////////////////////////////////////////////////////////////////////////////

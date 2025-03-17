@@ -22,12 +22,12 @@ define test test-chkspeed (tags: #("io", "slow"))
   let filename = "5MB.zip";
   block () 
     with-curl-global ($curl-global-default)
-      with-curl-easy (curl = make(<curl-easy>),
-	                    url = concatenate(url, "/", filename),
-	                    useragent = "dylan-curl-speedchecker/1.0",
-	                    writefunction = $curl-write-callback,
-	                    xferinfofunction = $curl-progress-callback,
-	                    noprogress = #f)
+      with-curl-easy (curl = make(<curl-easy>,
+                                  url: concatenate(url, "/", filename),
+                                  useragent: "dylan-curl-speedchecker/1.0",
+                                  writefunction: $curl-write-callback,
+                                  xferinfofunction: $curl-progress-callback,
+                                  noprogress: #f))
 	      with-open-file (stream = filename, direction: #"output", if-exists: #"replace")
 	        dynamic-bind(*curl-write-callback* = handle-download)
 	          dynamic-bind(*curl-progress-callback* = progress-callback)

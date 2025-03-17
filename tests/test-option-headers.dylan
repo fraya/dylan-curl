@@ -5,12 +5,12 @@ License:    See License.txt in this distribution for details.
 
 define test test-option-headers (tags: #("io", "httpbin"))
   with-curl-global($curl-global-default)
-    with-curl-easy (curl = make(<curl-easy>),
-                    url = httpbin("/headers"),
-                    header = "Content-Type: application/json")
-      curl.curl-header := "Authorization: Bearer your_token_here";
-      curl.curl-header := "X-friend: Foo";
+    with-curl-easy (curl = make(<curl-easy>,
+                                url: httpbin("/headers")))
       add-header!(curl,
+                  "Content-Type: application/json",
+                  "Authorization: Bearer your_token_here",
+                  "X-friend: Foo",
                   "X-Custom-Header: Chucho",
                   "Another-Header: Good");
       curl-easy-perform(curl);
