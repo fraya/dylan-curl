@@ -1,6 +1,10 @@
 Module:    curl-easy-test-suite
-Copyright: Copyright (C) 2024, Dylan Hackers. All rights reserved.
+Copyright: Copyright (C) 2025, Dylan Hackers. All rights reserved.
 License:   See License.txt in this distribution for details.
+Comments:  Test performed to check the double initialization of the
+           library.
+Todo:      It is still possible to use the library when the resources have
+           been released.
 
 define test test-global-initialization ()
   assert-false(curl-library-initialized?());
