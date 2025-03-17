@@ -589,9 +589,14 @@ define class <curl-info-error> (<curl-error>) end;
 
 ///////////////////////////////////////////////////////////////////////////////
 //
-// Curlerrors as exceptions
+// <curl> and <curl-easy> classes
 //
 ///////////////////////////////////////////////////////////////////////////////
+
+//
+// *curl-options* is a table from keywords to setter methods.  Used to
+// initialize the class in the `make` method.
+//
 
 define variable *curl-options*
   = make(<table>);
@@ -607,13 +612,18 @@ end;
 
 define method make
     (class == <curl-easy>, #rest options, #key) => (_ :: <curl-easy>)
+
+  // Assign slot default initialization or value passed with headers:
   let curl = next-method();
 
+  // check that slot has been initialized
   if (null-pointer?(curl.curl-handle))
     signal(make(<curl-init-error>))
   end;
 
-  // initialize options
+  // initialize curl's options using setters.
+  // parameter options contains pairs of keywords and values
+  // (e.g. #"url", "http://example.com", #"verbose", #t ...)
   for (i from 0 below options.size - 1 by 2)
     let keyword = options[i];
     let value = options[i + 1];
