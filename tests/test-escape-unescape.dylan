@@ -1,6 +1,8 @@
 Module:    curl-easy-test-suite
 Author:    Fernando Raya
 Copyright: Copyright (C) 2025, Dylan Hackers. All rights reserved.
+Reference: https://curl.se/libcurl/c/curl_escape.html
+Reference: https://curl.se/libcurl/c/curl_unescape.html
 
 define test test-curl-easy-escape ()
   with-curl-global ($curl-global-default)
