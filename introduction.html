@@ -348,13 +348,13 @@ to another method for centralized error handling.</p>
 </div>
 </div>
 <p>If you need to set a lot of options, you can pass them to the
-<a class="reference internal" href="reference.html#dylan-curl:curl-easy:with-curl-easy"><code class="xref dylan dylan-macro docutils literal notranslate"><span class="pre">with-curl-easy</span></code></a> with less verbosity.</p>
+<a class="reference external" href="https://opendylan.org/books/drm/Constructing_and_Initializing_Instances#make"><code class="xref drm docutils literal notranslate"><span class="pre">make</span></code></a> method with less verbosity.</p>
 <div class="highlight-dylan notranslate"><div class="highlight"><pre><span></span><span class="nb">block</span><span class="w"> </span><span class="p">()</span>
-<span class="w">  </span><span class="n">with-curl-easy</span><span class="w"> </span><span class="p">(</span><span class="n">curl</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">make</span><span class="p">(</span><span class="nc">&lt;curl-easy&gt;</span><span class="p">),</span>
-<span class="w">                  </span><span class="n">url</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;https://example.org&quot;</span><span class="p">,</span>
-<span class="w">                  </span><span class="n">ssl-verifypeer</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="l">#f</span><span class="p">,</span>
-<span class="w">                  </span><span class="n">ssl-verifyhost</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span>
-<span class="w">                  </span><span class="n">ca-cache-timeout</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">604800</span><span class="p">)</span>
+<span class="w">  </span><span class="n">with-curl-easy</span><span class="w"> </span><span class="p">(</span><span class="n">curl</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">make</span><span class="p">(</span><span class="nc">&lt;curl-easy&gt;</span><span class="p">,</span>
+<span class="w">                              </span><span class="k">url:</span><span class="w"> </span><span class="s">&quot;https://example.org&quot;</span><span class="p">,</span>
+<span class="w">                              </span><span class="k">ssl-verifypeer:</span><span class="w"> </span><span class="l">#f</span><span class="p">,</span>
+<span class="w">                              </span><span class="k">ssl-verifyhost:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span>
+<span class="w">                              </span><span class="k">ca-cache-timeout:</span><span class="w"> </span><span class="mi">604800</span><span class="p">))</span>
 <span class="w">    </span><span class="c1">// perform request</span>
 <span class="w">    </span><span class="c1">// gather information</span>
 <span class="w">  </span><span class="k">end</span><span class="w"> </span><span class="n">with-curl-easy</span><span class="p">;</span>
@@ -428,8 +428,8 @@ wrapper, you access the information directly using property syntax.</p>
 <div class="literal-block-wrapper docutils container" id="id10">
 <div class="code-block-caption"><span class="caption-text">Dylan Example</span><a class="headerlink" href="#id10" title="Link to this code">¶</a></div>
 <div class="highlight-dylan notranslate"><div class="highlight"><pre><span></span><span class="nb">block</span><span class="w"> </span><span class="p">()</span>
-<span class="w">   </span><span class="n">with-curl-easy</span><span class="w"> </span><span class="p">(</span><span class="n">curl</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">make</span><span class="p">(</span><span class="nc">&lt;curl&gt;</span><span class="p">),</span>
-<span class="w">                   </span><span class="n">url</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;https://example.com/&quot;</span><span class="p">)</span>
+<span class="w">   </span><span class="n">with-curl-easy</span><span class="w"> </span><span class="p">(</span><span class="n">curl</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">make</span><span class="p">(</span><span class="nc">&lt;curl&gt;</span><span class="p">,</span>
+<span class="w">                               </span><span class="k">url:</span><span class="w"> </span><span class="s">&quot;https://example.com/&quot;</span><span class="p">))</span>
 <span class="w">     </span><span class="n">curl-easy-perform</span><span class="p">(</span><span class="n">curl</span><span class="p">);</span>
 <span class="w">     </span><span class="n">format-out</span><span class="p">(</span><span class="s">&quot;Time: %d&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">curl</span><span class="p">.</span><span class="n">total-time</span><span class="p">)</span>
 <span class="w">   </span><span class="k">end</span><span class="p">;</span>
@@ -488,8 +488,8 @@ header strings, which you build using <cite>curl_slist</cite> and <cite>curl_sli
 <div class="literal-block-wrapper docutils container" id="id12">
 <div class="code-block-caption"><span class="caption-text">Using <cite>add-header!</cite></span><a class="headerlink" href="#id12" title="Link to this code">¶</a></div>
 <div class="highlight-dylan notranslate"><div class="highlight"><pre><span></span><span class="n">with-curl-global</span><span class="p">(</span><span class="no">$curl-global-default</span><span class="p">)</span>
-<span class="w">  </span><span class="n">with-curl-easy</span><span class="p">(</span><span class="n">curl</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">make</span><span class="p">(</span><span class="nc">&lt;curl-easy&gt;</span><span class="p">),</span>
-<span class="w">                 </span><span class="n">url</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;https://api.example.com/data&quot;</span><span class="p">)</span>
+<span class="w">  </span><span class="n">with-curl-easy</span><span class="p">(</span><span class="n">curl</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">make</span><span class="p">(</span><span class="nc">&lt;curl-easy&gt;</span><span class="p">,</span>
+<span class="w">                             </span><span class="k">url:</span><span class="w"> </span><span class="s">&quot;https://api.example.com/data&quot;</span><span class="p">))</span>
 
 <span class="w">    </span><span class="n">add-header!</span><span class="p">(</span><span class="n">curl</span><span class="p">,</span>
 <span class="w">                </span><span class="s">&quot;Content-Type: application/json&quot;</span><span class="p">,</span>
@@ -505,15 +505,15 @@ header strings, which you build using <cite>curl_slist</cite> and <cite>curl_sli
 </pre></div>
 </div>
 </div>
-<p>Or passing the options to <a class="reference internal" href="reference.html#dylan-curl:curl-easy:with-curl-easy"><code class="xref dylan dylan-macro docutils literal notranslate"><span class="pre">with-curl-easy</span></code></a>:</p>
+<p>Or passing the options to <a class="reference external" href="https://opendylan.org/books/drm/Constructing_and_Initializing_Instances#make"><code class="xref drm docutils literal notranslate"><span class="pre">make</span></code></a> method:</p>
 <div class="literal-block-wrapper docutils container" id="id13">
-<div class="code-block-caption"><span class="caption-text">Using <cite>with-curl-easy</cite> options</span><a class="headerlink" href="#id13" title="Link to this code">¶</a></div>
+<div class="code-block-caption"><span class="caption-text">Using <cite>make</cite> keywords</span><a class="headerlink" href="#id13" title="Link to this code">¶</a></div>
 <div class="highlight-dylan notranslate"><div class="highlight"><pre><span></span><span class="n">with-curl-global</span><span class="p">(</span><span class="no">$curl-global-default</span><span class="p">)</span>
-<span class="w">  </span><span class="n">with-curl-easy</span><span class="p">(</span><span class="n">curl</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">make</span><span class="p">(</span><span class="nc">&lt;curl-easy&gt;</span><span class="p">),</span>
-<span class="w">                 </span><span class="n">url</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;https://api.example.com/data&quot;</span><span class="p">,</span>
-<span class="w">                 </span><span class="n">header</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;Content-Type: application/json&quot;</span><span class="p">,</span>
-<span class="w">                 </span><span class="n">header</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;Authorization: Bearer your_token_here&quot;</span><span class="p">,</span>
-<span class="w">                 </span><span class="n">header</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;X-Custom-Header: Custom Value&quot;</span><span class="p">)</span>
+<span class="w">  </span><span class="n">with-curl-easy</span><span class="p">(</span><span class="n">curl</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">make</span><span class="p">(</span><span class="nc">&lt;curl-easy&gt;</span><span class="p">,</span>
+<span class="w">                             </span><span class="k">url:</span><span class="w"> </span><span class="s">&quot;https://api.example.com/data&quot;</span><span class="p">,</span>
+<span class="w">                             </span><span class="k">header:</span><span class="w"> </span><span class="s">&quot;Content-Type: application/json&quot;</span><span class="p">,</span>
+<span class="w">                             </span><span class="k">header:</span><span class="w"> </span><span class="s">&quot;Authorization: Bearer your_token_here&quot;</span><span class="p">,</span>
+<span class="w">                             </span><span class="k">header:</span><span class="w"> </span><span class="s">&quot;X-Custom-Header: Custom Value&quot;</span><span class="p">))</span>
 
 <span class="w">    </span><span class="c1">// ... other curl options ...</span>
 
@@ -528,8 +528,8 @@ header strings, which you build using <cite>curl_slist</cite> and <cite>curl_sli
 <div class="literal-block-wrapper docutils container" id="id14">
 <div class="code-block-caption"><span class="caption-text">Using <cite>curl-header-setter</cite></span><a class="headerlink" href="#id14" title="Link to this code">¶</a></div>
 <div class="highlight-dylan notranslate"><div class="highlight"><pre><span></span><span class="n">with-curl-global</span><span class="p">(</span><span class="no">$curl-global-default</span><span class="p">)</span>
-<span class="w">  </span><span class="n">with-curl-easy</span><span class="p">(</span><span class="n">curl</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">make</span><span class="p">(</span><span class="nc">&lt;curl-easy&gt;</span><span class="p">),</span>
-<span class="w">                        </span><span class="n">url</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;https://api.example.com/data&quot;</span><span class="p">)</span>
+<span class="w">  </span><span class="n">with-curl-easy</span><span class="p">(</span><span class="n">curl</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">make</span><span class="p">(</span><span class="nc">&lt;curl-easy&gt;</span><span class="p">,</span>
+<span class="w">                             </span><span class="k">url:</span><span class="w"> </span><span class="s">&quot;https://api.example.com/data&quot;</span><span class="p">))</span>
 
 <span class="w">    </span><span class="n">curl</span><span class="p">.</span><span class="n">curl-header</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="s">&quot;Content-Type: application/json&quot;</span><span class="p">;</span>
 <span class="w">    </span><span class="n">curl</span><span class="p">.</span><span class="n">curl-header</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="s">&quot;Authorization: Bearer your_token_here&quot;</span><span class="p">;</span>

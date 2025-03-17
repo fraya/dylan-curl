@@ -107,16 +107,16 @@ to another method for centralized error handling.
    end block;
 
 If you need to set a lot of options, you can pass them to the
-:macro:`with-curl-easy` with less verbosity.
+:drm:`make` method with less verbosity.
 
 .. code-block:: dylan
 
    block ()
-     with-curl-easy (curl = make(<curl-easy>),
-                     url = "https://example.org",
-                     ssl-verifypeer = #f,
-                     ssl-verifyhost = 1,
-                     ca-cache-timeout = 604800)
+     with-curl-easy (curl = make(<curl-easy>,
+                                 url: "https://example.org",
+                                 ssl-verifypeer: #f,
+                                 ssl-verifyhost: 1,
+                                 ca-cache-timeout: 604800))
        // perform request
        // gather information
      end with-curl-easy;
@@ -148,7 +148,7 @@ In Opendylan :func:`curl-perform` raises a
 .. code-block:: dylan
    :caption: Dylan example
 
-   block () 
+   block ()
      curl-easy-perform(curl);
      format-out("Request completed successfully.\n")
    exception (err :: <curl-perform-error>)
@@ -190,8 +190,8 @@ wrapper, you access the information directly using property syntax.
    :caption: Dylan Example
 
    block ()
-      with-curl-easy (curl = make(<curl>),
-                      url = "https://example.com/")
+      with-curl-easy (curl = make(<curl>,
+                                  url: "https://example.com/"))
         curl-easy-perform(curl);
         format-out("Time: %d", curl.total-time)
       end;
@@ -250,8 +250,8 @@ The above example could be translated to Opendylan in three ways:
    :caption: Using `add-header!`
 
    with-curl-global($curl-global-default)
-     with-curl-easy(curl = make(<curl-easy>),
-                    url = "https://api.example.com/data")
+     with-curl-easy(curl = make(<curl-easy>,
+                                url: "https://api.example.com/data"))
 
        add-header!(curl,
                    "Content-Type: application/json",
@@ -265,17 +265,17 @@ The above example could be translated to Opendylan in three ways:
        end with-curl-easy;
    end with-curl-global;
 
-Or passing the options to :macro:`with-curl-easy`:
+Or passing the options to :drm:`make` method:
 
 .. code-block:: dylan
-   :caption: Using `with-curl-easy` options
+   :caption: Using `make` keywords
 
    with-curl-global($curl-global-default)
-     with-curl-easy(curl = make(<curl-easy>),
-                    url = "https://api.example.com/data",
-                    header = "Content-Type: application/json",
-                    header = "Authorization: Bearer your_token_here",
-                    header = "X-Custom-Header: Custom Value")
+     with-curl-easy(curl = make(<curl-easy>,
+                                url: "https://api.example.com/data",
+                                header: "Content-Type: application/json",
+                                header: "Authorization: Bearer your_token_here",
+                                header: "X-Custom-Header: Custom Value"))
 
        // ... other curl options ...
 
@@ -290,8 +290,8 @@ Or using the setter method :meth:`curl-header-setter`
    :caption: Using `curl-header-setter`
 
    with-curl-global($curl-global-default)
-     with-curl-easy(curl = make(<curl-easy>),
-                           url = "https://api.example.com/data")
+     with-curl-easy(curl = make(<curl-easy>,
+                                url: "https://api.example.com/data"))
 
        curl.curl-header := "Content-Type: application/json";
        curl.curl-header := "Authorization: Bearer your_token_here";
