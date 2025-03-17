@@ -16,9 +16,9 @@ define function httpbin
 end;
 
 define test test-postfields (tags: #("io"))
-  with-curl-easy (curl = make(<curl-easy>),
-                  url = httpbin("/post"),
-                  postfields = "name=daniel&project=curl")
+  with-curl-easy (curl = make(<curl-easy>,
+                              url: httpbin("/post"),
+                              postfields: "name=daniel&project=curl"))
     curl-easy-perform(curl);
     assert-equal(200, curl.curl-response-code);
   end with-curl-easy;
@@ -37,10 +37,10 @@ define test test-http-methods (tags: #("io", "httpbin"))
 end test;
 
 define test test-auth-basic (tags: #("io", "httpbin"))
-  with-curl-easy (curl = make(<curl-easy>),
-                  url = httpbin("/basic-auth/admin/hunter42"),
-                  username = "admin",
-                  password = "hunter42")
+  with-curl-easy (curl = make(<curl-easy>,
+                              url: httpbin("/basic-auth/admin/hunter42"),
+                              username: "admin",
+                              password: "hunter42"))
     curl.curl-easy-perform;
     assert-equal(200, curl.curl-response-code);
   end with-curl-easy;
@@ -48,21 +48,20 @@ end test;
 
 define test test-auth-bearer (tags: #("io", "httpbin"))
   let bearer = "hunter42";
-  with-curl-easy (curl = make(<curl-easy>),
-                  url = httpbin("/bearer"))
-    curl.curl-header := concatenate("Authorization: Bearer ", bearer);
+  with-curl-easy (curl = make(<curl-easy>,
+                              url: httpbin("/bearer"),
+                              header: concatenate("Authorization: Bearer ", bearer)))
     curl-easy-perform(curl);
     assert-equal(200, curl.curl-response-code);
   end with-curl-easy;
 end test test-auth-bearer;
 
 define test test-auth-digest (tags: #("io", "httpbin"))
-  let url = httpbin("/digest-auth/auth/user/passwd");
-  with-curl-easy (curl = make(<curl-easy>),
-                  url = url,
-                  verbose = #f,
-                  userpwd = "user:passwd",
-                  httpauth = $curlauth-digest)
+  with-curl-easy (curl = make(<curl-easy>,
+                              url: httpbin("/digest-auth/auth/user/passwd"),
+                              verbose: #f,
+                              userpwd: "user:passwd",
+                              httpauth: $curlauth-digest))
     curl-easy-perform(curl);
     assert-equal(200, curl.curl-response-code);
   end with-curl-easy;

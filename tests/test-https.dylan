@@ -7,11 +7,11 @@ Reference:  https://curl.se/libcurl/c/https.html
 define test test-https (tags: #("io", "slow"))
   block ()
     with-curl-global ($curl-global-default)
-      with-curl-easy (curl = make(<curl-easy>),
-                      url = "https://example.org",
-                      ssl-verifypeer = #f,
-                      ssl-verifyhost = 1,
-                      ca-cache-timeout = 604800)
+      with-curl-easy (curl = make(<curl-easy>,
+                                  url: "https://example.org",
+                                  ssl-verifypeer: #f,
+                                  ssl-verifyhost: 1,
+                                  ca-cache-timeout: 604800))
         curl-easy-perform(curl);
         assert-true(#t);
       end with-curl-easy;

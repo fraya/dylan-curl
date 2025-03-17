@@ -7,11 +7,12 @@ Copyright: Copyright (C) 2025, Dylan Hackers. All rights reserved.
 define test test-get-simple-http-page (tags: #("io"))
   block ()
     with-curl-global ($curl-global-default)
-      with-curl-easy (curl = make(<curl-easy>),
-                      url = "https://example.com",
-                      followlocation = 1)
+      with-curl-easy (curl = make(<curl-easy>,
+                                  url: "http://example.com",
+                                  followlocation: 1))
 	      curl-easy-perform(curl);
 	      assert-true(#t);
+        
       end with-curl-easy;
     end with-curl-global;
   exception (err :: <curl-error>)
