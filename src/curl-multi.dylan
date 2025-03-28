@@ -145,15 +145,6 @@ define C-function c-curl-multi-info-read
   c-name: "curl_multi_info_read";
 end C-function;
 
-// Message info getter
-
-define method curl-multi-info
-    (multi :: <curl-multi>)
- => (message :: <curlmsg*>, msgs-in-queue :: <integer>)
-  let handle = multi.curl-multi-handle;
-  c-curl-multi-info-read(handle)
-end;
-
 // https://curl.se/libcurl/c/curl_multi_perform.html
 
 define C-function curl-multi-perform
@@ -216,6 +207,15 @@ define function curl-multi-get-handles
     c-curl-free(c-handles);
   end block; 
 end function;
+
+// Message info getter
+
+define method curl-multi-info
+    (multi :: <curl-multi>)
+ => (message :: <curlmsg*>, msgs-in-queue :: <integer>)
+  let handle = multi.curl-multi-handle;
+  c-curl-multi-info-read(handle)
+end;
 
 define function curl-multi-add!
     (multi :: <curl-multi>, easy :: <curl-easy>)
