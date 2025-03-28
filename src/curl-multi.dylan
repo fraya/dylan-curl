@@ -189,6 +189,18 @@ define function curl-multi-do
   multi
 end;
 
+define function curl-multi-add!
+    (multi :: <curl-multi>, easy :: <curl-easy>)
+ => (multi :: <curl-multi>)
+  curl-multi-do(c-curl-multi-add-handle, multi, easy) 
+end;
+
+define function curl-multi-remove!
+    (multi :: <curl-multi>, easy :: <curl-easy>)
+ => (multi :: <curl-multi>)
+  curl-multi-do(c-curl-multi-remove-handle, multi, easy)
+end;
+
 define function curl-multi-get-handles
     (multi :: <curl-multi>)
  => (handles :: <curl-easy-vector>)
@@ -215,18 +227,6 @@ define method curl-multi-info
  => (message :: <curlmsg*>, msgs-in-queue :: <integer>)
   let handle = multi.curl-multi-handle;
   c-curl-multi-info-read(handle)
-end;
-
-define function curl-multi-add!
-    (multi :: <curl-multi>, easy :: <curl-easy>)
- => (multi :: <curl-multi>)
-  curl-multi-do(c-curl-multi-add-handle, multi, easy) 
-end;
-
-define function curl-multi-remove!
-    (multi :: <curl-multi>, easy :: <curl-easy>)
- => (multi :: <curl-multi>)
-  curl-multi-do(c-curl-multi-remove-handle, multi, easy)
 end;
 
 define macro with-curl-multi
