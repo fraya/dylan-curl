@@ -1,11 +1,9 @@
 {
     "dependencies": [
-	"strings@1.1.0",
-        "command-line-parser@3.2.2"
     ],
     "dev-dependencies": [
-	"sphinx-extensions@1.0.0",
-	"testworks@3.0"
+        "sphinx-extensions@latest",  
+        "testworks@latest"
     ],
     "description": "Curl library wrapper",
     "name": "curl",
