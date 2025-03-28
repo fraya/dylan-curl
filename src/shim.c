@@ -113,3 +113,29 @@ void* curl_easy_getinfo_ptr (CURL *handle, CURLINFO option, CURLcode *code)
 /*   *code = curl_easy_getinfo(handle, option, &result); */
 /*   return result; */
 /* } */
+
+/*****************************************************************************
+ *
+ *  CURLM options shim functions
+ *
+ *****************************************************************************/
+
+ CURLcode curlm_setopt_long(CURLM *handle, CURLoption option, int value)
+ {
+   return curl_multi_setopt(handle, option, (long) value);
+ }
+ 
+ CURLcode curlm_setopt_objectpoint(CURLM *handle, CURLoption option, void *value)
+ {
+   return curl_multi_setopt(handle, option, value);
+ }
+ 
+ CURLcode curlm_setopt_functionpoint(CURLM *handle, CURLoption option, void *f)
+ {
+   return curl_multi_setopt(handle, option, f);
+ }
+ 
+ CURLcode curlm_setopt_off_t(CURLM *handle, CURLoption option, curl_off_t value)
+ {
+   return curl_multi_setopt(handle, option, value);
+ }
