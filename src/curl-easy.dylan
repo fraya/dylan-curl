@@ -322,6 +322,7 @@ end C-struct;
 ///////////////////////////////////////////////////////////////////////////////
 
 define C-subtype <curl-easy-handle> (<C-void*>) end;
+define C-pointer-type <curl-easy-handle*> => <curl-easy-handle>;
 define constant <curl-off-t> = <integer>;
 
 
@@ -467,6 +468,11 @@ define C-function c-curl-easy-upkeep
   c-name: "curl_easy_upkeep";
 end C-function;
 
+define C-function c-curl-free
+  input parameter ptr :: <C-void*>;
+  c-name: "curl_free";
+end C-function;
+
 define C-function curl-global-init
   // https://curl.se/libcurl/c/curl_global_init.html
   input parameter flags :: <C-int>;
@@ -574,17 +580,49 @@ define abstract class <curl-error> (<error>)
   constant virtual slot curl-error-message :: <string>;
 end;
 
+define generic curl-error-message
+  (err :: <curl-error>) => (message :: <string>);
+
 define method curl-error-message
     (err :: <curl-error>) => (message :: <string>)
   c-curl-easy-strerror(err.curl-error-code)
+end;
+
+define method as
+    (type == <string>, err :: <curl-error>)
+ => (string :: <string>)
+  curl-error-message(err)
 end;
 
 define class <curl-init-error> (<curl-error>)
   inherited slot curl-error-code, init-value: $curle-failed-init;
 end;
 
-define class <curl-option-error> (<curl-error>) end;
+define abstract class <curl-option-error> (<curl-error>) end;
+
+// Error produced when an option is set
+
+define class <curl-option-set-error> (<curl-option-error>) end;
+
+// Error produced trying to set an option that does not exists
+
+define class <curl-option-unknown-error> (<curl-option-error>)
+  inherited slot curl-error-code = $curle-failed-init;
+  constant slot curl-error-keyword :: <symbol>,
+    required-init-keyword: keyword:;
+end;
+
+define method curl-error-message
+    (err :: <curl-option-unknown-error>) => (message :: <string>)
+  format-to-string("Curl option '%s:' is unknown", err.curl-error-keyword)
+end;
+
+// Error produced performing the request
+
 define class <curl-perform-error> (<curl-error>) end;
+
+// Error produced trying to get information about the request
+
 define class <curl-info-error> (<curl-error>) end;
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -604,21 +642,25 @@ define variable *curl-options*
 define abstract class <curl> (<object>) end;
 
 define open class <curl-easy> (<curl>)
-  constant slot curl-handle :: <curl-easy-handle> = c-curl-easy-init(),
+  constant slot curl-easy-handle :: <curl-easy-handle> = c-curl-easy-init(),
     init-keyword: handle:;
   slot curl-headers :: <curlopt-slistpoint> = null-pointer(<curlopt-slistpoint>),
     init-keyword: headers:;
 end;
 
+define constant <curl-easy-vector>
+  = limited(<vector>, of: <curl-easy>);
+
 define method make
     (class == <curl-easy>, #rest options, #key) => (_ :: <curl-easy>)
 
-  // Assign slot default initialization or value passed with headers:
+  // Assign slot default initialization or values passed with
+  // 'options'
   let curl = next-method();
 
   // check that slot has been initialized
-  if (null-pointer?(curl.curl-handle))
-    signal(make(<curl-init-error>))
+  if (null-pointer?(curl.curl-easy-handle))
+    error(make(<curl-init-error>))
   end;
 
   // initialize curl's options using setters.
@@ -627,26 +669,29 @@ define method make
   for (i from 0 below options.size - 1 by 2)
     let keyword = options[i];
     let value = options[i + 1];
-    let setter = element(*curl-options*, keyword, default: #f);
-    if (~setter)
-      signal(make(<curl-option-error>, code: $curle-failed-init))
-    end;
-    setter(value, curl);
-  end;
-
+    // Ugly hack: Filter #"handle" keyword since this value is set before in
+    // next-method call
+    if (keyword ~= #"handle")
+      let setter = element(*curl-options*, keyword, default: #f);
+      if (~setter)
+        error(make(<curl-option-unknown-error>, keyword: keyword))
+      end;
+      setter(value, curl);
+    end if;
+  end for;
   curl
 end;
 
 define function curl-easy-cleanup
     (curl :: <curl-easy>) => ()
   curl-slist-free-all(curl.curl-headers);
-  c-curl-easy-cleanup(curl.curl-handle)
+  c-curl-easy-cleanup(curl.curl-easy-handle)
 end;
 
 define function curl-easy-dup
     (curl :: <curl-easy>) => (dup :: <curl-easy>)
   make(<curl-easy>,
-       handle: c-curl-easy-duphandle(curl.curl-handle))
+       handle: c-curl-easy-duphandle(curl.curl-easy-handle))
 end;
 
 define function add-header!
@@ -667,7 +712,7 @@ define function curl-easy-escape
     (curl :: <curl-easy>, url :: <string>, #key length :: false-or(<integer>) = #f)
  => (escaped-url :: <string>)
   let url-size = length | url.size;
-  let escaped = c-curl-easy-escape(curl.curl-handle, url, url-size);
+  let escaped = c-curl-easy-escape(curl.curl-easy-handle, url, url-size);
   if (null-pointer?(escaped))
     signal(make(<curl-init-error>))
   end;
@@ -681,7 +726,7 @@ define function curl-easy-perform
     curl.curl-httpheader := curl.curl-headers
   end;
   // perform request
-  let curl-code = c-curl-easy-perform(curl.curl-handle);
+  let curl-code = c-curl-easy-perform(curl.curl-easy-handle);
   unless (curl-code = $curle-ok)
     signal(make(<curl-perform-error>, code: curl-code))
   end;
@@ -690,14 +735,14 @@ end;
 define function curl-easy-reset
     (curl :: <curl-easy>) => ()
   curl.curl-headers := null-pointer(<curlopt-slistpoint>);
-  c-curl-easy-reset(curl.curl-handle)
+  c-curl-easy-reset(curl.curl-easy-handle)
 end;
 
 define function curl-easy-unescape
     (curl :: <curl-easy>, url :: <string>, #key length :: false-or(<integer>) = #f)
  => (escaped-url :: <string>, out-length :: <integer>)
   let url-size = length | url.size;
-  let (unescaped, out-length) = c-curl-easy-unescape(curl.curl-handle, url, url-size);
+  let (unescaped, out-length) = c-curl-easy-unescape(curl.curl-easy-handle, url, url-size);
   if (null-pointer?(unescaped))
     signal(make(<curl-init-error>))
   end;
@@ -943,10 +988,10 @@ define macro curlopt-definer
          define method "curl-" ## ?id ## "-setter"
              (option :: "<curlopt-" ## ?type ## ">", curl :: <curl-easy>)
           => (option :: "<curlopt-" ## ?type ## ">")
-           let handle = curl.curl-handle;
+           let handle = curl.curl-easy-handle;
            let code = "curl-setopt-" ## ?type (handle, "$curlopt-" ## ?id, option);
            if (code ~= $curle-ok)
-             signal(make(<curl-option-error>, code: code))
+             error(make(<curl-option-set-error>, code: code))
            end;
            option
          end method;
@@ -1414,7 +1459,7 @@ define macro curlinfo-definer
          define method "curl-" ## ?id
               (curl :: <curl-easy>)
 	  => (result :: "<curlinfo-" ## ?type ## ">")
-	     let handle = curl.curl-handle;
+	     let handle = curl.curl-easy-handle;
 	     let (result, code)
 	       = "curl-easy-getinfo-" ## ?type (handle, "$curlinfo-" ## ?id);
 	     unless (code = $curle-ok)

@@ -303,11 +303,14 @@ define module curl-easy
     curl-error-message,
     <curl-init-error>,
     <curl-option-error>,
+    <curl-option-set-error>,
+    <curl-option-unknown-error>,
     <curl-perform-error>;
 
   create
     <curl>,
     <curl-easy>,
+    <curl-easy-vector>,
     curl-library-initialized?,
     curl-library-setup,
     curl-library-cleanup,
@@ -349,10 +352,18 @@ define module curl-easy
   create
     *curl-options*;
 
+  // Curl option types
   create
+    <curlopt-long>,
+    <curlopt-objectpoint>,
+    <curlopt-functionpoint>,
+    <curlopt-off-t>,
+    <curlopt-blob>,
     <curlopt-stringpoint>,
     <curlopt-slistpoint>,
-    <curlopt-cbpoint>;
+    <curlopt-cbpoint>,
+    <curlopt-values>,
+    <curlopt-boolean>;
 
   create
     curl-writedata-setter,
@@ -744,5 +755,25 @@ define module curl-easy-impl
   use format-out;
 
   export
-    *curl-library-initialized?*;
+    *curl-library-initialized?*,
+    <curl-easy-handle>,
+    <curl-easy-handle*>,
+    curl-easy-handle,
+    c-curl-free;
+
+  export
+    <curl-boolean>;
+
+  export 
+    $curlopttype-long,
+    $curlopttype-objectpoint,
+    $curlopttype-functionpoint,
+    $curlopttype-off-t,
+    $curlopttype-blob,
+    $curlopttype-stringpoint,
+    $curlopttype-slistpoint,
+    $curlopttype-cbpoint,
+    $curlopttype-values,
+    $curlopttype-boolean;
+
 end module;
