@@ -4,8 +4,8 @@
         "command-line-parser@3.2.2"
     ],
     "dev-dependencies": [
-	"sphinx-extensions@1.0.0",
-	"testworks@3.0"
+	"sphinx-extensions",
+	"testworks"
     ],
     "description": "Curl library wrapper",
     "name": "curl",
