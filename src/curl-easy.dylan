@@ -444,8 +444,9 @@ define C-function c-curl-easy-send
   c-name: "curl_easy_send";
 end C-function;
 
-define C-function c-curl-easy-strerror
-  // https://curl.se/libcurl/c/curl_easy_strerror.html
+// https://curl.se/libcurl/c/curl_easy_strerror.html
+
+define C-function curl-easy-strerror
   input parameter error-number :: <C-int>;
   result error-message :: <C-string>;
   c-name: "curl_easy_strerror";
@@ -585,7 +586,7 @@ define generic curl-error-message
 
 define method curl-error-message
     (err :: <curl-error>) => (message :: <string>)
-  c-curl-easy-strerror(err.curl-error-code)
+  curl-easy-strerror(err.curl-error-code)
 end;
 
 define method as
@@ -934,7 +935,7 @@ end C-function;
 //////////////////////////////////////////////////////////////////////////////
 
 define constant <curlopt-long> = <integer>;
-define constant <curlopt-objectpoint> = <c-struct>;
+define constant <curlopt-objectpoint> = <object>;
 define constant <curlopt-functionpoint> = <object>;
 define constant <curlopt-off-t> = <integer>;
 define constant <curlopt-blob> = <curl-blob*>;
@@ -1032,7 +1033,6 @@ define curlopt long resume-from = 21;
 define curlopt stringpoint cookie = 22;
 define curlopt slistpoint httpheader = 23;
 // // 24 is deprecated use curlopt-mimepost
-define curlopt objectpoint httppost = 24;
 define curlopt stringpoint sslcert = 25;
 define curlopt stringpoint keypasswd = 26;
 define curlopt boolean crlf = 27;
@@ -1112,7 +1112,7 @@ define curlopt boolean nosignal = 99;
 define curlopt objectpoint share = 100;
 define curlopt values proxytype = 101;
 define curlopt stringpoint accept-encoding = 102;
-define curlopt objectpoint private = 103;
+define curlopt stringpoint private = 103;
 define curlopt slistpoint http200aliases = 104;
 define curlopt boolean unrestricted-auth = 105;
 define curlopt boolean ftp-use-eprt = 106;
@@ -1458,14 +1458,14 @@ define macro curlinfo-definer
 
          define method "curl-" ## ?id
               (curl :: <curl-easy>)
-	  => (result :: "<curlinfo-" ## ?type ## ">")
-	     let handle = curl.curl-easy-handle;
-	     let (result, code)
-	       = "curl-easy-getinfo-" ## ?type (handle, "$curlinfo-" ## ?id);
-	     unless (code = $curle-ok)
-	       signal(make(<curl-info-error>, code: code))
-	     end;
-	     result
+           => (result :: "<curlinfo-" ## ?type ## ">")
+            let handle = curl.curl-easy-handle;
+            let (result, code)
+              = "curl-easy-getinfo-" ## ?type (handle, "$curlinfo-" ## ?id);
+            unless (code = $curle-ok)
+              signal(make(<curl-info-error>, code: code))
+            end;
+            result
          end method }
 end macro;
 
