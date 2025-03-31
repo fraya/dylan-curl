@@ -23,9 +23,13 @@ define module curl-multi
   // curlmsg status codes
 
   create
-    <curlmsg-status>,
-    $curlmsg-none,
-    $curlmsg-done;
+    <curlmsg>,
+    <curlmsg*>,
+    curlmsg-msg,
+    curlmsg-easy-handle,
+    curlmsg-data,
+    curlmsg-done?,
+    curlmsg-none?;
 
   // curlmsg data
 
@@ -38,9 +42,18 @@ define module curl-multi
 
   create
     <curlmsg>,
-    curlmsg-status,
+    curlmsg-msg,
     curlmsg-easy-handle,
-    curlmsg-data;
+    curlmsg-data,
+    curlmsg-curl-easy;
+
+  // curl-waitfd
+  
+  create
+    <curl-waitfd>,
+    curl-waitfd-fd,
+    curl-waitfd-events,
+    curl-waitfd-revents;
 
   create
     <curl-multi-error>,
@@ -54,8 +67,10 @@ define module curl-multi
   create
     curl-multi-cleanup,
     // curl-multi-get-handles,
-    curl-multi-info,
-    curl-multi-perform;
+    curl-multi-info-read,
+    curl-multi-perform,
+    curl-multi-poll,
+    curl-multi-wait;
 
   create
     curl-multi-add!,
