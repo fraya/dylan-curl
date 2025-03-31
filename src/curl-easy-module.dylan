@@ -333,6 +333,7 @@ define module curl-easy
     curl-easy-perform,
     // curl-easy-recv,
     curl-easy-reset,
+    curl-easy-strerror,
     curl-easy-unescape,
     curl-version;
 
@@ -388,7 +389,6 @@ define module curl-easy
     curl-resume-from-setter,
     curl-cookie-setter,
     curl-httpheader-setter,
-    curl-httppost-setter,
     curl-sslcert-setter,
     curl-keypasswd-setter,
     curl-crlf-setter,
