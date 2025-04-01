@@ -230,14 +230,17 @@ define function curl-multi-get-handles
   end block; 
 end function;
 
-// Message info getter
-
-define method curl-multi-info
+define function curl-multi-info-read
     (multi :: <curl-multi>)
- => (message :: <curlmsg*>, msgs-in-queue :: <integer>)
+ => (message :: false-or(<curlmsg*>), messages-in-queue :: <integer>)
+
   let handle = multi.curl-multi-handle;
-  c-curl-multi-info-read(handle)
-end;
+  let (message, messages-in-queue)
+    = c-curl-multi-info-read(handle);
+
+  values(if (null-pointer?(message)) #f else message end,
+         messages-in-queue)
+end function;
 
 define macro with-curl-multi
   { with-curl-multi (?multi:variable = ?handler:expression) ?body:body end }
