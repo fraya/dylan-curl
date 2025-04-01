@@ -46,11 +46,21 @@ define C-union <curlmsg-data>
 end;
 
 define C-struct <curlmsg>
-  constant slot curlmsg-status      :: <C-int>;
+  constant slot curlmsg-msg         :: <C-int>;
   constant slot curlmsg-easy-handle :: <curl-easy-handle>;
   constant slot curlmsg-data        :: <curlmsg-data>;
   pointer-type-name: <curlmsg*>; 
 end C-struct;
+
+define function curlmsg-done?
+    (message :: <curlmsg*>) => (done? :: <boolean>)
+  message.curlmsg-msg = $curlmsg-done
+end;
+
+define function curlmsg-none?
+    (message :: <curlmsg*>) => (none? :: <boolean>)
+  message.curlmsg-msg = $curlmsg-none
+end;
 
 ///////////////////////////////////////////////////////////////////////////////
 //
