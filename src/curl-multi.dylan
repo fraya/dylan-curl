@@ -179,6 +179,26 @@ define C-function c-curl-multi-perform
   c-name: "curl_multi_perform";
 end C-function;
 
+define C-function c-curl-multi-poll
+  input  parameter multi-handle :: <curl-multi-handle>;
+  input  parameter extra-fds    :: <curl-waitfd*>;
+  input  parameter extra-nfds   :: <C-unsigned-int>;
+  input  parameter timeout-ms   :: <C-int>;
+  output parameter numfds       :: <C-int*>;
+  result curlmcode :: <C-int>;
+  c-name: "curl_multi_poll";
+end C-function;
+
+define C-function c-curl-multi-wait
+  input  parameter multi-handle :: <curl-multi-handle>;
+  input  parameter extra-fds    :: <curl-waitfd*>;
+  input  parameter extra-nfds   :: <C-unsigned-int>;
+  input  parameter timeout-ms   :: <C-int>;
+  output parameter numfds       :: <C-int*>;
+  result curlmcode :: <C-int>;
+  c-name: "curl_multi_wait";
+end C-function;
+
 ///////////////////////////////////////////////////////////////////////////////
 //
 // Curl multi handle
@@ -271,6 +291,42 @@ define function curl-multi-perform
   running-handles
 
 end function;
+
+// 'curl-multi-select' is an utility function added because
+// 'curl-multi-poll' and 'curl-multi-wait' share the same code
+
+define function curl-multi-select
+    (fn    :: <function>,
+     multi :: <curl-multi>,
+     #key extra-file-descriptors        :: false-or(<curl-waitfd*>) = #f,
+          extra-file-descriptors-number :: <integer> = 0,
+          timeout-ms                    :: <integer> = 0)
+ => (file-descriptors-count :: <integer>)
+
+  if (~extra-file-descriptors)
+    extra-file-descriptors        := null-pointer(<curl-waitfd*>);
+    extra-file-descriptors-number := 0;
+  end;
+
+  let (file-descriptors-count, code)
+  = fn(multi,
+       extra-file-descriptors,
+       extra-file-descriptors-number,
+       timeout-ms);
+
+  if (code ~= $curlm-ok)
+    error(make(<curl-multi-error>, code: code))
+  end;
+
+  file-descriptors-count
+
+end function curl-multi-select;
+
+define constant curl-multi-poll
+  = curry(c-curl-multi-poll, curl-multi-select);
+
+define constant curl-multi-wait
+  = curry(c-curl-multi-wait, curl-multi-select);
 
 define macro with-curl-multi
   { with-curl-multi (?multi:variable = ?handler:expression) ?body:body end }
