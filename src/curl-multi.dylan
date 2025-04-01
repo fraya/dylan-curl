@@ -264,7 +264,7 @@ define function curl-multi-perform
   let (running-handles, code)
     = c-curl-multi-perform(multi.curl-multi-handle);
 
-  if (code ~= $curlm-code)
+  if (code ~= $curlm-ok)
     error(make(<curl-multi-perform-error>), code: code)
   end;
 

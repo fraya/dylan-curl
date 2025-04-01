@@ -102,7 +102,7 @@ define test test-multi-chkspeed (tags: #("io", "slow"))
           while (message)
             if (curlmsg-done?(message))
               debug("Curl message DONE\n");
-              let easy   = curlmsg-curl-easy(message);
+              let easy   = message.curlmsg-easy-handle;
               debug("Message easy handle> %=\n", easy);
               let url    = easy.curl-private();
               let data   = message.curlmsg-data;
