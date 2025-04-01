@@ -157,7 +157,7 @@ end C-function;
 
 // https://curl.se/libcurl/c/curl_multi_perform.html
 
-define C-function curl-multi-perform
+define C-function c-curl-multi-perform
   input  parameter multi-handle    :: <curl-multi-handle>;
   output parameter running-handles :: <C-int*>;
   result curlmcode :: <C-int>;
@@ -240,6 +240,21 @@ define function curl-multi-info-read
 
   values(if (null-pointer?(message)) #f else message end,
          messages-in-queue)
+end function;
+
+define function curl-multi-perform
+    (multi :: <curl-multi>)
+ => (running-handles :: <integer>)
+
+  let (running-handles, code)
+    = c-curl-multi-perform(multi.curl-multi-handle);
+
+  if (code ~= $curlm-code)
+    error(make(<curl-multi-perform-error>), code: code)
+  end;
+
+  running-handles
+
 end function;
 
 define macro with-curl-multi
