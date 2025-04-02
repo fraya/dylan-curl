@@ -20,7 +20,7 @@ define module curl-multi
     $curlm-aborted-by-callback,
     $curlm-unrecoverable-poll;
 
-  // curlmsg status codes
+  // curlmsg
 
   create
     <curlmsg>,
@@ -37,15 +37,6 @@ define module curl-multi
     <curlmsg-data>,
     curlmsg-data-whatever,
     curlmsg-data-result;
-
-  // curlmsg  
-
-  create
-    <curlmsg>,
-    curlmsg-msg,
-    curlmsg-easy-handle,
-    curlmsg-data,
-    curlmsg-curl-easy;
 
   // curl-waitfd
   
