@@ -281,11 +281,11 @@ define function curl-multi-perform
     (multi :: <curl-multi>)
  => (running-handles :: <integer>)
 
-  let (running-handles, code)
+  let (code, running-handles)
     = c-curl-multi-perform(multi.curl-multi-handle);
 
   if (code ~= $curlm-ok)
-    error(make(<curl-multi-perform-error>), code: code)
+    error(make(<curl-multi-perform-error>, code: code))
   end;
 
   running-handles
