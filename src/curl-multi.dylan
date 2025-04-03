@@ -62,6 +62,17 @@ define function curlmsg-none?
   message.curlmsg-msg = $curlmsg-none
 end;
 
+define function curlmsg-curl-easy
+    (message :: <curlmsg*>) => (_ :: <curl-easy>)
+  make(<curl-easy>, handle: message.curlmsg-easy-handle)
+end;
+
+define function curlmsg-result
+    (message :: <curlmsg*>) => (string :: <string>)
+  let code = message.curlmsg-data.curlmsg-data-result;
+  curl-easy-strerror(code)
+end;
+
 ///////////////////////////////////////////////////////////////////////////////
 //
 // <curl-waitfd>
@@ -205,7 +216,7 @@ end C-function;
 //
 ///////////////////////////////////////////////////////////////////////////////
 
-define class <curl-multi> (<curl>)
+define open class <curl-multi> (<curl>)
   constant slot curl-multi-handle :: <curl-multi-handle>
     = c-curl-multi-init();
 end;
@@ -296,7 +307,7 @@ end function;
 // 'curl-multi-poll' and 'curl-multi-wait' share the same code
 
 define function curl-multi-select
-    (fn    :: <function>,
+    (fn :: <function>,
      multi :: <curl-multi>,
      #key extra-file-descriptors        :: false-or(<curl-waitfd*>) = #f,
           extra-file-descriptors-number :: <integer> = 0,
@@ -308,11 +319,11 @@ define function curl-multi-select
     extra-file-descriptors-number := 0;
   end;
 
-  let (file-descriptors-count, code)
-  = fn(multi,
-       extra-file-descriptors,
-       extra-file-descriptors-number,
-       timeout-ms);
+  let (code, file-descriptors-count)
+    = fn(multi.curl-multi-handle,
+         extra-file-descriptors,
+         extra-file-descriptors-number,
+         timeout-ms);
 
   if (code ~= $curlm-ok)
     error(make(<curl-multi-error>, code: code))
@@ -322,11 +333,31 @@ define function curl-multi-select
 
 end function curl-multi-select;
 
-define constant curl-multi-poll
-  = curry(c-curl-multi-poll, curl-multi-select);
+define function curl-multi-wait
+    (multi :: <curl-multi>,
+     #key extra-file-descriptors        :: false-or(<curl-waitfd*>) = #f,
+          extra-file-descriptors-number :: <integer> = 0,
+          timeout-ms                    :: <integer> = 0)
+ => (file-descriptors-count :: <integer>)
+ curl-multi-select(c-curl-multi-wait,
+                   multi,
+                   extra-file-descriptors: extra-file-descriptors,
+                   extra-file-descriptors-number: extra-file-descriptors-number,
+                   timeout-ms: timeout-ms)
+end function;
 
-define constant curl-multi-wait
-  = curry(c-curl-multi-wait, curl-multi-select);
+define function curl-multi-poll
+    (multi :: <curl-multi>,
+     #key extra-file-descriptors        :: false-or(<curl-waitfd*>) = #f,
+          extra-file-descriptors-number :: <integer> = 0,
+          timeout-ms                    :: <integer> = 0)
+ => (file-descriptors-count :: <integer>)
+ curl-multi-select(c-curl-multi-poll,
+                   multi,
+                   extra-file-descriptors: extra-file-descriptors,
+                   extra-file-descriptors-number: extra-file-descriptors-number,
+                   timeout-ms: timeout-ms)
+end function;
 
 define macro with-curl-multi
   { with-curl-multi (?multi:variable = ?handler:expression) ?body:body end }

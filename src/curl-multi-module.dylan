@@ -27,9 +27,11 @@ define module curl-multi
     <curlmsg*>,
     curlmsg-msg,
     curlmsg-easy-handle,
+    curlmsg-curl-easy,
     curlmsg-data,
     curlmsg-done?,
-    curlmsg-none?;
+    curlmsg-none?,
+    curlmsg-result;
 
   // curlmsg data
 
