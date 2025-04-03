@@ -65,37 +65,53 @@ define function debug
   force-err();
 end;
 
-define class <downloads> (<curl-multi>)
-  slot downloads-pending              :: <deque> = make(<deque>);
-  constant slot downloads-in-progress :: <deque> = make(<deque>);
+define inline function download!
+    (url :: <string>) => (_ :: <curl-easy>)
+  make(<curl-easy>,
+       // verbose: #t, // shows connection details
+       url: url,
+       private: url)
 end;
 
-define function next-in-progress!
+define class <downloads> (<curl-multi>)
+  constant slot downloads-max-parallel :: <integer>,
+    required-init-keyword: max-parallel:;
+  constant slot downloads-pending :: <deque>,
+    required-init-keyword: pending:;
+  slot downloads-left :: <integer> = 0;
+end;
+
+define method initialize
+    (downloads :: <downloads>, #key) => (#rest objects)
+  next-method();
+  downloads.curl-multi-maxconnects := downloads.downloads-max-parallel;
+end;
+
+define function forth!
     (downloads :: <downloads>) => ()
   let url = pop(downloads.downloads-pending);
-  debug("In progress <%s>\n", url);
-  push-last(downloads.downloads-in-progress, url);
-  curl-multi-add!(downloads, make(<curl-easy>, url: url, private: url));
+  curl-multi-add!(downloads, download!(url));
+  downloads.downloads-left := downloads.downloads-left + 1;
 end;
 
-define method finished!
-    (downloads :: <downloads>, url :: <string>) => ()
-  remove!(downloads.downloads-in-progress, url, test: \=);
+define function prepare!
+    (downloads :: <downloads>) => ()
+  let n = min(downloads.downloads-max-parallel, 
+              downloads.downloads-pending.size);
+  for (i from 0 below n)
+    forth!(downloads);
+  end;
 end;
 
-define method finished!
+define function finished!
     (downloads :: <downloads>, download :: <curl-easy>) => ()
   curl-multi-remove!(downloads, download);
   curl-easy-cleanup(download);
+  downloads.downloads-left := downloads.downloads-left - 1;
 end;
 
-define function finished?
-    (downloads :: <downloads>) => (_ :: <boolean>)
-  empty?(downloads.downloads-in-progress)
-end;
-
-define function process-messages
-  (downloads :: <downloads>) => (_ :: <boolean>)
+define function process-messages 
+    (downloads :: <downloads>) => ()
   block (exit)
     while(#t)
       let (msg, msgs-left) = curl-multi-info-read(downloads);
@@ -106,41 +122,43 @@ define function process-messages
         let url      = download.curl-private;
         let status   = curlmsg-result(msg);
         finished!(downloads, download);
-        finished!(downloads, url);
         debug("FINISHED - %s <%s>\n", status, url);
       else
         debug("CURLMsg (%d)\n", msg.curlmsg-msg);
       end if;
       if (~empty?(downloads.downloads-pending))
-        next-in-progress!(downloads)
+        forth!(downloads)
       end if;
     end while;
   end block;
-end function;
+end;
+
+define function perform!
+    (downloads :: <downloads>) => ()
+  while (downloads.downloads-left > 0)
+    curl-multi-perform(downloads);
+    process-messages(downloads);               
+    if (downloads.downloads-left > 0)
+      curl-multi-wait(downloads, timeout-ms: 1000);
+    end;
+  end while;
+end;
 
 define benchmark test-multi-chkspeed (tags: #("io", "slow"))
+  local method downloads!(urls, max-parallel)
+          make(<downloads>, 
+                max-parallel: max-parallel,
+                pending: as(<deque>, urls))
+        end;
   block ()
     with-curl-global ($curl-global-default)
-      with-curl-multi (downloads = make(<downloads>))
-        downloads.curl-multi-maxconnects := $max-parallel;
-        downloads.downloads-pending      := as(<deque>, $urls);
-
-        let max-in-progress = min($max-parallel, $urls.size);
-        for (i from 0 below max-in-progress)
-          next-in-progress!(downloads);
-        end;
- 
-        while (~finished?(downloads))
-          let still-alive = curl-multi-perform(downloads);
-          process-messages(downloads);               
-          if (~empty?(downloads.downloads-in-progress))
-            curl-multi-wait(downloads, timeout-ms: 1000);
-          end;
-        end while;
+      with-curl-multi (downloads = downloads!($urls, $max-parallel))
+        prepare!(downloads);
+        perform!(downloads);
       end with-curl-multi;
     end with-curl-global;
   exception (err :: <error>)
-    format-err("Houston, we have an error!> %s\n", err);
+    format-err("ERROR> %s\n", as(<string>, err));
     force-out();
   end block;
 end benchmark;
