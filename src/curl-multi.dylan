@@ -388,37 +388,21 @@ end macro with-curl-multi;
 //
 //////////////////////////////////////////////////////////////////////////////
 
-define C-function curlm-setopt-long
-  input parameter handle :: <curl-multi-handle>;
-  input parameter option :: <C-int>;
-  input parameter value :: <C-long>;
-  result curlm-code :: <C-int>;
-  c-name: "curlm_setopt_long";
-end C-function;
+define macro shim-curlm-setopt-definer
+  { define shim-curlm-setopt ?:name ?type:expression }
+    => { define C-function "curlm-setopt-" ## ?name
+           input parameter handle :: <curl-easy-handle>;
+           input parameter option :: <C-int>;
+           input parameter value  :: ?type;
+           result curl-code :: <C-int>;
+           c-name: "curlm_setopt_" ?"name";
+         end C-function; }
+end macro;
 
-define C-function curlm-setopt-objectpoint
-  input parameter handle :: <curl-multi-handle>;
-  input parameter option :: <C-int>;
-  input parameter value :: <C-void*>;
-  result curlm-code :: <C-int>;
-  c-name: "curlm_setopt_objectpoint";
-end C-function;
-
-define C-function curlm-setopt-functionpoint
-  input parameter handle :: <curl-multi-handle>;
-  input parameter option :: <C-int>;
-  input parameter value :: <C-function-pointer>;
-  result curlm-code :: <C-int>;
-  c-name: "curlm_setopt_functionpoint";
-end C-function;
-
-define C-function curlm-setopt-offt
-  input parameter handle :: <curl-multi-handle>;
-  input parameter option :: <C-int>;
-  input parameter value :: <C-long>;
-  result curlm-code :: <C-int>;
-  c-name: "curlm_setopt_offt";
-end C-function;
+define shim-curlm-setopt long <C-long>;
+define shim-curlm-setopt objectpoint <C-void*>;
+define shim-curlm-setopt functionpoint <C-function-pointer>;
+define shim-curlm-setopt offt <C-long>;
 
 ///////////////////////////////////////////////////////////////////////////////
 //
