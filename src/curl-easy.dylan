@@ -1291,53 +1291,23 @@ define constant <curlinfo-offt>  = <curl-offt>;
 //
 //////////////////////////////////////////////////////////////////////////////
 
-define C-function curl-easy-getinfo-string
-  input  parameter handle    :: <curl-easy-handle>;
-  input  parameter option    :: <C-int>;
-  output parameter curl-code :: <C-int*>;
-  result value :: <C-string>;
-  c-name: "curl_easy_getinfo_string";
-end C-function;
+define macro shim-curl-getinfo-definer
+  { define shim-curl-getinfo ?:name ?type:expression }
+    => { define C-function "curl-easy-getinfo-" ## ?name
+           input  parameter handle    :: <curl-easy-handle>;
+           input  parameter option    :: <C-int>;
+           output parameter curl-code :: <C-int*>;
+           result value :: ?type;
+           c-name: "curl_easy_getinfo_" ?"name";
+         end C-function; }
+end macro;
 
-define C-function curl-easy-getinfo-long
-  input  parameter handle    :: <curl-easy-handle>;
-  input  parameter option    :: <C-int>;
-  output parameter curl-code :: <C-int*>;
-  result value :: <c-long>;
-  c-name: "curl_easy_getinfo_long";
-end C-function;
-
-define C-function curl-easy-getinfo-double
-  input  parameter handle    :: <curl-easy-handle>;
-  input  parameter option    :: <C-int>;
-  output parameter curl-code :: <C-int*>;
-  result value :: <c-double>;
-  c-name: "curl_easy_getinfo_double";
-end C-function;
-
-define C-function curl-easy-getinfo-offt
-  input  parameter handle    :: <curl-easy-handle>;
-  input  parameter option    :: <C-int>;
-  output parameter curl-code :: <C-int*>;
-  result value :: <C-int>;
-  c-name: "curl_easy_getinfo_off_t";
-end C-function;
-
-define C-function curl-easy-getinfo-slist
-  input  parameter handle    :: <curl-easy-handle>;
-  input  parameter option    :: <C-int>;
-  output parameter curl-code :: <C-int*>;
-  result value :: <curl-slist*>;
-  c-name: "curl_easy_getinfo_slist";
-end C-function;
-
-define C-function curl-easy-getinfo-ptr
-  input  parameter handle    :: <curl-easy-handle>;
-  input  parameter option    :: <C-int>;
-  output parameter curl-code :: <C-int*>;
-  result value :: <C-void*>;
-  c-name: "curl_easy_getinfo_ptr";
-end C-function;
+define shim-curl-getinfo string <C-string>;
+define shim-curl-getinfo long <C-long>;
+define shim-curl-getinfo double <C-double>;
+define shim-curl-getinfo offt <C-int>;
+define shim-curl-getinfo slist <curl-slist*>;
+define shim-curl-getinfo ptr <C-void*>;
 
 // define C-function curl-easy-getinfo-tlssessioninfo
 //   input  parameter handle    :: <curl-easy-handle>;

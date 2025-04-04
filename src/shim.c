@@ -79,7 +79,7 @@ double curl_easy_getinfo_double (CURL *handle, CURLINFO option, CURLcode *code)
   return result;
 }
 
-curl_off_t curl_easy_getinfo_off_t (CURL *handle, CURLINFO option, CURLcode *code)
+curl_off_t curl_easy_getinfo_offt (CURL *handle, CURLINFO option, CURLcode *code)
 {
   curl_off_t result;
   *code = curl_easy_getinfo(handle, option, &result);
