@@ -19,7 +19,7 @@ CURLcode curl_setopt_functionpoint(CURL *handle, CURLoption option, void *f)
   return curl_easy_setopt(handle, option, f);
 }
 
-CURLcode curl_setopt_off_t(CURL *handle, CURLoption option, curl_off_t value)
+CURLcode curl_setopt_offt(CURL *handle, CURLoption option, curl_off_t value)
 {
   return curl_easy_setopt(handle, option, value);
 }
@@ -135,7 +135,7 @@ void* curl_easy_getinfo_ptr (CURL *handle, CURLINFO option, CURLcode *code)
    return curl_multi_setopt(handle, option, f);
  }
  
- CURLcode curlm_setopt_off_t(CURLM *handle, CURLoption option, curl_off_t value)
+ CURLcode curlm_setopt_offt(CURLM *handle, CURLoption option, curl_off_t value)
  {
    return curl_multi_setopt(handle, option, value);
  }

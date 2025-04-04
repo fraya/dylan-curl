@@ -412,12 +412,12 @@ define C-function curlm-setopt-functionpoint
   c-name: "curlm_setopt_functionpoint";
 end C-function;
 
-define C-function curlm-setopt-off-t
+define C-function curlm-setopt-offt
   input parameter handle :: <curl-multi-handle>;
   input parameter option :: <C-int>;
   input parameter value :: <C-long>;
   result curlm-code :: <C-int>;
-  c-name: "curlm_setopt_off_t";
+  c-name: "curlm_setopt_offt";
 end C-function;
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -451,8 +451,8 @@ define curlmopt objectpoint timerdata             = 5;
 define curlmopt long maxconnects                  = 6;
 define curlmopt long max-host-connections         = 7;
 define curlmopt long max-pipeline-length          = 8;
-define curlmopt off-t content-length-penalty-size = 9;
-define curlmopt off-t chunk-length-penalty-size   = 10;
+define curlmopt offt content-length-penalty-size  = 9;
+define curlmopt offt chunk-length-penalty-size    = 10;
 define curlmopt objectpoint pipelining-site-bl    = 11;
 define curlmopt objectpoint pipelining-server-bl  = 12;
 define curlmopt long max-total-connections        = 13;

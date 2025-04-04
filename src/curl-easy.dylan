@@ -323,7 +323,7 @@ end C-struct;
 
 define C-subtype <curl-easy-handle> (<C-void*>) end;
 define C-pointer-type <curl-easy-handle*> => <curl-easy-handle>;
-define constant <curl-off-t> = <integer>;
+define constant <curl-offt> = <integer>;
 
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -844,89 +844,31 @@ end C-mapped-subtype;
 //
 // A "shim" function is created for each `$curl-setopt-xxx` constant to
 // streamline the process of working with the variadic function
-// `curl_easy_getinfo`.
+// `curl_easy_setopt`.
 //
 //////////////////////////////////////////////////////////////////////////////
 
-define C-function curl-setopt-long
-  input parameter handle :: <curl-easy-handle>;
-  input parameter option :: <C-int>;
-  input parameter value :: <C-long>;
-  result curl-code :: <C-int>;
-  c-name: "curl_setopt_long";
-end C-function;
+define macro shim-curl-setopt-definer
+  { define shim-curl-setopt ?:name ?type:expression }
+    => { define C-function "curl-setopt-" ## ?name
+           input parameter handle :: <curl-easy-handle>;
+           input parameter option :: <C-int>;
+           input parameter value  :: ?type;
+           result curl-code :: <C-int>;
+           c-name: "curl_setopt_" ?"name";
+         end C-function; }
+end macro;
 
-define C-function curl-setopt-objectpoint
-  input parameter handle :: <curl-easy-handle>;
-  input parameter option :: <C-int>;
-  input parameter value :: <C-void*>;
-  result curl-code :: <C-int>;
-  c-name: "curl_setopt_objectpoint";
-end C-function;
-
-define C-function curl-setopt-functionpoint
-  input parameter handle :: <curl-easy-handle>;
-  input parameter option :: <C-int>;
-  input parameter value :: <C-function-pointer>;
-  result curl-code :: <C-int>;
-  c-name: "curl_setopt_functionpoint";
-end C-function;
-
-define C-function curl-setopt-off-t
-  input parameter handle :: <curl-easy-handle>;
-  input parameter option :: <C-int>;
-  input parameter value :: <C-long>;
-  result curl-code :: <C-int>;
-  c-name: "curl_setopt_off_t";
-end C-function;
-
-define C-function curl-setopt-blob
-  input parameter handle :: <curl-easy-handle>;
-  input parameter option :: <C-int>;
-  input parameter stblob :: <curlopt-blob>;
-  result curl-code :: <C-int>;
-  c-name: "curl_setopt_blob";
-end C-function;
-
-define C-function curl-setopt-stringpoint
-  input parameter handle :: <curl-easy-handle>;
-  input parameter option :: <C-int>;
-  input parameter value  :: <C-string>;
-  result curl-code :: <C-int>;
-  c-name: "curl_setopt_stringpoint";
-end C-function;
-
-define C-function curl-setopt-slistpoint
-  input parameter handle :: <curl-easy-handle>;
-  input parameter option :: <C-int>;
-  input parameter value  :: <curlopt-slistpoint>;
-  result curl-code :: <C-int>;
-  c-name: "curl_setopt_slistpoint";
-end C-function;
-
-define C-function curl-setopt-cbpoint
-  input parameter handle :: <curl-easy-handle>;
-  input parameter option :: <C-int>;
-  input parameter value  :: <C-void*>;
-  result curl-code :: <C-int>;
-  c-name: "curl_setopt_cbpoint";
-end C-function;
-
-define C-function curl-setopt-values
-  input parameter handle :: <curl-easy-handle>;
-  input parameter option :: <C-int>;
-  input parameter vals   :: <c-long>;
-  result curl-code :: <C-int>;
-  c-name: "curl_setopt_values";
-end C-function;
-
-define C-function curl-setopt-boolean
-  input parameter handle :: <curl-easy-handle>;
-  input parameter option :: <C-int>;
-  input parameter value  :: <curl-boolean>;
-  result curl-code :: <C-int>;
-  c-name: "curl_setopt_boolean";
-end C-function;
+define shim-curl-setopt long <c-long>;
+define shim-curl-setopt objectpoint <c-void*>;
+define shim-curl-setopt functionpoint <c-function-pointer>;
+define shim-curl-setopt offt <c-long>;
+define shim-curl-setopt blob <curlopt-blob>;
+define shim-curl-setopt stringpoint <c-string>;
+define shim-curl-setopt slistpoint <curlopt-slistpoint>;
+define shim-curl-setopt cbpoint <c-void*>;
+define shim-curl-setopt values <c-long>;
+define shim-curl-setopt boolean <curl-boolean>;
 
 //////////////////////////////////////////////////////////////////////////////
 //
@@ -937,7 +879,7 @@ end C-function;
 define constant <curlopt-long> = <integer>;
 define constant <curlopt-objectpoint> = <object>;
 define constant <curlopt-functionpoint> = <object>;
-define constant <curlopt-off-t> = <integer>;
+define constant <curlopt-offt> = <integer>;
 define constant <curlopt-blob> = <curl-blob*>;
 define constant <curlopt-stringpoint> = <string>;
 define constant <curlopt-slistpoint> = <curl-slist*>;
@@ -960,7 +902,7 @@ define constant <curlopt-boolean> = <boolean>;
 define constant $curlopttype-long          = 0;
 define constant $curlopttype-objectpoint   = 10000;
 define constant $curlopttype-functionpoint = 20000;
-define constant $curlopttype-off-t         = 30000;
+define constant $curlopttype-offt          = 30000;
 define constant $curlopttype-blob          = 40000;
 define constant $curlopttype-stringpoint   = $curlopttype-objectpoint;
 define constant $curlopttype-slistpoint    = $curlopttype-objectpoint;
@@ -1124,12 +1066,12 @@ define curlopt values proxyauth = 111;
 define curlopt long server-response-timeout = 112;
 define curlopt values ipresolve = 113;
 define curlopt long maxfilesize = 114;
-define curlopt off-t infilesize-large = 115;
-define curlopt off-t resume-from-large = 116;
-define curlopt off-t maxfilesize-large = 117;
+define curlopt offt infilesize-large = 115;
+define curlopt offt resume-from-large = 116;
+define curlopt offt maxfilesize-large = 117;
 define curlopt stringpoint netrc-file = 118;
 define curlopt values use-ssl = 119;
-define curlopt off-t postfieldsize-large = 120;
+define curlopt offt postfieldsize-large = 120;
 define curlopt boolean tcp-nodelay = 121;
 // 122-128 obsolete
 define curlopt values ftpsslauth = 129;
@@ -1147,8 +1089,8 @@ define curlopt long localport = 139;
 define curlopt long localportrange = 140;
 define curlopt long connect-only = 141;
 // 142-144 deprecated
-define curlopt off-t max-send-speed-large = 145;
-define curlopt off-t max-recv-speed-large = 146;
+define curlopt offt max-send-speed-large = 145;
+define curlopt offt max-recv-speed-large = 146;
 define curlopt stringpoint ftp-alternative-to-user = 147;
 define curlopt functionpoint sockoptfunction = 148;
 define curlopt cbpoint sockoptdata = 149;
@@ -1263,7 +1205,7 @@ define curlopt stringpoint request-target = 266;
 define curlopt long socks5-auth = 267;
 define curlopt long ssh-compression = 268;
 define curlopt objectpoint mimepost = 269;
-define curlopt off-t timevalue-large = 270;
+define curlopt offt timevalue-large = 270;
 define curlopt long happy-eyeballs-timeout-ms = 271;
 define curlopt functionpoint resolver-start-function = 272;
 define curlopt cbpoint resolver-start-data = 273;
@@ -1335,7 +1277,7 @@ define constant <curlinfo-ptr>    = <C-void*>;
 // define constant <curlinfo-tlssessioninfo> = <curl-tlssessioninfo*>;
 // define constant <curlinfo-certinfo> = <curl-certinfo*>;
 // define constant <curlinfo-socket> =
-define constant <curlinfo-off-t>  = <curl-off-t>;
+define constant <curlinfo-offt>  = <curl-offt>;
 // define constant <curlinfo-mask>
 // define constant <curlinfo-typemask>
 
@@ -1373,7 +1315,7 @@ define C-function curl-easy-getinfo-double
   c-name: "curl_easy_getinfo_double";
 end C-function;
 
-define C-function curl-easy-getinfo-off-t
+define C-function curl-easy-getinfo-offt
   input  parameter handle    :: <curl-easy-handle>;
   input  parameter option    :: <C-int>;
   output parameter curl-code :: <C-int*>;
@@ -1431,7 +1373,7 @@ define constant $curlinfo-double   = #x300000;
 define constant $curlinfo-slist    = #x400000;
 define constant $curlinfo-ptr      = #x400000; // same as slist
 define constant $curlinfo-socket   = #x500000; ignore($curlinfo-socket);
-define constant $curlinfo-off-t    = #x600000;
+define constant $curlinfo-offt     = #x600000;
 
 define constant $curlinfo-mask     = #x0fffff;
 ignore($curlinfo-mask);
@@ -1481,16 +1423,16 @@ define curlinfo double total-time = 3;
 define curlinfo double namelookup-time = 4;
 define curlinfo double connect-time = 5;
 define curlinfo double pretransfer-time = 6;
-define curlinfo off-t size-upload-t = 7;
-define curlinfo off-t size-download-t = 8;
-define curlinfo off-t speed-download-t = 9;
-define curlinfo off-t speed-upload-t = 10;
+define curlinfo offt size-upload-t = 7;
+define curlinfo offt size-download-t = 8;
+define curlinfo offt speed-download-t = 9;
+define curlinfo offt speed-upload-t = 10;
 define curlinfo long header-size = 11;
 define curlinfo long request-size = 12;
 define curlinfo long ssl-verifyresult = 13;
-define curlinfo off-t filetime-t = 14;
-define curlinfo off-t content-length-download-t = 15;
-define curlinfo off-t content-length-upload-t = 16;
+define curlinfo offt filetime-t = 14;
+define curlinfo offt content-length-download-t = 15;
+define curlinfo offt content-length-upload-t = 16;
 define curlinfo double starttransfer-time = 17;
 define curlinfo string content-type = 18;
 define curlinfo double redirect-time = 19;
@@ -1524,22 +1466,22 @@ define curlinfo long http-version = 46;
 define curlinfo long proxy-ssl-verifyresult = 47;
 define curlinfo long protocol = 48;
 define curlinfo string scheme = 49;
-define curlinfo off-t total-time-t = 50;
-define curlinfo off-t namelookup-time-t = 51;
-define curlinfo off-t connect-time-t = 52;
-define curlinfo off-t pretransfer-time-t = 53;
-define curlinfo off-t starttransfer-time-t = 54;
-define curlinfo off-t redirect-time-t = 55;
-define curlinfo off-t appconnect-time-t = 56;
-define curlinfo off-t retry-after = 57;
+define curlinfo offt total-time-t = 50;
+define curlinfo offt namelookup-time-t = 51;
+define curlinfo offt connect-time-t = 52;
+define curlinfo offt pretransfer-time-t = 53;
+define curlinfo offt starttransfer-time-t = 54;
+define curlinfo offt redirect-time-t = 55;
+define curlinfo offt appconnect-time-t = 56;
+define curlinfo offt retry-after = 57;
 define curlinfo string effective-method = 58;
 define curlinfo long proxy-error = 59;
 define curlinfo string referer = 60;
 define curlinfo string cainfo = 61;
 define curlinfo string capath = 62;
-define curlinfo off-t xfer-id = 63;
-define curlinfo off-t conn-id = 64;
-define curlinfo off-t queue-time-t = 65;
+define curlinfo offt xfer-id = 63;
+define curlinfo offt conn-id = 64;
+define curlinfo offt queue-time-t = 65;
 define curlinfo long used-proxy = 66;
-define curlinfo off-t posttransfer-time-t = 67;
-define curlinfo off-t earlydata-sent-t = 68;
+define curlinfo offt posttransfer-time-t = 67;
+define curlinfo offt earlydata-sent-t = 68;
