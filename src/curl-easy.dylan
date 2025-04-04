@@ -608,14 +608,14 @@ define class <curl-option-set-error> (<curl-option-error>) end;
 // Error produced trying to set an option that does not exists
 
 define class <curl-option-unknown-error> (<curl-option-error>)
-  inherited slot curl-error-code = $curle-failed-init;
+  inherited slot curl-error-code = $curle-unknown-option;
   constant slot curl-error-keyword :: <symbol>,
     required-init-keyword: keyword:;
 end;
 
 define method curl-error-message
     (err :: <curl-option-unknown-error>) => (message :: <string>)
-  format-to-string("Curl option '%s:' is unknown", err.curl-error-keyword)
+  format-to-string("%s: %=", next-method(), err.curl-error-keyword)
 end;
 
 // Error produced performing the request
