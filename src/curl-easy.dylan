@@ -664,19 +664,14 @@ define method make
     error(make(<curl-init-error>))
   end;
 
-  // initialize curl's options using setters.
-  // parameter options contains pairs of keywords and values
-  // (e.g. #"url", "http://example.com", #"verbose", #t ...)
+  // check each pair of keyword-value in options, if the keyword
+  // is a curl option, it uses the setter
+
   for (i from 0 below options.size - 1 by 2)
     let keyword = options[i];
-    let value = options[i + 1];
-    // Ugly hack: Filter #"handle" keyword since this value is set before in
-    // next-method call
-    if (keyword ~= #"handle")
-      let setter = element(*curl-options*, keyword, default: #f);
-      if (~setter)
-        error(make(<curl-option-unknown-error>, keyword: keyword))
-      end;
+    let value   = options[i + 1];
+    let setter  = element(*curl-options*, keyword, default: #f);
+    if (setter)
       setter(value, curl);
     end if;
   end for;
