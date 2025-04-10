@@ -18,6 +18,7 @@ define module curl-multi-test-suite
   use c-ffi;
   use file-system;
   use format-out;
+  use locators;
   use operating-system;
   use standard-io;
   use streams;
