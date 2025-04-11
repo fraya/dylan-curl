@@ -3,6 +3,8 @@ Module: dylan-user
 define library curl-multi-test-suite
   use common-dylan;
   use c-ffi;
+  use collections,
+    import: { table-extensions};
   use io;
   use strings;
   use system;
@@ -23,6 +25,7 @@ define module curl-multi-test-suite
   use standard-io;
   use streams;
   use strings;
+  use table-extensions;
   use threads;
   use testworks;
 

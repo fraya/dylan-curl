@@ -678,7 +678,10 @@ define method make
   curl
 end;
 
-define function curl-easy-cleanup
+define open generic curl-easy-cleanup
+  (curl :: <curl-easy>) => ();
+
+define method curl-easy-cleanup
     (curl :: <curl-easy>) => ()
   curl-slist-free-all(curl.curl-headers);
   c-curl-easy-cleanup(curl.curl-easy-handle)
