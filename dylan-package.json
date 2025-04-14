@@ -2,8 +2,8 @@
     "dependencies": [
     ],
     "dev-dependencies": [
-	"sphinx-extensions",
-	"testworks"
+	    "sphinx-extensions",
+	    "testworks"
     ],
     "description": "Curl library wrapper",
     "name": "curl",

@@ -2,12 +2,11 @@ Module: dylan-user
 
 define library dylan-curl
   export
-    curl-easy,
-    curl-easy-impl,
-    curl-multi,
-    curl-multi-impl;
+    lib-curl-easy,
+    lib-curl-multi;
   
   use common-dylan;
   use c-ffi;
-  use io;
+  use io,
+    import { format; };
 end library;
