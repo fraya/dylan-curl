@@ -31,11 +31,11 @@ end macro;
 //
 // The `curlopt-definer` macro serves two purposes:
 //
-// 1. Defines a constant for each identifier by adding the base index 
+// 1. Defines a constant for each identifier by adding the base index
 //    to the identifier's numeric value.
 //
 // 2. Creates a function to set the option.
-//    This function calls the corresponding shim function and checks 
+//    This function calls the corresponding shim function and checks
 //    the status code to handle errors appropriately.
 //
 //////////////////////////////////////////////////////////////////////////////
@@ -45,8 +45,8 @@ define macro curlopt-definer
     => { define constant "$curlopt-" ## ?id
            = "$curlopttype-" ## ?type + ?number;
 
-         define function "curl-setopt-" ## ?id
-             (option :: "<curlopt-" ## ?type ## ">", handle :: <curl-easy-handle>)
+         define function "curl-easy-setopt-" ## ?id
+             (handle :: <curl-easy-handle>, option :: "<curlopt-" ## ?type ## ">")
           => ()
            let code = "curl-setopt-" ## ?type (handle, "$curlopt-" ## ?id, option);
            if (code ~= $curle-ok)
@@ -81,7 +81,7 @@ end macro;
 //
 // The `curlinfo-definer` macro serves two purposes:
 //
-// 1. Defines a constant for each identifier by adding the base index 
+// 1. Defines a constant for each identifier by adding the base index
 //    to the identifier's numeric value.
 // 2. Creates a function to retrieve information about the identifier.
 //    This function calls the corresponding shim function and checks
@@ -94,7 +94,7 @@ define macro curlinfo-definer
     => { define constant "$curlinfo-" ## ?id
            = "$curlinfo-" ## ?type + ?number;
 
-         define function "curl-" ## ?id
+         define function "curl-easy-getinfo-" ## ?id
               (handle :: <curl-easy-handle>)
            => (result :: "<curlinfo-" ## ?type ## ">")
             let (result, code)
@@ -104,4 +104,38 @@ define macro curlinfo-definer
             end;
             result
          end }
+end macro;
+
+define macro with-curl-easy-handle
+  { with-curl-easy-handle (?curl:variable) ?body:body end }
+    => { with-curl-easy-handle (?curl = curl-easy-init()) ?body end }
+  { with-curl-easy-handle (?curl:variable = ?handler:expression) ?body:body end }
+    => { let _curl = #f;
+         block ()
+           _curl := ?handler;
+           let ?curl :: <curl-easy-handle> = _curl;
+           if (null-pointer?(?curl))
+             error(make(<curl-init-error>))
+           end;
+           ?body
+         cleanup
+           if (_curl)
+             curl-easy-cleanup(_curl)
+           end;
+         end block }
+end macro;
+
+define macro with-curl-global
+  { with-curl-global () ?body:body end }
+    => { with-curl-global($curl-global-default) ?body end }
+  { with-curl-global (?flags:expression) ?body:body end }
+    => { let status = curl-global-init(?flags);
+         if (status ~= $curle-ok)
+           error(make(<curl-init-error>))
+         end;
+         block ()
+           ?body
+         cleanup
+           curl-global-cleanup()
+         end block }
 end macro;
