@@ -14,6 +14,13 @@ Files:          library.dylan
                 lib-curl/multi/lib-curl-multi-constants.dylan
                 lib-curl/multi/lib-curl-multi-types.dylan
                 lib-curl/multi/lib-curl-multi-functions.dylan
+                dylan-curl/easy/dylan-curl-easy-module.dylan
+                dylan-curl/easy/dylan-curl-easy-types.dylan
+                dylan-curl/easy/dylan-curl-easy-functions.dylan
+                dylan-curl/easy/dylan-curl-easy-errors.dylan
+                dylan-curl/easy/dylan-curl-easy-macros.dylan
+                dylan-curl/easy/dylan-curl-easy-options.dylan
+                dylan-curl/easy/dylan-curl-easy-getinfo.dylan
 C-Source-Files: lib-curl/easy/lib-curl-easy-shim-setopt.c
                 lib-curl/easy/lib-curl-easy-shim-getinfo.c
 C-Libraries:    -lcurl

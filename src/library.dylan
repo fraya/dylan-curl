@@ -3,7 +3,8 @@ Module: dylan-user
 define library dylan-curl
   export
     lib-curl-easy,
-    lib-curl-multi;
+    lib-curl-multi,
+    dylan-curl-easy;
   
   use common-dylan;
   use c-ffi;

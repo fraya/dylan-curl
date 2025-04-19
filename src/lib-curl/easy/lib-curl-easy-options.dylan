@@ -4,12 +4,8 @@ Author:      Fernando Raya
 Copyright:   Copyright (C) 2025, Dylan Hackers. All rights reserved.
 License:     See License.txt in this distribution for details.
 Reference:   https://github.com/curl/curl/blob/b723f6a445b4d5757db915fe9946158e4158def4/include/curl/curl.h#L1110
-
-//
-// Curl options (ordered by number)
-//
-// define curlopt <curlopt-type> <name> = <number-id>
-//
+Comments:    See "lib-curl-easy-macros.dylan"
+Comments:    Curl options (ordered by number)
 
 define curlopt cbpoint writedata = 1;
 define curlopt stringpoint url = 2;

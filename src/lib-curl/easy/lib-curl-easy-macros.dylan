@@ -47,14 +47,10 @@ define macro curlopt-definer
 
          define function "curl-easy-setopt-" ## ?id
              (handle :: <curl-easy-handle>, option :: "<curlopt-" ## ?type ## ">")
-          => ()
-           let code = "curl-setopt-" ## ?type (handle, "$curlopt-" ## ?id, option);
-           if (code ~= $curle-ok)
-             error(make(<curl-option-set-error>, code: code))
-           end;
-           option
-         end; }
-end macro curlopt-definer;
+          => (curl-code :: <integer>)
+           "curl-setopt-" ## ?type (handle, "$curlopt-" ## ?id, option);
+         end }
+end macro;
 
 //////////////////////////////////////////////////////////////////////////////
 //
@@ -96,15 +92,18 @@ define macro curlinfo-definer
 
          define function "curl-easy-getinfo-" ## ?id
               (handle :: <curl-easy-handle>)
-           => (result :: "<curlinfo-" ## ?type ## ">")
-            let (result, code)
-              = "curl-easy-getinfo-" ## ?type (handle, "$curlinfo-" ## ?id);
-            unless (code = $curle-ok)
-              signal(make(<curl-info-error>, code: code))
-            end;
-            result
+           => (result :: "<curlinfo-" ## ?type ## ">", curl-code :: <integer>)
+            "curl-easy-getinfo-" ## ?type (handle, "$curlinfo-" ## ?id);
          end }
 end macro;
+
+///////////////////////////////////////////////////////////////////////////////
+//
+// with-curl-easy-handle:
+//
+// Macro to release a handle.
+//
+///////////////////////////////////////////////////////////////////////////////
 
 define macro with-curl-easy-handle
   { with-curl-easy-handle (?curl:variable) ?body:body end }
@@ -125,13 +124,21 @@ define macro with-curl-easy-handle
          end block }
 end macro;
 
+///////////////////////////////////////////////////////////////////////////////
+//
+// with-curl-global:
+//
+// Macro to global initialization and release of the library.
+//
+///////////////////////////////////////////////////////////////////////////////
+
 define macro with-curl-global
   { with-curl-global () ?body:body end }
     => { with-curl-global($curl-global-default) ?body end }
   { with-curl-global (?flags:expression) ?body:body end }
-    => { let status = curl-global-init(?flags);
-         if (status ~= $curle-ok)
-           error(make(<curl-init-error>))
+    => { let code = curl-global-init(?flags);
+         if (code ~= $curle-ok)
+           error(make(<curl-error>, curle: code))
          end;
          block ()
            ?body

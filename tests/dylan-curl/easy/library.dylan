@@ -1,22 +1,22 @@
 Module: dylan-user
 
-define library lib-curl-easy-test-suite
+define library dylan-curl-easy-test-suite
   use common-dylan;
   use c-ffi;
   use dylan-curl,
-    import: { lib-curl-easy };
+    import: { dylan-curl-easy };
   use io,
     import: { format-out };
   use testworks;
 end library;
 
-define module lib-curl-easy-test-suite
+define module dylan-curl-easy-test-suite
   use common-dylan;
   use c-ffi;
   use format-out;
   use threads;
   use testworks;
 
-  use lib-curl-easy;
+  use dylan-curl-easy;
 
 end module;

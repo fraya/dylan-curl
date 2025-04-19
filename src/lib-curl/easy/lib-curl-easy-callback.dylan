@@ -43,8 +43,8 @@ define function curl-write-callback
     if (*curl-write-callback*)
       *curl-write-callback*(data, size-t, bytes, user-data)
     else
-      error(make(<curl-init-callback-error>,
-                 callback: "*curl-write-callback*"))
+      error(make(<curl-init-error>,
+                 detail: "write-callback function not set"))
     end
 end;
 
@@ -59,12 +59,10 @@ define function curl-header-callback
      bytes     :: <integer>,         // size of the data 
      user-data :: <C-void*>)         // object passed in 'writedata'
   => (bytes-written :: <integer>)
-    if (*curl-header-callback*)
-      *curl-header-callback*(buffer, size-t, bytes, user-data)
-    else
-      error(make(<curl-init-callback-error>,
-                 callback: "*curl-header-callback*"))
-    end
+    if (~*curl-header-callback*)
+      error(make(<curl-init-error>))
+    end;
+    *curl-header-callback*(buffer, size-t, bytes, user-data)
 end;
 
 define function curl-debug-callback
@@ -74,12 +72,10 @@ define function curl-debug-callback
      data-size :: <integer>,          // data size in bytes
      user-data :: <C-void*>)          // Set in curl-setopt-debugdata
   => (code :: <integer>)
-    if (*curl-debug-callback*)
-      *curl-debug-callback*(handle, type, data, data-size, user-data)
-    else
-      error(make(<curl-init-callback-error>,
-                 callback: "*curl-debug-callback*"))
-    end
+    if (~*curl-debug-callback*)
+      error(make(<curl-init-error>))
+    end;
+    *curl-debug-callback*(handle, type, data, data-size, user-data)
 end;
 
 //
@@ -98,7 +94,10 @@ define function curl-progress-callback
      download-now    :: <integer>,    // downloaded bytes already
      upload-total    :: <integer>,    // bytes
      upload-now      :: <integer>)    // number of bytes uploaded already
- => (status  :: <integer>)
+  => (status  :: <integer>)
+    if (~*curl-progress-callback*)
+      error(make(<curl-init-error>))
+    end;
     *curl-progress-callback*(user-data,
                              download-total,
                              download-now,

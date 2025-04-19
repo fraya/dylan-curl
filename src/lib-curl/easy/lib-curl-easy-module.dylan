@@ -357,6 +357,14 @@ define module lib-curl-easy
     <curlopt-values>,
     <curlopt-boolean>;
 
+  create
+    <curlinfo-string>,
+    <curlinfo-long>,
+    <curlinfo-double>,
+    <curlinfo-slist>,
+    <curlinfo-ptr>,
+    <curlinfo-offt>;
+
   /////////////////////////////////////////////////////////////////////////////
   //
   // Functions. See: https://curl.se/libcurl/c/allfuncs.html
@@ -448,13 +456,7 @@ define module lib-curl-easy
     <curl-error>,
     curl-error-code,
     curl-error-message,
-    <curl-init-error>,
-    <curl-init-callback-error>,
-    <curl-option-error>,
-    <curl-option-set-error>,
-    <curl-option-unknown-error>,
-    <curl-perform-error>,
-    <curl-info-error>;
+    <curl-init-error>;
 
   // Curl macros
   create
@@ -843,23 +845,12 @@ define module lib-curl-easy
 end module lib-curl-easy;
 
 define module %lib-curl-easy
+
   use lib-curl-easy;
   
   use common-dylan;
   use c-ffi;
   use format,
     import: { format-to-string };
-//   use format-out;
-
-//   export
-//     *curl-library-initialized?*,
-//     <curl-easy-handle>,
-//     <curl-easy-handle*>,
-//     curl-easy-handle,
-//     c-curl-free;
-
-//   export
-//     <curl-boolean>;
-
-
+  
 end module;
