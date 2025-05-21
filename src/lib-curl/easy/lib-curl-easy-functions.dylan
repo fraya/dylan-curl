@@ -197,6 +197,25 @@ end C-function;
 
 // TODO: curl-global-sslset needed??
 
+// https://curl.se/libcurl/c/curl_mime_addpart.html
+
+define C-function curl-mime-addpart
+  input parameter mime :: <curl-mime*>;
+  result part :: <curl-mimepart*>;
+  c-name: "curl_mime_addpart";
+end C-function;
+
+// https://curl.se/libcurl/c/curl_mime_data.html
+
+define C-function curl-mime-data
+  input parameter part      :: <curl-mimepart*>;
+  input parameter data      :: <C-string>;
+  // parameter data-size is ignored, meaning that the size
+  // of the string 'data' is used
+  result code :: <curl-code>;
+  c-name: "curl_mime_data";
+end C-function;
+
 // https://curl.se/libcurl/c/curl_global_trace.html
 
 // NOTE: only from version 8.3
@@ -211,6 +230,21 @@ end C-function;
 define C-function curl-global-cleanup
   c-name: "curl_global_cleanup";
 end C-function;
+
+// https://curl.se/libcurl/c/curl_mime_free.html
+
+define C-function curl-mime-free
+  input parameter mime :: <curl-mime*>;
+  c-name: "curl_mime_free";
+end;
+
+// https://curl.se/libcurl/c/curl_mime_init.html
+
+define C-function curl-mime-init
+  input parameter handle :: <curl-easy-handle>;
+  result curl-mime :: <curl-mime*>;
+  c-name: "curl_mime_init";
+end;
 
 // https://curl.se/libcurl/c/curl_slist_append.html
 

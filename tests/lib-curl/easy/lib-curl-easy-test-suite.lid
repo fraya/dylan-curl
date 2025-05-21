@@ -4,6 +4,7 @@ Files:       library.dylan
              lib-curl-easy-test-getinfo-cainfo.dylan
              lib-curl-easy-test-debug-callback.dylan
              lib-curl-easy-test-escape-unescape.dylan
+             lib-curl-easy-test-mime.dylan
              lib-curl-easy-test-httpbin.dylan
              lib-curl-easy-test-https.dylan
              lib-curl-easy-test-simple-http-page.dylan

@@ -404,15 +404,15 @@ define module lib-curl-easy
     // TODO: curl-global-trace,
     // curl-maprintf (*) 
     // curl-mfprintf (*)
-    // TODO: curl-mime-addpart
-    // TODO: curl-mime-data
+    curl-mime-addpart,
+    curl-mime-data,
     // TODO: curl-mime-data-cb
     // TODO: curl-mime-encoder
     // TODO: curl-mime-filedata
     // TODO: curl-mime-filename
-    // TODO: curl-mime-free
+    curl-mime-free,
     // TODO: curl-mime-headers
-    // TODO: curl-mime-init
+    curl-mime-init,
     // TODO: curl-mime-name
     // TODO: curl-mime-subparts
     // TODO: curl-mime-type

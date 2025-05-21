@@ -138,6 +138,28 @@ define C-struct <curl-easy-option>
 end C-struct;
 
 //
+// <curm-mimepart>
+// 
+// Reference:
+// - https://github.com/curl/curl/blob/54ef546ec4f1a9f251674fe4501bbf98df911074/lib/mime.h#L110
+//
+
+define C-struct <curl-mimepart>
+  pointer-type-name: <curl-mimepart*>;
+end;
+
+//
+// <curl-mime>
+//
+// Reference:
+// - https://github.com/curl/curl/blob/54ef546ec4f1a9f251674fe4501bbf98df911074/lib/mime.h#L101
+//
+
+define C-struct <curl-mime>
+  pointer-type-name: <curl-mime*>;
+end;
+  
+//
 // <curl-boolean>:
 //
 // Maps the <boolean> type to <integer>, where functions interpret
