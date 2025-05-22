@@ -413,7 +413,7 @@ define module lib-curl-easy
     curl-mime-free,
     // TODO: curl-mime-headers
     curl-mime-init,
-    // TODO: curl-mime-name
+    curl-mime-name,
     // TODO: curl-mime-subparts
     // TODO: curl-mime-type
     // TODO: curl-printf

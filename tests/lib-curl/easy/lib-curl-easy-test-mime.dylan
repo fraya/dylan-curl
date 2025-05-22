@@ -14,6 +14,8 @@ define test test-mime ()
         let part = curl-mime-addpart(mime);
         let code = curl-mime-data(part, "This is the field data");
         assert-equal($curle-ok, code);
+        let code = curl-mime-name(part, "shoe_size");
+        assert-equal($curle-ok, code);
 
         curl-easy-setopt-mimepost(curl, mime);
         curl-easy-setopt-url(curl, "https://example.com");

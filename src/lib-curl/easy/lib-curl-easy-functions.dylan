@@ -246,6 +246,15 @@ define C-function curl-mime-init
   c-name: "curl_mime_init";
 end;
 
+// https://curl.se/libcurl/c/curl_mime_name.html
+
+define C-function curl-mime-name
+  input parameter part :: <curl-mimepart*>;
+  input parameter name :: <C-string>;
+  result curl-code :: <curl-code>;
+  c-name: "curl_mime_name";
+end;
+
 // https://curl.se/libcurl/c/curl_slist_append.html
 
 define C-function curl-slist-append
