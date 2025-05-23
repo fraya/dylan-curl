@@ -231,6 +231,15 @@ define C-function curl-global-cleanup
   c-name: "curl_global_cleanup";
 end C-function;
 
+// https://curl.se/libcurl/c/curl_mime_filename.html
+
+define C-function curl-mime-filename
+  input parameter part :: <curl-mimepart*>;
+  input parameter filename :: <C-string>;
+  result curl-code :: <curl-code>;
+  c-name: "curl_mime_filename";
+end;
+
 // https://curl.se/libcurl/c/curl_mime_free.html
 
 define C-function curl-mime-free

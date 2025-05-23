@@ -409,7 +409,7 @@ define module lib-curl-easy
     // TODO: curl-mime-data-cb
     // TODO: curl-mime-encoder
     // TODO: curl-mime-filedata
-    // TODO: curl-mime-filename
+    curl-mime-filename,
     curl-mime-free,
     // TODO: curl-mime-headers
     curl-mime-init,
