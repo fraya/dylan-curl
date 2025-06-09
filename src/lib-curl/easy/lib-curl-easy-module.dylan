@@ -432,7 +432,7 @@ define module lib-curl-easy
     curl-slist-append,
     curl-slist-free-all,
     // curl-strequal is not imported
-    // TODO: curl-strnequal
+    // curl-strnequal is not imported
     // TODO: curl-unscape
     // TODO: curl-url
     // TODO: curl-url-cleanup
