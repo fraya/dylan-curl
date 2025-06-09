@@ -431,7 +431,7 @@ define module lib-curl-easy
     // TODO: curl-share-strerror
     curl-slist-append,
     curl-slist-free-all,
-    // TODO: curl-strequal
+    // curl-strequal is not imported
     // TODO: curl-strnequal
     // TODO: curl-unscape
     // TODO: curl-url
