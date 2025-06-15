@@ -354,3 +354,46 @@ define constant $curlinfo-socket   = #x500000; ignore($curlinfo-socket);
 define constant $curlinfo-offt     = #x600000;
 define constant $curlinfo-mask     = #x0fffff; ignore($curlinfo-mask);
 define constant $curlinfo-typemask = #xf00000; ignore($curlinfo-typemask);
+
+//
+// Curlucode
+// The URL interface returns a CURLUcode to indicate when an error has occurred.
+//
+// Reference:
+//
+// - https://curl.se/libcurl/c/libcurl-errors.html
+//
+
+define constant $curlue-ok                 = 0;
+define constant $curlue-bad-handle         = 1;
+define constant $curlue-bad-partpointer    = 2;
+define constant $curlue-malformed-input    = 3;
+define constant $curlue-bad-port-number    = 4;
+define constant $curlue-unsupported-scheme = 5;
+define constant $curlue-urldecode          = 6;
+define constant $curlue-out-of-memory      = 7;
+define constant $curlue-user-not-allowed   = 8;
+define constant $curlue-unknown-part       = 9;
+define constant $curlue-no-scheme          = 10;
+define constant $curlue-no-user            = 11;
+define constant $curlue-no-password        = 12;
+define constant $curlue-no-options         = 13;
+define constant $curlue-no-host            = 14;
+define constant $curlue-no-port            = 15;
+define constant $curlue-no-query           = 16;
+define constant $curlue-no-fragment        = 17;
+define constant $curlue-no-zoneid          = 18;
+define constant $curlue-bad-file-url       = 19;
+define constant $curlue-bad-fragment       = 20;
+define constant $curlue-bad-hostname       = 21;
+define constant $curlue-bad-ipv6           = 22;
+define constant $curlue-bad-login          = 23;
+define constant $curlue-bad-password       = 24;
+define constant $curlue-bad-path           = 25;
+define constant $curlue-bad-query          = 26;
+define constant $curlue-bad-scheme         = 27;
+define constant $curlue-bad-slashes        = 28;
+define constant $curlue-bad-user           = 29;
+define constant $curlue-lacks-idn          = 30;
+define constant $curlue-too-large          = 31;
+

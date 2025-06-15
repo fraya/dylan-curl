@@ -167,6 +167,43 @@ define module lib-curl-easy
     $curlhe-ok,
     $curlhe-out-of-memory;
 
+  // Curl constants for the URL interface
+
+  create
+    $curlue-ok,
+    $curlue-bad-handle,
+    $curlue-bad-partpointer,
+    $curlue-malformed-input,
+    $curlue-bad-port-number,
+    $curlue-unsupported-scheme,
+    $curlue-urldecode,
+    $curlue-out-of-memory,
+    $curlue-user-not-allowed,
+    $curlue-unknown-part,
+    $curlue-no-scheme,
+    $curlue-no-user,
+    $curlue-no-password,
+    $curlue-no-options,
+    $curlue-no-host,
+    $curlue-no-port,
+    $curlue-no-query,
+    $curlue-no-fragment,
+    $curlue-no-zoneid,
+    $curlue-bad-file-url,
+    $curlue-bad-fragment,
+    $curlue-bad-hostname,
+    $curlue-bad-ipv6,
+    $curlue-bad-login,
+    $curlue-bad-password,
+    $curlue-bad-path,
+    $curlue-bad-query,
+    $curlue-bad-scheme,
+    $curlue-bad-slashes,
+    $curlue-bad-user,
+    $curlue-lacks-idn,
+    $curlue-too-large;
+
+
   // Information types passed to a debug callback
 
   create
