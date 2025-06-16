@@ -55,7 +55,7 @@ define module lib-curl-multi
   create
     curl-multi-add-handle,
     curl-multi-cleanup,
-    curl-multi-get-handles,
+    // TODO: v8.4.0 curl-multi-get-handles,
     curl-multi-info-read,
     curl-multi-init,
     curl-multi-perform,

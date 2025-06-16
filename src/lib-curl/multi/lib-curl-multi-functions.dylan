@@ -45,13 +45,14 @@ define C-function curl-multi-remove-handle
   c-name: "curl_multi_remove_handle";
 end C-function;
 
+// v.8.4.0
 // https://curl.se/libcurl/c/curl_multi_get_handles.html
 
-define C-function curl-multi-get-handles
-  input parameter multi :: <curl-multi-handle>;
-  result handles        :: <curl-easy-handle*>;
-  c-name: "curl_multi_get_handles";
-end C-function;
+// define C-function curl-multi-get-handles
+//   input parameter multi :: <curl-multi-handle>;
+//   result handles        :: <curl-easy-handle*>;
+//   c-name: "curl_multi_get_handles";
+// end C-function;
 
 // https://curl.se/libcurl/c/curl_multi_info_read.html
 
