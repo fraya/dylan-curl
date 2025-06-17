@@ -48,7 +48,7 @@ define test test-lib-curl-easy-debug-callback ()
     with-curl-global ()
       with-curl-easy-handle (curl)
 
-        curl-easy-setopt-url(curl, "https://example.com/");
+        curl-easy-setopt-url(curl, "https://example.org/");
         curl-easy-setopt-verbose(curl, #t);
         curl-easy-setopt-debugfunction(curl, $curl-debug-callback);
         

@@ -39,7 +39,7 @@ end function;
 
 define test dylan-curl-easy-test-debug-callback ()
   with-curl-global ()
-    with-curl-easy (curl = "https://example.com/",
+    with-curl-easy (curl = "https://example.org/",
                     verbose: #t,
                     debug-callback: dump-debug-callback)
       assert-no-errors(curl.curl-easy-perform);

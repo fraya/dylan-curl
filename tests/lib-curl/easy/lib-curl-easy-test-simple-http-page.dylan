@@ -7,7 +7,7 @@ Reference: https://curl.se/libcurl/c/simple.html
 define test test-lib-curl-easy-simple-http-page ()
   with-curl-global ()
     with-curl-easy-handle (curl)
-      curl-easy-setopt-url(curl, "http://example.com");
+      curl-easy-setopt-url(curl, "http://example.org");
       curl-easy-setopt-followlocation(curl, 1);
 
       let res = curl-easy-perform(curl);

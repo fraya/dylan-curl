@@ -18,7 +18,7 @@ define test test-mime ()
         assert-equal($curle-ok, code);
 
         curl-easy-setopt-mimepost(curl, mime);
-        curl-easy-setopt-url(curl, "https://example.com");
+        curl-easy-setopt-url(curl, "https://example.org");
         let code = curl-easy-perform(curl);
         assert-equal($curle-ok, code);
       end

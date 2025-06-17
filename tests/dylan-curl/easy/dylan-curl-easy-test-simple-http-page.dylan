@@ -8,7 +8,7 @@ Reference: https://curl.se/libcurl/c/simple.html
 
 define test dylan-curl-easy-test-simple-http-page-1 ()
   with-curl-global ()
-    with-curl-easy (curl = "http://example.com", 
+    with-curl-easy (curl = "http://example.org", 
                     followlocation: 1)
       curl.curl-easy-perform;
       assert-equal(200, curl.curl-easy-response-code);
@@ -20,7 +20,7 @@ end test;
 
 define test dylan-curl-easy-test-simple-http-page-2 ()  
   with-curl-global ()
-    with-curl-easy (curl = "http://example.com", 
+    with-curl-easy (curl = "http://example.org", 
                     followlocation: 1)
       curl.curl-easy-perform;
       assert-equal(200, curl.curl-easy-response-code);
@@ -34,7 +34,7 @@ define test dylan-curl-easy-test-simple-http-page-3 ()
   let buffer = make(<string-stream>, direction: #"output");
   let content-length = 0;
   with-curl-global ()
-    with-curl-easy (curl = "http://example.com/",
+    with-curl-easy (curl = "http://example.org/",
                     followlocation: 1,
                     write-data-stream: buffer)
       curl.curl-easy-perform;
