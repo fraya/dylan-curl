@@ -476,7 +476,7 @@ define module lib-curl-easy
     // TODO: curl-url-dup
     // TODO: curl-url-get
     // TODO: curl-url-set
-    // TODO: curl-url-strerror
+    curl-url-strerror,
     curl-version;
     // TODO: curl-version-info
     // TODO: curl-ws-meta

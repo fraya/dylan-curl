@@ -280,6 +280,15 @@ define C-function curl-slist-free-all
   c-name: "curl_slist_free_all";
 end C-function;
 
+// https://curl.se/libcurl/c/curl_url_strerror.html
+
+define C-function curl-url-strerror
+  input parameter curlu-code :: <C-int>;
+  result err-msg :: <C-string>;
+  c-name: "curl_url_strerror";
+end C-function;
+
+
 // https://curl.se/libcurl/c/curl_version.html
 
 define C-function curl-version
