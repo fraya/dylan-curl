@@ -302,6 +302,14 @@ define C-function curl-url-cleanup
   c-name: "curl_url_cleanup";
 end C-function;
 
+// https://curl.se/libcurl/c/curl_url_dup.html
+
+define C-function curl-url-dup
+  input parameter in-handle :: <curlu*>;
+  result copied-handle :: <curlu*>;
+  c-name: "curl_url_dup";
+end C-function;
+
 // https://curl.se/libcurl/c/curl_version.html
 
 define C-function curl-version

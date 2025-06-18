@@ -491,7 +491,7 @@ define module lib-curl-easy
     // TODO: curl-unscape
     curl-url,
     curl-url-cleanup,
-    // TODO: curl-url-dup
+    curl-url-dup,
     // TODO: curl-url-get
     // TODO: curl-url-set
     curl-url-strerror,

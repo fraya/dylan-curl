@@ -6,14 +6,19 @@ Reference: https://curl.se/libcurl/c/curl_url.html
 
 define test test-lib-curl-url ()
   with-curl-global ()
-    let curlu = #f;
+    let curlu1 :: false-or(<curlu*>) = #f;
+    let curlu2 :: false-or(<curlu*>) = #f;
     block ()
-      curlu := curl-url();
-      assert-no-errors(curlu);
+      curlu1 := curl-url();
+      curlu2 := curl-url-dup(curlu1);
+      assert-no-errors(curlu1);
     cleanup
-      unless (curlu)
-        curl-url-cleanup(curlu)
-      end
+      unless (curlu1)
+        curl-url-cleanup(curlu1)
+      end;
+      unless (curlu2)
+        curl-url-cleanup(curlu2)
+      end;
     end block;
   end
 end test;
