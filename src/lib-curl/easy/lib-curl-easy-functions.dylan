@@ -310,6 +310,28 @@ define C-function curl-url-dup
   c-name: "curl_url_dup";
 end C-function;
 
+// https://curl.se/libcurl/c/curl_url_get.html
+
+define C-function curl-url-get
+  input  parameter handle   :: <curlu*>;
+  input  parameter curlpart :: <C-int>;
+  output parameter content  :: <C-string*>;
+  input  parameter flags    :: <C-int>;
+  result curlu-code :: <C-int>;
+  c-name: "curl_url_get";
+end C-function;
+
+// https://curl.se/libcurl/c/curl_url_set.html
+
+define C-function curl-url-set
+  input parameter handle   :: <curlu*>;
+  input parameter curlpart :: <C-int>;
+  input parameter content  :: <C-string>;
+  input parameter flags    :: <C-int>;
+  result curlcode :: <C-int>;
+  c-name: "curl_url_set";
+end C-function;
+
 // https://curl.se/libcurl/c/curl_version.html
 
 define C-function curl-version
