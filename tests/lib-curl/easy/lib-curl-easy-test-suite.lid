@@ -8,5 +8,6 @@ Files:       library.dylan
              lib-curl-easy-test-httpbin.dylan
              lib-curl-easy-test-https.dylan
              lib-curl-easy-test-simple-http-page.dylan
+             lib-curl-easy-test-url.dylan
              lib-curl-easy-test-suite.dylan
 Target-Type: executable

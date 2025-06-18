@@ -288,6 +288,19 @@ define C-function curl-url-strerror
   c-name: "curl_url_strerror";
 end C-function;
 
+// https://curl.se/libcurl/c/curl_url.html
+
+define C-function curl-url
+  result handle :: <curlu*>;
+  c-name: "curl_url";
+end C-function;
+
+// https://curl.se/libcurl/c/curl_url_cleanup.html
+
+define C-function curl-url-cleanup
+  input parameter handle :: <curlu*>;
+  c-name: "curl_url_cleanup";
+end C-function;
 
 // https://curl.se/libcurl/c/curl_version.html
 

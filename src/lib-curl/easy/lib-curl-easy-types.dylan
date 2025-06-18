@@ -212,3 +212,11 @@ define constant <curlinfo-ptr>          = <C-void*>;
 define constant <curlinfo-offt>         = <curl-offt>;
 // define constant <curlinfo-mask>
 // define constant <curlinfo-typemask>
+
+//
+// URL interface
+//
+
+define C-struct <curlu>
+  pointer-type-name: <curlu*>;
+end;

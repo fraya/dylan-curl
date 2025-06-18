@@ -402,6 +402,11 @@ define module lib-curl-easy
     <curlinfo-ptr>,
     <curlinfo-offt>;
 
+  // Curl URL interface
+
+  create
+    <curlu*>;
+
   /////////////////////////////////////////////////////////////////////////////
   //
   // Functions. See: https://curl.se/libcurl/c/allfuncs.html
@@ -471,8 +476,8 @@ define module lib-curl-easy
     // curl-strequal is not imported
     // curl-strnequal is not imported
     // TODO: curl-unscape
-    // TODO: curl-url
-    // TODO: curl-url-cleanup
+    curl-url,
+    curl-url-cleanup,
     // TODO: curl-url-dup
     // TODO: curl-url-get
     // TODO: curl-url-set
