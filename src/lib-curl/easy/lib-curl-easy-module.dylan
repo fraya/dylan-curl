@@ -203,7 +203,20 @@ define module lib-curl-easy
     $curlue-lacks-idn,
     $curlue-too-large;
 
-
+  // CurluPart constants
+  create
+    $curlupart-url,
+    $curlupart-scheme,
+    $curlupart-user,
+    $curlupart-password,
+    $curlupart-options,
+    $curlupart-host,
+    $curlupart-port,
+    $curlupart-path,
+    $curlupart-query,
+    $curlupart-fragment,
+    $curlupart-zoneid;
+  
   // Information types passed to a debug callback
 
   create

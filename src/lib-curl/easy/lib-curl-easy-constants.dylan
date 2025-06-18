@@ -19,6 +19,7 @@ License:     See License.txt in this distribution for details.
 //  - $curlsslbackend: SSL backends              {C-s $curlsslbackend: RET}
 //  - $curlopttyp: Curl option types ids         {C-s $curlopttype: RET}
 //  - $curlot: Curl easy option type             {C-s $curlot: RET}
+//  - $curlupart: Curl URL part                  {C-s $curlupart: RET}
 //
 ///////////////////////////////////////////////////////////////////////////////
 
@@ -396,4 +397,24 @@ define constant $curlue-bad-slashes        = 28;
 define constant $curlue-bad-user           = 29;
 define constant $curlue-lacks-idn          = 30;
 define constant $curlue-too-large          = 31;
+
+//
+// CURLUPart
+//
+// Reference:
+//
+// - https://github.com/curl/curl/blob/9e3492690b8d15a81f029516ae7e06a2de5863b9/include/curl/urlapi.h#L70C1-L82C13
+//
+
+define constant $curlupart-url      = 0;
+define constant $curlupart-scheme   = 1;
+define constant $curlupart-user     = 2;
+define constant $curlupart-password = 3;
+define constant $curlupart-options  = 4;
+define constant $curlupart-host     = 5;
+define constant $curlupart-port     = 6;
+define constant $curlupart-path     = 7;
+define constant $curlupart-query    = 8;
+define constant $curlupart-fragment = 9;
+define constant $curlupart-zoneid   = 10;
 
