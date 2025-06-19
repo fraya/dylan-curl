@@ -488,7 +488,7 @@ define module lib-curl-easy
     curl-slist-free-all,
     // curl-strequal is not imported
     // curl-strnequal is not imported
-    // TODO: curl-unscape
+    // curl-unscape (*) is deprecated, use curl-easy-unescape
     curl-url,
     curl-url-cleanup,
     curl-url-dup,
