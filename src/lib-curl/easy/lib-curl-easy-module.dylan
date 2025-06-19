@@ -216,6 +216,23 @@ define module lib-curl-easy
     $curlupart-query,
     $curlupart-fragment,
     $curlupart-zoneid;
+
+  // Constants for queriying information about the library at runtime
+
+  create
+    $curlversion-first,    // 7.10 
+    $curlversion-second,   // 7.11.1 
+    $curlversion-third,    // 7.12.0
+    $curlversion-fourth,   // 7.16.1
+    $curlversion-fifth,    // 7.57.0
+    $curlversion-sixth,    // 7.66.0
+    $curlversion-seventh,  // 7.70.0
+    $curlversion-eighth,   // 7.72.0 
+    $curlversion-ninth,    // 7.75.0
+    $curlversion-tenth,    // 7.77.0
+    $curlversion-eleventh, // 7.87.0
+    $curlversion-twelfth,  // 8.8.0 
+    $curlversion-now;
   
   // Information types passed to a debug callback
 
@@ -420,6 +437,37 @@ define module lib-curl-easy
   create
     <curlu*>;
 
+  create
+    <curl-version-info-data>,
+    <curl-version-info-data*>,
+    curl-version-info-data-age,
+    curl-version-info-data-version,
+    curl-version-info-data-version-num,
+    curl-version-info-data-host,
+    curl-version-info-data-features,
+    curl-version-info-data-ssl_version,
+    curl-version-info-data-ssl-version-num,
+    curl-version-info-data-libz-version,
+    curl-version-info-data-protocols,
+    curl-version-info-data-ares,
+    curl-version-info-data-ares-num,
+    curl-version-info-data-libidn,
+    curl-version-info-data-iconv-ver-num,
+    curl-version-info-data-libssh-version,
+    curl-version-info-data-brotli-ver-num,
+    curl-version-info-data-brotli-version,
+    curl-version-info-data-nghtp2-ver-num,
+    curl-version-info-data-nghttp2-version,
+    curl-version-info-data-quic-version,
+    curl-version-info-data-cainfo,
+    curl-version-info-data-capath,
+    curl-version-info-data-zstd-ver-num,
+    curl-version-info-data-zstd-version,
+    curl-version-info-data-hyper-version,
+    curl-version-info-data-gsasl-version,
+    curl-version-info-data-feature-names,
+    curl-version-info-data-rtmp-version;  
+
   /////////////////////////////////////////////////////////////////////////////
   //
   // Functions. See: https://curl.se/libcurl/c/allfuncs.html
@@ -495,8 +543,8 @@ define module lib-curl-easy
     curl-url-get,
     curl-url-set,
     curl-url-strerror,
-    curl-version;
-    // TODO: curl-version-info
+    curl-version,
+    curl-version-info;
     // TODO: curl-ws-meta
     // TODO: curl-ws-recv
     // TODO: curl-ws-send;

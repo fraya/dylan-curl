@@ -338,3 +338,11 @@ define C-function curl-version
   result version :: <C-string>;
   c-name: "curl_version";
 end C-function;
+
+// https://curl.se/libcurl/c/curl_version_info.html
+
+define C-function curl-version-info
+  input parameter age :: <C-int>;
+  result info :: <curl-version-info-data*>;
+  c-name: "curl_version_info";
+end C-function;

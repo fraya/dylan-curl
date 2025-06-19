@@ -220,3 +220,68 @@ define constant <curlinfo-offt>         = <curl-offt>;
 define C-struct <curlu>
   pointer-type-name: <curlu*>;
 end;
+
+// https://github.com/curl/curl/blob/69642330a3673364ba873fc1aabab5e85fa8da79/include/curl/curl.h#L3108
+
+define C-struct <curl-version-info-data> 
+  constant slot curl-version-info-data-age             :: <C-int>;
+  constant slot curl-version-info-data-version         :: <C-string>;
+  constant slot curl-version-info-data-version-num     :: <C-int>;     /* LIBCURL_VERSION_NUM */
+  constant slot curl-version-info-data-host            :: <C-string>;  /* OS/host/cpu/machine when configured */
+  constant slot curl-version-info-data-features        :: <C-int>;     /* bitmask, see defines below */
+  constant slot curl-version-info-data-ssl_version     :: <C-string>;  /* human readable string */
+  constant slot curl-version-info-data-ssl-version-num :: <C-long>;    /* not used anymore, always 0 */
+  constant slot curl-version-info-data-libz-version    :: <C-string>;  /* human readable string */
+   /* protocols is terminated by an entry with a NULL protoname */
+  constant slot curl-version-info-data-protocols       :: <C-string*>; 
+  /* The fields below this were added in CURLVERSION_SECOND */
+  constant slot curl-version-info-data-ares            :: <C-string>;
+  constant slot curl-version-info-data-ares-num        :: <C-int>;
+
+  /* This field was added in CURLVERSION_THIRD */
+  constant slot curl-version-info-data-libidn          :: <C-string>;
+
+  /* These field were added in CURLVERSION_FOURTH */
+
+  /* Same as '_libiconv_version' if built with HAVE_ICONV */
+  constant slot curl-version-info-data-iconv-ver-num   :: <C-int>;
+  constant slot curl-version-info-data-libssh-version  :: <C-string>; /* human readable string */
+
+  /* These fields were added in CURLVERSION_FIFTH */
+  /* Numeric Brotli version (MAJOR << 24) | (MINOR << 12) | PATCH */
+  constant slot curl-version-info-data-brotli-ver-num  :: <C-int>;    
+  constant slot curl-version-info-data-brotli-version  :: <C-string>; /* human readable string. */
+
+  /* These fields were added in CURLVERSION_SIXTH */
+  /* Numeric nghttp2 version (MAJOR << 16) | (MINOR << 8) | PATCH */
+  constant slot curl-version-info-data-nghtp2-ver-num  :: <C-int>;    
+  constant slot curl-version-info-data-nghttp2-version :: <C-string>; /* human readable string. */
+  /* human readable quic (+ HTTP/3) library + version or NULL */
+  constant slot curl-version-info-data-quic-version    :: <C-string>;      
+
+  /* These fields were added in CURLVERSION_SEVENTH */
+  /* the built-in default CURLOPT_CAINFO, might be NULL */
+  constant slot curl-version-info-data-cainfo          :: <C-string>; 
+  /* the built-in default CURLOPT_CAPATH, might be NULL */        
+  constant slot curl-version-info-data-capath          :: <C-string>;          
+
+  /* These fields were added in CURLVERSION_EIGHTH */
+  /* Numeric Zstd version (MAJOR << 24) | (MINOR << 12) | PATCH */
+  constant slot curl-version-info-data-zstd-ver-num    :: <C-int>; 
+  constant slot curl-version-info-data-zstd-version    :: <C-string>; /* human readable string. */
+
+  /* These fields were added in CURLVERSION_NINTH */
+  constant slot curl-version-info-data-hyper-version   :: <C-string>; /* human readable string. */
+
+  /* These fields were added in CURLVERSION_TENTH */
+  constant slot curl-version-info-data-gsasl-version   :: <C-string>; /* human readable string. */
+
+  /* These fields were added in CURLVERSION_ELEVENTH */
+  /* feature_names is terminated by an entry with a NULL feature name */
+  constant slot curl-version-info-data-feature-names   :: <C-string*>;
+
+  /* These fields were added in CURLVERSION_TWELFTH */
+  constant slot curl-version-info-data-rtmp-version    :: <C-string>; /* human readable string. */
+
+  pointer-type-name: <curl-version-info-data*>;
+end C-struct;

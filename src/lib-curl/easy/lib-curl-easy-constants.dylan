@@ -418,3 +418,21 @@ define constant $curlupart-query    = 8;
 define constant $curlupart-fragment = 9;
 define constant $curlupart-zoneid   = 10;
 
+// Curl version 
+// https://github.com/curl/curl/blob/69642330a3673364ba873fc1aabab5e85fa8da79/include/curl/curl.h#L3085
+
+define constant $curlversion-first    = 0;  // 7.10 
+define constant $curlversion-second   = 1;  // 7.11.1 
+define constant $curlversion-third    = 2;  // 7.12.0
+define constant $curlversion-fourth   = 3;  // 7.16.1
+define constant $curlversion-fifth    = 4;  // 7.57.0
+define constant $curlversion-sixth    = 5;  // 7.66.0
+define constant $curlversion-seventh  = 6;  // 7.70.0
+define constant $curlversion-eighth   = 7;  // 7.72.0
+define constant $curlversion-ninth    = 8;  // 7.75.0
+define constant $curlversion-tenth    = 9;  // 7.77.0
+define constant $curlversion-eleventh = 10; // 7.87.0
+define constant $curlversion-twelfth  = 11; // 8.8.0 
+
+// https://github.com/curl/curl/blob/69642330a3673364ba873fc1aabab5e85fa8da79/include/curl/curl.h#L3101
+define constant $curlversion-now = $curlversion-twelfth;
