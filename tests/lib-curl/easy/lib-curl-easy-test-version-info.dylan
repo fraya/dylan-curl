@@ -16,26 +16,29 @@ define test test-lib-curl-easy-version-info ()
           i := i + 1;
         end;
       end block;
+    end,
+    method version(version)
+      concatenate("v.", if (empty?(version)) "?" else version end)
     end;
 
   with-curl-global ()
     let ver = curl-version-info($curlversion-now);
     format-out("\nVersion info\n");
-    format-out("Host %s\n", ver.curl-version-info-data-host);
-    format-out("SSL v.%s\n", ver.curl-version-info-data-ssl_version);
-    format-out("libZ v.%s\n", ver.curl-version-info-data-libz-version);
+    format-out("host: %s\n", ver.curl-version-info-data-host);
+    format-out("brotli: %s\n", version(ver.curl-version-info-data-brotli-version));
+    format-out("cainfo: %s\n", version(ver.curl-version-info-data-cainfo));
+    format-out("data capath: %s\n", ver.curl-version-info-data-capath);
+    format-out("hyper: %s\n", version(ver.curl-version-info-data-hyper-version));
+    format-out("gsasl: %s\n", version(ver.curl-version-info-data-gsasl-version));
+    format-out("libs: %s\n", version(ver.curl-version-info-data-libz-version));
+    format-out("libidn: %s\n", version(ver.curl-version-info-data-libidn));
+    format-out("ssh: %s\n", version(ver.curl-version-info-data-libssh-version));
+    format-out("nghttp2: %s\n", version(ver.curl-version-info-data-nghttp2-version));
+    format-out("quic: %s\n", version(ver.curl-version-info-data-quic-version));
+    format-out("ssl: %s\n", version(ver.curl-version-info-data-ssl-version));
+    format-out("zstd: %s\n", version(ver.curl-version-info-data-zstd-version));
     format-out("Supported protocols:\n");
     print-slist(ver.curl-version-info-data-protocols);
-    format-out("libidn v.%s\n", ver.curl-version-info-data-libidn);
-    format-out("lib SSH v.%s\n", ver.curl-version-info-data-libssh-version);
-    format-out("brotli v.%s\n", ver.curl-version-info-data-brotli-version);
-    format-out("nghttp2 v.%s\n", ver.curl-version-info-data-nghttp2-version);
-    format-out("quic v.%s\n", ver.curl-version-info-data-quic-version);
-    format-out("cainfo v.%s\n", ver.curl-version-info-data-cainfo);
-    format-out("data capath %s\n", ver.curl-version-info-data-capath);
-    format-out("zstd v.%s\n", ver.curl-version-info-data-zstd-version);
-    format-out("hyper v.%s\n", ver.curl-version-info-data-hyper-version);
-    format-out("gsasl v.%s\n", ver.curl-version-info-data-gsasl-version);
     format-out("Supported features:\n");
     print-slist(ver.curl-version-info-data-feature-names);
     assert-true(#t);
