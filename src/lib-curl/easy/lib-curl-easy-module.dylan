@@ -445,7 +445,7 @@ define module lib-curl-easy
     curl-version-info-data-version-num,
     curl-version-info-data-host,
     curl-version-info-data-features,
-    curl-version-info-data-ssl_version,
+    curl-version-info-data-ssl-version,
     curl-version-info-data-ssl-version-num,
     curl-version-info-data-libz-version,
     curl-version-info-data-protocols,

@@ -229,7 +229,7 @@ define C-struct <curl-version-info-data>
   constant slot curl-version-info-data-version-num     :: <C-int>;     /* LIBCURL_VERSION_NUM */
   constant slot curl-version-info-data-host            :: <C-string>;  /* OS/host/cpu/machine when configured */
   constant slot curl-version-info-data-features        :: <C-int>;     /* bitmask, see defines below */
-  constant slot curl-version-info-data-ssl_version     :: <C-string>;  /* human readable string */
+  constant slot curl-version-info-data-ssl-version     :: <C-string>;  /* human readable string */
   constant slot curl-version-info-data-ssl-version-num :: <C-long>;    /* not used anymore, always 0 */
   constant slot curl-version-info-data-libz-version    :: <C-string>;  /* human readable string */
    /* protocols is terminated by an entry with a NULL protoname */
