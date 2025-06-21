@@ -103,24 +103,22 @@ define C-function curl-easy-perform
   c-name: "curl_easy_perform";
 end C-function;
 
-
-// NOT IMPLEMENTED: Problem with input output parameter
-// https://curl.se/libcurl/c/curl_easy_recv.html
-
-// define C-function curl-easy-recv
-//   input parameter handle :: <curl-easy-handle>;
-//   input output parameter buffer :: <C-void*>;
-//   input parameter buflen :: <C-int>;
-//   output parameter n :: <C-int*>;
-//   result status :: <C-int>;
-//   c-name: "curl_easy_recv_shim";
-// end C-function;
-
 // https://curl.se/libcurl/c/curl_easy_perform.html
 
 define C-function curl-easy-reset
   input parameter handle :: <curl-easy-handle>;
   c-name: "curl_easy_reset";
+end C-function;
+
+// https://curl.se/libcurl/c/curl_easy_recv.html
+
+define C-function curl-easy-recv
+  input parameter handle        :: <curl-easy-handle>;
+  input parameter buffer        :: <C-void*>;
+  input parameter buffer-size   :: <C-size-t>;
+  output parameter bytes-read   :: <C-size-t*>;
+  result status :: <C-int>;
+  c-name: "curl_easy_recv";
 end C-function;
 
 // https://curl.se/libcurl/c/curl_easy_send.html

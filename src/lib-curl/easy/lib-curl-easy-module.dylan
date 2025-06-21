@@ -490,7 +490,7 @@ define module lib-curl-easy
     curl-easy-option-next,
     curl-easy-pause,
     curl-easy-perform,
-    // TODO: curl-easy-recv,
+    curl-easy-recv,
     curl-easy-reset,
     curl-easy-send,
     // curl-easy-setopt see: "lib-curl-easy-options.dylan"
