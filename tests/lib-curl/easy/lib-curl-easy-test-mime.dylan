@@ -31,3 +31,28 @@ define test test-mime ()
       format-out("cainfo failed: %s\n", err.curl-error-message)
   end block;
 end test;
+
+define test test-mime-type ()
+  let mime = #f;
+  block()
+    with-curl-global ()
+      with-curl-easy-handle (curl)
+        mime := curl-mime-init(curl);
+        assert-false(null-pointer?(mime));
+
+        let part = curl-mime-addpart(mime);
+        assert-false(null-pointer?(part));
+
+        let code = curl-mime-type(part, "image/png");
+        assert-equal($curle-ok, code);
+
+        let code = curl-mime-name(part, "image");
+        assert-equal($curle-ok, code);
+      end
+    end
+  cleanup
+    unless (mime)
+      curl-mime-free(mime)
+    end
+  end block;
+end test;

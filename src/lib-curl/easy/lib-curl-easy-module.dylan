@@ -518,7 +518,7 @@ define module lib-curl-easy
     curl-mime-init,
     curl-mime-name,
     // TODO: curl-mime-subparts
-    // TODO: curl-mime-type
+    curl-mime-type,
     // TODO: curl-msnprintf (*)
     // curl-multi-* see: "../multi/"
     // curl-mvaprintf (*)

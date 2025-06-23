@@ -214,6 +214,15 @@ define C-function curl-mime-data
   c-name: "curl_mime_data";
 end C-function;
 
+// https://curl.se/libcurl/c/curl_mime_type.html
+
+define C-function curl-mime-type
+  input parameter part     :: <curl-mimepart*>;
+  input parameter mimetype :: <C-string>;
+  result code :: <curl-code>;
+  c-name: "curl_mime_type";
+end C-function;
+
 // https://curl.se/libcurl/c/curl_global_trace.html
 
 // NOTE: only from version 8.3
