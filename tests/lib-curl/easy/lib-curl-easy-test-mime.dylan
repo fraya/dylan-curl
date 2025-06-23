@@ -56,3 +56,29 @@ define test test-mime-type ()
     end
   end block;
 end test;
+
+define test test-mime-headers ()
+  let mime = #f;
+  let headers = null-pointer(<curl-slist*>);
+  block()
+    with-curl-global ()
+      with-curl-easy-handle (curl)
+        mime := curl-mime-init(curl);
+        assert-false(null-pointer?(mime));
+
+        let part = curl-mime-addpart(mime);
+        assert-false(null-pointer?(part));
+
+        headers := curl-slist-append(headers, "Custom header: mooo");
+        assert-false(null-pointer?(headers));
+
+        /* use these headers in the part, takes ownership */
+        let code = curl-mime-headers(part, headers, 1);
+      end
+    end
+  cleanup
+    unless (mime)
+      curl-mime-free(mime)
+    end
+  end block;
+end test;
