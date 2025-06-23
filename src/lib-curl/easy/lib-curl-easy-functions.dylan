@@ -214,6 +214,15 @@ define C-function curl-mime-data
   c-name: "curl_mime_data";
 end C-function;
 
+// https://curl.se/libcurl/c/curl_mime_subparts.html
+
+define C-function curl-mime-subparts
+  input parameter part     :: <curl-mimepart*>;
+  input parameter subparts :: <curl-mime*>;
+  result code :: <curl-code>;
+  c-name: "curl_mime_subparts"; 
+end C-function;
+
 // https://curl.se/libcurl/c/curl_mime_type.html
 
 define C-function curl-mime-type
