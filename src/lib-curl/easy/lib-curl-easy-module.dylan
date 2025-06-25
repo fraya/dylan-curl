@@ -468,6 +468,12 @@ define module lib-curl-easy
     curl-version-info-data-feature-names,
     curl-version-info-data-rtmp-version;  
 
+  create
+    <curl-mime>,
+    <curl-mime*>,
+    <curl-mimepart>,
+    <curl-mimepart*>;
+
   /////////////////////////////////////////////////////////////////////////////
   //
   // Functions. See: https://curl.se/libcurl/c/allfuncs.html
@@ -511,7 +517,7 @@ define module lib-curl-easy
     curl-mime-data,
     // TODO: curl-mime-data-cb
     // TODO: curl-mime-encoder
-    // TODO: curl-mime-filedata
+    curl-mime-filedata,
     curl-mime-filename,
     curl-mime-free,
     curl-mime-headers,
