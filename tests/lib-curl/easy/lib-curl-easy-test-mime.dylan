@@ -83,6 +83,37 @@ define test test-mime-headers ()
   end block;
 end test;
 
+define test test-mime-encoder ()
+  let mime :: false-or(<curl-mime*>) = #f;
+  let part :: false-or(<curl-mimepart*>) = #f;
+  block ()
+    // create fake image.png
+    let temp-directory = test-temp-directory();
+    let image-locator = write-test-file("image.png", contents: "fake image");
+
+    with-curl-global ()
+      with-curl-easy-handle (curl)
+        mime := curl-mime-init(curl);
+        assert-false(null-pointer?(mime));
+
+        part := curl-mime-addpart(mime);
+        assert-false(null-pointer?(part));
+
+        let code = curl-mime-filedata(part, as(<string>, image-locator));
+        assert-equal($curle-ok, code, "Error in curl-mime-filedata");
+        
+        let code = curl-mime-name(part, "data");
+        assert-equal($curle-ok, code, "Error curl-mime-name");
+
+        let code = curl-mime-encoder(part, "base64");
+        assert-equal($curle-ok, code, "Error encoding part");
+      end with-curl-easy-handle;
+    end with-curl-global;
+  cleanup
+    unless (mime) curl-mime-free(mime) end;
+  end block;
+end test;
+
 define test test-mime-filedata ()
   let mime :: false-or(<curl-mime*>) = #f;
   let part :: false-or(<curl-mimepart*>) = #f;

@@ -516,7 +516,7 @@ define module lib-curl-easy
     curl-mime-addpart,
     curl-mime-data,
     // TODO: curl-mime-data-cb
-    // TODO: curl-mime-encoder
+    curl-mime-encoder,
     curl-mime-filedata,
     curl-mime-filename,
     curl-mime-free,
