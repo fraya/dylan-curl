@@ -191,6 +191,14 @@ define C-function curl-global-init
   c-name: "curl_global_init";
 end C-function;
 
+// https://curl.se/libcurl/c/curl_global_trace.html
+
+define C-function curl-global-trace
+  input parameter config :: <C-string>;
+  result curl-code       :: <curl-code>;
+  c-name: "curl_global_trace";
+end C-function;
+
 // TODO: curl-global-init-mem needed???
 
 // TODO: curl-global-sslset needed??

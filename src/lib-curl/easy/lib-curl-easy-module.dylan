@@ -510,7 +510,7 @@ define module lib-curl-easy
     curl-global-init,
     // TODO: curl-global-init-mem,
     // TODO: curl-global-sslset,
-    // TODO: curl-global-trace,
+    curl-global-trace,
     // curl-maprintf (*) 
     // curl-mfprintf (*)
     curl-mime-addpart,

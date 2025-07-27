@@ -5,6 +5,7 @@ Files:       library.dylan
              lib-curl-easy-test-debug-callback.dylan
              lib-curl-easy-test-escape-unescape.dylan
              lib-curl-easy-test-mime.dylan
+             lib-curl-easy-test-global-trace.dylan
              lib-curl-easy-test-httpbin.dylan
              lib-curl-easy-test-https.dylan
              lib-curl-easy-test-send-recv.dylan
