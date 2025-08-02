@@ -71,11 +71,10 @@ define test test-chkspeed (tags: #("io", "slow"))
           register-c-dylan-object(stream);
           let exported-stream = export-c-dylan-object(stream);
           curl-easy-setopt-writedata(curl, exported-stream);
-          dynamic-bind(*curl-write-callback* = handle-download)
-            dynamic-bind(*curl-progress-callback* = progress-callback)
-              let curl-code = curl-easy-perform(curl);
-              assert-equal($curle-ok, curl-code);
-            end;
+          dynamic-bind(*curl-write-callback* = handle-download,
+                       *curl-progress-callback* = progress-callback)
+            let curl-code = curl-easy-perform(curl);
+            assert-equal($curle-ok, curl-code);
           end;
           unregister-c-dylan-object(stream);
         end with-open-file;
