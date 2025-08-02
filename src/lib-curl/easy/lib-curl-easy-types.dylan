@@ -285,3 +285,7 @@ define C-struct <curl-version-info-data>
 
   pointer-type-name: <curl-version-info-data*>;
 end C-struct;
+
+define C-subtype <curlsh*> (<C-void*>) end;
+
+
