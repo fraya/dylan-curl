@@ -10,7 +10,7 @@ License:     See License.txt in this distribution for details.
 //  ----------------------
 //
 //  - $curle: Curl error codes                   {C-s $curle: RET}
-//  - $curl-global: Global initialization        {C-s $curl-global: RET} 
+//  - $curl-global: Global initialization        {C-s $curl-global: RET}
 //  - $curlpx: Proxy error codes                 {C-s $curlpx: RET}
 //  - $curlhe: Header error codes                {C-s $curlhe: RET}
 //  - $curlinfo: Debug callback function         {C-s $curlinfo: RET}
@@ -436,3 +436,4 @@ define constant $curlversion-twelfth  = 11; // 8.8.0
 
 // https://github.com/curl/curl/blob/69642330a3673364ba873fc1aabab5e85fa8da79/include/curl/curl.h#L3101
 define constant $curlversion-now = $curlversion-twelfth;
+
