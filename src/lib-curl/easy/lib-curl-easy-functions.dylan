@@ -316,6 +316,29 @@ define C-function curl-mime-name
   c-name: "curl_mime_name";
 end;
 
+// https://curl.se/libcurl/c/curl_share_init.html
+
+define C-function curl-share-init
+  result share :: <curlsh*>;
+  c-name: "curl_share_init";
+end;
+
+// https://curl.se/libcurl/c/curl_share_cleanup.html
+
+define C-function curl-share-cleanup
+  input parameter share :: <curlsh*>;
+  result code :: <C-int>;
+  c-name: "curl_share_cleanup";
+end;
+
+// https://curl.se/libcurl/c/curl_share_strerror.html
+
+define c-function curl-share-strerror
+  input parameter error-num :: <c-int>;
+  result error-description  :: <c-string>;
+  c-name: "curl_share_strerror";
+end c-function;
+
 // https://curl.se/libcurl/c/curl_slist_append.html
 
 define C-function curl-slist-append
