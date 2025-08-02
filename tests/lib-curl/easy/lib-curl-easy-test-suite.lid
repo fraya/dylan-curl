@@ -9,6 +9,7 @@ Files:       library.dylan
              lib-curl-easy-test-httpbin.dylan
              lib-curl-easy-test-https.dylan
              lib-curl-easy-test-send-recv.dylan
+             lib-curl-easy-test-share.dylan
              lib-curl-easy-test-simple-http-page.dylan
              lib-curl-easy-test-url.dylan
              lib-curl-easy-test-version-info.dylan
