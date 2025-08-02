@@ -26,7 +26,7 @@ define method make
   // check that slot has been initialized
   
   if (null-pointer?(curl.curl-easy-handle))
-    error(make(<curl-init-error>))
+    error(make(<curl-easy-init-error>))
   end;
   
   // Set all curl options passed as keywords
