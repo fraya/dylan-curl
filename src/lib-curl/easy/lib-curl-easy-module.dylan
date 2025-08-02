@@ -13,9 +13,9 @@ define module lib-curl-easy
   // See: "lib-curl-easy-constants.dylan"
   //
   /////////////////////////////////////////////////////////////////////////////
-  
+
   // Curle: Error codes
-  
+
   export
     $curle-aborted-by-callback,
     $curle-again,
@@ -156,7 +156,7 @@ define module lib-curl-easy
     $curlpx-user-rejected;
 
   // Curl header error codes
-  
+
   create
     $curlhe-bad-argument,
     $curlhe-badindex,
@@ -246,7 +246,7 @@ define module lib-curl-easy
     $curlinfo-text;
 
   // Type of authentication methods
-  
+
   create
     $curlauth-any,
     $curlauth-anysafe,
@@ -265,7 +265,7 @@ define module lib-curl-easy
     $curlauth-only;
 
   // Bitmask to pause a connection
-  
+
   create
     $curlpause-all,
     $curlpause-cont,
@@ -294,7 +294,7 @@ define module lib-curl-easy
     $curlsslbackend-wolfssl;
 
   // Curl option types
-  
+
   create
     $curlopttype-blob,
     $curlopttype-boolean,
@@ -344,9 +344,9 @@ define module lib-curl-easy
     <curl-easy-handle>,
     <curl-easy-handle*>,
     <curl-option-id>;
-  
+
   // Memory block with binary data
-  
+
   create
     <curl-blob>,
     <curl-blob*>,
@@ -358,7 +358,7 @@ define module lib-curl-easy
     curl-blob-flags-setter;
 
   // TLS session info
-  
+
   create
     <curl-tlssessioninfo>,
     <curl-tlssessioninfo*>,
@@ -380,7 +380,7 @@ define module lib-curl-easy
     curl-header-anchor;
 
   // Curl slist
-  
+
   create
     <curl-slist>,
     <curl-slist*>,
@@ -411,7 +411,7 @@ define module lib-curl-easy
     <curl-boolean>;
 
   // Curl types to make easier the macros
-  
+
   create
     <curlopt-long>,
     <curlopt-objectpoint>,
@@ -466,13 +466,18 @@ define module lib-curl-easy
     curl-version-info-data-hyper-version,
     curl-version-info-data-gsasl-version,
     curl-version-info-data-feature-names,
-    curl-version-info-data-rtmp-version;  
+    curl-version-info-data-rtmp-version;
 
   create
     <curl-mime>,
     <curl-mime*>,
     <curl-mimepart>,
     <curl-mimepart*>;
+
+  // Curl shared object
+
+  create
+    <curlsh*>;
 
   /////////////////////////////////////////////////////////////////////////////
   //
@@ -482,7 +487,7 @@ define module lib-curl-easy
   // new applications
   //
   /////////////////////////////////////////////////////////////////////////////
-  
+
   create
     curl-easy-cleanup,
     curl-easy-duphandle,
@@ -511,7 +516,7 @@ define module lib-curl-easy
     // TODO: curl-global-init-mem,
     // TODO: curl-global-sslset,
     curl-global-trace,
-    // curl-maprintf (*) 
+    // curl-maprintf (*)
     // curl-mfprintf (*)
     curl-mime-addpart,
     curl-mime-data,
@@ -532,12 +537,10 @@ define module lib-curl-easy
     // curl-mvprintf (*)
     // curl-mvsnprintf (*)
     // curl-mvsprintf (*)
-    // TODO: curl-pushheader-byname
-    // TODO: curl-pushheader-bynum
-    // TODO: curl-share-cleanup
-    // TODO: curl-share-init
-    // TODO: curl-share-setopt
-    // TODO: curl-share-strerror
+    curl-share-cleanup,
+    curl-share-init,
+    // curl-share-setopt see: "lib-curl-easy-share.dylan"
+    curl-share-strerror,
     curl-slist-append,
     curl-slist-free-all,
     // curl-strequal is not imported
@@ -560,7 +563,8 @@ define module lib-curl-easy
     <curl-error>,
     curl-error-code,
     curl-error-message,
-    <curl-init-error>;
+    <curl-easy-error>,
+    <curl-easy-init-error>;
 
   // Curl macros
   create
@@ -568,7 +572,7 @@ define module lib-curl-easy
     with-curl-global;
 
   // curl options (in alphabetical order)
-  
+
   create
     curl-easy-setopt-abstract-unix-socket,
     curl-easy-setopt-accept-encoding,
@@ -876,7 +880,7 @@ define module lib-curl-easy
     curl-easy-setopt-xoauth2-bearer;
 
   // Curlinfo options (in alphabetical order)
-  
+
   create
     // TODO: curl-easy-getinfo-activesocket
     curl-easy-getinfo-appconnect-time,
@@ -946,15 +950,58 @@ define module lib-curl-easy
     curl-easy-getinfo-used-proxy,
     curl-easy-getinfo-xfer-id;
 
+  // Curl share error codes
+
+  create
+    $curlshe-ok,
+    $curlshe-bad-option,
+    $curlshe-in-use,
+    $curlshe-invalid,
+    $curlshe-nomem,
+    $curlshe-not-built-in;
+
+
+  // Curl lock data constants
+  create
+    $curl-lock-data-share,
+    $curl-lock-data-cookie,
+    $curl-lock-data-dns,
+    $curl-lock-data-ssl-session,
+    $curl-lock-data-connect,
+    $curl-lock-data-psl,
+    $curl-lock-data-hsts;
+
+  // Curl share lock access
+
+  create
+     $curl-lock-access-shared,
+     $curl-lock-access-single;
+
+  // Curl share set options
+
+  create
+    curl-share-setopt-lockfunc,
+    curl-share-setopt-unlockfunc,
+    curl-share-setopt-share,
+    curl-share-setopt-unshare,
+    curl-share-setopt-userdata;
+
+  create
+    <curl-share-error>,
+    <curl-share-init-error>;
+
+  create
+    with-curl-share;
+
 end module lib-curl-easy;
 
 define module %lib-curl-easy
 
   use lib-curl-easy;
-  
+
   use common-dylan;
   use c-ffi;
   use format,
     import: { format-to-string };
-  
+
 end module;
