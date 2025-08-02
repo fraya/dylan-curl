@@ -4,6 +4,7 @@ Author:      Fernando Raya
 Copyright:   Copyright (C) 2025, Dylan Hackers. All rights reserved.
 License:     See License.txt in this distribution for details.
 
+
 //////////////////////////////////////////////////////////////////////////////
 //
 // `curl-easy-setopt` shim functions.
@@ -114,7 +115,7 @@ define macro with-curl-easy-handle
            _curl := ?handler;
            let ?curl :: <curl-easy-handle> = _curl;
            if (null-pointer?(?curl))
-             error(make(<curl-init-error>))
+             error(make(<curl-easy-init-error>))
            end;
            ?body
          cleanup
@@ -138,7 +139,7 @@ define macro with-curl-global
   { with-curl-global (?flags:expression) ?body:body end }
     => { let code = curl-global-init(?flags);
          if (code ~= $curle-ok)
-           error(make(<curl-error>, curle: code))
+           error(make(<curl-easy-error>, code: code))
          end;
          block ()
            ?body
