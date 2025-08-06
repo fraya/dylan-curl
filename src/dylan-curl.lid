@@ -11,6 +11,7 @@ Files:          library.dylan
                 lib-curl/easy/lib-curl-easy-options.dylan
                 lib-curl/easy/lib-curl-easy-getinfo.dylan
                 lib-curl/easy/lib-curl-easy-share.dylan
+                lib-curl/easy/lib-curl-easy-ws.dylan
                 lib-curl/multi/lib-curl-multi-module.dylan
                 lib-curl/multi/lib-curl-multi-constants.dylan
                 lib-curl/multi/lib-curl-multi-types.dylan
@@ -26,5 +27,6 @@ Files:          library.dylan
 C-Source-Files: lib-curl/easy/lib-curl-easy-shim-setopt.c
                 lib-curl/easy/lib-curl-easy-shim-getinfo.c
                 lib-curl/easy/lib-curl-easy-shim-share-setopt.c
+                lib-curl/easy/lib-curl-easy-shim-ws.c
 C-Libraries:    -lcurl
 Target-Type:    dll

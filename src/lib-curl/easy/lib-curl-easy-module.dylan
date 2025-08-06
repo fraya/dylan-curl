@@ -554,9 +554,31 @@ define module lib-curl-easy
     curl-url-strerror,
     curl-version,
     curl-version-info;
-    // TODO: curl-ws-meta
-    // TODO: curl-ws-recv
-    // TODO: curl-ws-send;
+
+  // Curl websockets
+
+  create
+    $curlws-text,
+    $curlws-binary,
+    $curlws-cont,
+    $curlws-close,
+    $curlws-ping,
+    $curlws-offset,
+    $curlws-pong,
+    $curlws-raw-mode,
+    $curlws-noautopong;
+
+  create
+    <curl-ws-frame>,
+    curl-ws-frame-age,
+    curl-ws-frame-flags,
+    curl-ws-frame-offset,
+    curl-ws-frame-bytesleft;
+
+  create
+    curl-ws-meta,
+    curl-ws-recv,
+    curl-ws-send;
 
   // Curl errors
   create
