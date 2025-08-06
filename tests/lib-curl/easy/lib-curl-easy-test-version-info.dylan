@@ -23,7 +23,7 @@ define test test-lib-curl-easy-version-info ()
 
   with-curl-global ()
     let ver = curl-version-info($curlversion-now);
-    format-out("\nVersion info\n");
+    format-out("\nVersion info (%s)\n", curl-version());
     format-out("host: %s\n", ver.curl-version-info-data-host);
     format-out("brotli: %s\n", version(ver.curl-version-info-data-brotli-version));
     format-out("cainfo: %s\n", version(ver.curl-version-info-data-cainfo));
