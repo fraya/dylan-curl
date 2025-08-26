@@ -330,7 +330,14 @@ define module lib-curl-easy
     *curl-debug-callback*,
     *curl-header-callback*,
     *curl-progress-callback*,
-    *curl-write-callback*;
+    *curl-write-callback*,
+    $curl-read-callback,
+    $curl-seek-callback,
+    $curl-free-callback,
+    *curl-read-callback*,
+    *curl-seek-callback*,
+    *curl-free-callback*;
+
 
   /////////////////////////////////////////////////////////////////////////////
   //
@@ -573,7 +580,8 @@ define module lib-curl-easy
     curl-ws-frame-age,
     curl-ws-frame-flags,
     curl-ws-frame-offset,
-    curl-ws-frame-bytesleft;
+    curl-ws-frame-bytesleft,
+    curl-ws-frame-len;
 
   create
     curl-ws-meta,
