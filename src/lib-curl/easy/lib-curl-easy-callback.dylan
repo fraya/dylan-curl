@@ -49,9 +49,9 @@ end;
 // Call on each received header
 //
 define function curl-header-callback
-    (buffer    :: <C-void*>,         // delivered data  
+    (buffer    :: <C-void*>,         // delivered data
      size-t    :: <integer>,         // always 1
-     bytes     :: <integer>,         // size of the data 
+     bytes     :: <integer>,         // size of the data
      user-data :: <C-Dylan-object>)  // object passed in 'writedata'
   => (bytes-written :: <integer>)
     *curl-header-callback*(buffer, size-t, bytes, user-data)
@@ -127,4 +127,54 @@ define C-callable-wrapper $curl-progress-callback of curl-progress-callback
   input parameter ultotal :: <C-int>;
   input parameter ulnow   :: <C-int>;
   result status :: <C-int>;
+end C-callable-wrapper;
+
+// Curl mime callbacks
+
+define thread variable *curl-read-callback* :: <function> = ignore;
+define thread variable *curl-seek-callback* :: <function> = ignore;
+define thread variable *curl-free-callback* :: <function> = ignore;
+
+define function curl-read-callback
+    (buffer       :: <string>,
+     buffer-size  :: <integer>,
+     number-items :: <integer>,
+     arg          :: <object>)
+ => (bytes-read   :: <integer>)
+  let bytes-read = *curl-read-callback*(buffer, buffer-size, number-items, arg);
+  // if cb function is set to ignore, bytes-read is #f so return 0 to stop read
+  bytes-read | 0
+end;
+
+define function curl-seek-callback
+    (arg    :: <object>,
+     offset :: <integer>,
+     origin :: <integer>)
+ => (seek-status :: <integer>)
+  *curl-seek-callback*(arg, offset, origin)
+end;
+
+define function curl-free-callback
+    (arg :: <object>)
+ => ()
+  *curl-free-callback*(arg)
+end;
+
+define C-callable-wrapper $curl-read-callback of curl-read-callback
+  input parameter buffer       :: <C-string>;
+  input parameter buffer-size  :: <C-int>;
+  input parameter number-items :: <C-int>;
+  input parameter arg          :: <C-Dylan-object>;
+  result bytes-read :: <C-int>;
+end C-callable-wrapper;
+
+define C-callable-wrapper $curl-seek-callback of curl-seek-callback
+  input parameter arg    :: <C-Dylan-object>;
+  input parameter offset :: <C-size-t>;
+  input parameter origin :: <C-int>;
+  result seek-status :: <C-int>;
+end C-callable-wrapper;
+
+define C-callable-wrapper $curl-free-callback of curl-free-callback
+  input parameter arg :: <C-Dylan-object>;
 end C-callable-wrapper;
