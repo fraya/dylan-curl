@@ -26,6 +26,7 @@ define c-struct <curl-ws-frame>
   constant slot curl-ws-frame-flags     :: <c-int>;
   constant slot curl-ws-frame-offset    :: <c-unsigned-long>;
   constant slot curl-ws-frame-bytesleft :: <c-unsigned-long>;
+  constant slot curl-ws-frame-len       :: <c-size-t>;
   pointer-type-name: <curl-ws-frame*>;
 end c-struct;
 
@@ -42,8 +43,8 @@ end c-function;
 define c-function curl-ws-recv
   input  parameter handler :: <curl-easy-handle>;
   input  parameter buffer  :: <c-dylan-object>;
-  input  parameter buflen  :: <c-unsigned-long>;
-  output parameter recv    :: <c-unsigned-long*>;
+  input  parameter buflen  :: <c-size-t>;
+  output parameter recv    :: <c-size-t*>;
   output parameter meta    :: <curl-ws-frame*>;
   result code :: <curl-code>;
   c-name: "curl_ws_recv";
@@ -57,7 +58,7 @@ end c-function;
 
 define c-function curl-ws-send
   input  parameter handler  :: <curl-easy-handle>;
-  input  parameter buffer   :: <c-dylan-object>;
+  input  parameter buffer   :: <c-string>;
   input  parameter buflen   :: <c-unsigned-long>;
   input  parameter fragsize :: <c-unsigned-long>;
   input  parameter flags    :: <c-unsigned-int>;
