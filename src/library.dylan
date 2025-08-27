@@ -12,4 +12,6 @@ define library dylan-curl
     import { format,
              format-out,
              standard-io };
+  use uncommon-dylan,
+    import { uncommon-utils };
 end library;

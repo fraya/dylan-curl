@@ -1,5 +1,6 @@
 {
     "dependencies": [
+      "uncommon-dylan@1.0.0"
     ],
     "dev-dependencies": [
 	    "sphinx-extensions",

@@ -23,7 +23,8 @@ end library;
 
 define module lib-curl-easy-test-suite
   export
-    suite-httpbin;
+    suite-httpbin,
+    suite-curl-constants;
 
   use common-dylan;
   use c-ffi;

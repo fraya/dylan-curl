@@ -1,6 +1,7 @@
 Library:     lib-curl-easy-test-suite
 Files:       library.dylan
              lib-curl-easy-test-chkspeed.dylan
+             lib-curl-easy-test-constants.dylan
              lib-curl-easy-test-getinfo-cainfo.dylan
              lib-curl-easy-test-debug-callback.dylan
              lib-curl-easy-test-escape-unescape.dylan

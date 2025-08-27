@@ -1033,5 +1033,7 @@ define module %lib-curl-easy
   use c-ffi;
   use format,
     import: { format-to-string };
+  use uncommon-utils,
+    import: { enum-definer };
 
 end module;
