@@ -17,12 +17,14 @@ Comments:    See "lib-curl-easy-macros.dylan"
 // https://github.com/curl/curl/blob/a7e6c78bfa3e4edcb3c0dcd105d2edc73d9e8b09/include/curl/curl.h#L3064
 //
 
-define constant $curlshe-ok           = 0;
-define constant $curlshe-bad-option   = 1;
-define constant $curlshe-in-use       = 2;
-define constant $curlshe-invalid      = 3;
-define constant $curlshe-nomem        = 4;
-define constant $curlshe-not-built-in = 5;
+define enum curl-shared-error-codes ()
+  $curlshe-ok = 0;
+  $curlshe-bad-option;
+  $curlshe-in-use;
+  $curlshe-invalid;
+  $curlshe-nomem;
+  $curlshe-not-built-in;
+end;
 
 // Curl lock data constants
 // https://github.com/curl/curl/blob/902262b16605bb8d92ee2002d498d81c2776fe5e/include/curl/curl.h#L3031
